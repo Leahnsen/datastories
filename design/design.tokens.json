@@ -1,0 +1,14 @@
+{
+  "columnWidth": 22,
+  "laneHeight": 26,
+  "margin": 14,
+  "glyphSize": 28,
+  "x": 40,
+  "blockHeight": 40,
+  "rowGap": 6,
+  "horizontalSpacing": 10,
+  "framePadding": 4,
+  "strokeWidth": 1,
+  "galleryCardWidth": 340,
+  "gallerySvgHeight": 720
+}

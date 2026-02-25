@@ -1,0 +1,955 @@
+[
+  {
+    "id": "wine-animals",
+    "title": "wine animals",
+    "notation": "S → I₁ → Su(I₁) → S → ⟦V₁h⟧(I₁) → V₁u(I₁), Su(I₁) → V₁u(I₁), Su(I₁) → S, (¬V₁h) → S → ⟦V₂h⟧(I₁) → S → S → S → S → S → S, V₂u(I₁) → S → S → Su(I₁) → S → S → S → S → (¬V₂h), S → S",
+    "meta": {
+      "Datum": "1. April 2025",
+      "Doublecheck Formula": "exploratory filtering stuff- hier einfach als V, A, S codiert - ausreichend=",
+      "Input data type": "category (nominal)",
+      "Input semantics": "Behavior",
+      "News-Orga": "The Pudding",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Persistent user  input reference across story paragraphs, Persistent user input highlight across visualizations, Persistent user input reference across annotations",
+      "Topic": "Konsum/Verbraucher",
+      "UI for user input": "Visual Object Selection",
+      "URL": "https://pudding.cool/2025/04/wine-animals/"
+    }
+  },
+  {
+    "id": "nyc-street-view",
+    "title": "nyc street view",
+    "notation": "(S → V)₁…₈ → S→ I₁ → V → S",
+    "meta": {
+      "Datum": "1. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Text",
+      "Input semantics": "Make a Guess",
+      "News-Orga": "The Pudding",
+      "Position of user input in story": "Mid",
+      "Response on user input": "Keine Auflösung",
+      "Topic": "Stadt & Architektur",
+      "UI for user input": "Text Input",
+      "URL": "https://pudding.cool/2025/07/street-view/"
+    }
+  },
+  {
+    "id": "so-viel-wurden-sie-verdienen-wenn-sie-beamter-waren",
+    "title": "So viel würden Sie verdienen, wenn Sie Beamter wären",
+    "notation": "S → ⟦V₁, Au₁⟧ → S₁…₅ → I₁, V₁u(I₁), Au₁(I₁) → S → (¬V₁) → S → I₂, Vu(I₂), Au(I₂) → S",
+    "meta": {
+      "Datum": "20. November 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Category (ordinal), Numeric (continuous), Numeric (discrete), category (nominal)",
+      "Input semantics": "Economic Attributes, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "Annotation update, Local highlight of user input in visualization, Story update, Visualization update",
+      "Topic": "Wirtschaft",
+      "UI for user input": "Button Based Input, Dropdown, Slider",
+      "URL": "https://www.zeit.de/geld/2025-11/gehalt-beamte-angestellte-vergleich-jobs-rechner"
+    }
+  },
+  {
+    "id": "so-konnten-ihre-kinder-die-klimakrise-erleben",
+    "title": "So könnten Ihre Kinder die Klimakrise erleben",
+    "notation": "S → I₁ → Au(I₁) → Su(I₁) → S → V → S",
+    "meta": {
+      "Datum": "10. November 2025",
+      "Doublecheck Formula": "ein Teil von I1 bleibt immer sichtbar, während VU, AU, SU kommen, dh, man kann immer neue Updates bekommen → aktuell nicht codiert?",
+      "Input data type": "Category (ordinal), Numeric (continuous)",
+      "Input semantics": "Opinion, Simulation Parameter, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "New Data Story generated based on user input, Persistent user input reference across annotations",
+      "Topic": "Klima/wetter/Energie/Umwelt",
+      "UI for user input": "Button Based Input, Slider",
+      "URL": "https://www.zeit.de/wissen/umwelt/2025-11/klimawandel-zukunft-forschung-rechner-kinder-erderwaermung"
+    }
+  },
+  {
+    "id": "schlafen-sie-genug",
+    "title": "Schlafen Sie genug?",
+    "notation": "S → I₁ → Vcuu(I₁) → (S → V)₁…₂",
+    "meta": {
+      "Datum": "30. Oktober 2025",
+      "Doublecheck Formula": "VCUU(I1) impliziert VH(I1) - Doppelt Codieren? Exploratory Filter nach I1",
+      "Input data type": "Numeric (continuous), category (nominal)",
+      "Input semantics": "Behavior, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Visual comparison of user inputs across participants",
+      "Topic": "Gesundheit",
+      "UI for user input": "Button Based Input, Slider",
+      "URL": "https://www.zeit.de/gesundheit/2025-10/schlaf-rechner-erholung-qualitaet-dauer-faq"
+    }
+  },
+  {
+    "id": "zahlen-sie-ihrem-kind-genug-taschengeld",
+    "title": "Zahlen Sie Ihrem Kind genug Taschengeld?",
+    "notation": "S → I₁ → Vcuu(I₁), Au(I₁) → S → V → S",
+    "meta": {
+      "Datum": "7. November 2025",
+      "Doublecheck Formula": "Exploratory Filter nach I1",
+      "Input data type": "Geographic, Numeric (continuous)",
+      "Input semantics": "Economic Attributes, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Visual comparison of user inputs across participants",
+      "Topic": "Gesellschaft",
+      "UI for user input": "Button Based Input, Slider",
+      "URL": "https://www.zeit.de/familie/2025-11/taschengeld-kinder-hoehe-alter-vergleich-eltern"
+    }
+  },
+  {
+    "id": "gehoren-sie-zur-politischen-mitte",
+    "title": "Gehören Sie zur politischen Mitte?",
+    "notation": "S → I₁…₁₃ → (Vcuo(I₁…₁₃), Au(I₁…₁₃)) → (Vcuo(Iₙ), Au(Iₙ))ₙ₌₁…₁₃ → S",
+    "meta": {
+      "Datum": "4. November 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Category (ordinal)",
+      "Input semantics": "Opinion",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Visual comparison of user inputs across offical data",
+      "Topic": "Politik",
+      "UI for user input": "Slider",
+      "URL": "https://www.zeit.de/politik/deutschland/2025-11/politische-einordnung-fragen-studien-vergleich-interaktion"
+    }
+  },
+  {
+    "id": "lohnt-sich-eine-warmepumpe-fur-ihr-haus",
+    "title": "Lohnt sich eine Wärmepumpe für Ihr Haus?",
+    "notation": "S → I₁, Vu( I₁), Au( I₁) → S",
+    "meta": {
+      "Datum": "30. Oktober 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Binary, Category (ordinal), Numeric (continuous), category (nominal)",
+      "Input semantics": "Simulation Parameter",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Visualization update",
+      "Topic": "Konsum/Verbraucher",
+      "UI for user input": "Button Based Input, Slider",
+      "URL": "https://www.zeit.de/wirtschaft/2025-10/heizungsart-rechner-preis-erdgas-waermepumpe"
+    }
+  },
+  {
+    "id": "lohnt-sich-die-ehe-fur-sie",
+    "title": "Lohnt sich die Ehe für Sie?",
+    "notation": "S → I₁, Au(I₁), Vu(I₁) → S → V → S",
+    "meta": {
+      "Datum": "24. Oktober 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous)",
+      "Input semantics": "Economic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "Annotation update, Visualization update",
+      "Topic": "Steuerpolitik",
+      "UI for user input": "Slider",
+      "URL": "https://www.zeit.de/arbeit/2025-10/steuervorteile-ehe-einkommen-ersparnis-rechner"
+    }
+  },
+  {
+    "id": "wie-zufrieden-sind-sie-mit-ihrem-leben",
+    "title": "Wie zufrieden sind Sie mit Ihrem Leben?",
+    "notation": "S → ⟦V₁⟧ → I₁ → Su(I₁), V₁u(I₁) → S₁…₃→ (¬V₁) → S → V → S",
+    "meta": {
+      "Datum": "23. Oktober 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Category (ordinal)",
+      "Input semantics": "Personal Subjective",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Local highlight of user input in visualization, Story update",
+      "Topic": "Gesellschaft",
+      "UI for user input": "Slider",
+      "URL": "https://www.zeit.de/familie/2025-10/lebenszufriedenheit-kinder-eltern-familiengruendung-vergleich"
+    }
+  },
+  {
+    "id": "wie-weit-darf-ihr-kind-allein-gehen",
+    "title": "Wie weit darf Ihr Kind allein gehen?",
+    "notation": "S → I₁ → Au(I₁) → (Iₙ → Vcuu(Iₙ))ₙ₌₂…₈ → S → I₉",
+    "meta": {
+      "Datum": "1. Oktober 2025",
+      "Doublecheck Formula": "Vis update komisch, daher unklar, ob I1 in alle darauffolgenden VCUU(In) mit reingenommen werden soll",
+      "Input data type": "Binary, Numeric (continuous), Text, category (nominal)",
+      "Input semantics": "Behavior, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "Visual comparison of user inputs across participants",
+      "Topic": "Gesellschaft",
+      "UI for user input": "Button Based Input, Slider, Text Input",
+      "URL": "https://www.zeit.de/familie/2025-10/bewegungsradius-kinder-selbststaendigkeit-erziehung-vergleich"
+    }
+  },
+  {
+    "id": "wie-riskant-ist-ihr-alkoholkonsum",
+    "title": "Wie riskant ist Ihr Alkoholkonsum?",
+    "notation": "S → I₁, Au(I₁), Vcuo(I₁) → (S → V)₁…₄ → S",
+    "meta": {
+      "Datum": "30. September 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Binary, Category (ordinal), Numeric (discrete), category (nominal)",
+      "Input semantics": "Behavior, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Visual comparison of user inputs across offical data, Visualization update",
+      "Topic": "Gesundheit, Konsum/Verbraucher",
+      "UI for user input": "Button Based Input, Stepper",
+      "URL": "https://www.zeit.de/gesundheit/2025-09/alkoholkonsum-rechner-vergleich-gesundheitsrisiko-studie"
+    }
+  },
+  {
+    "id": "wie-gut-passt-mein-job-zu-mir",
+    "title": "Wie gut passt mein Job zu mir?",
+    "notation": "S → I₁…₁₂ → (Vcuu(Iₙ), Au(Iₙ))ₙ₌₁…₁₂ → S",
+    "meta": {
+      "Datum": "26. September 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Category (ordinal)",
+      "Input semantics": "Opinion, Personal Subjective",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Visual comparison of user inputs across participants",
+      "Topic": "Arbeitsmarkt",
+      "UI for user input": "Slider",
+      "URL": "https://www.zeit.de/arbeit/2025-09/zufriedenheit-job-berufswahl-arbeitgeber-job-crafting"
+    }
+  },
+  {
+    "id": "lohnt-sich-ein-e-auto-fur-sie-testen-sie-es-mit-unserem-rechner",
+    "title": "Lohnt sich ein E-Auto für Sie? Testen Sie es mit unserem Rechner",
+    "notation": "S, ⟦V₁⟧ → S₁…₆ → I₁, V₁u(I₁), V₁h(I₁) → (¬V₁) → S → V → S",
+    "meta": {
+      "Datum": "3. September 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Binary, Numeric (continuous), category (nominal)",
+      "Input semantics": "Behavior, Cost Parameter, Personal Subjective",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Visualization update",
+      "Topic": "Konsum/Verbraucher, Technik",
+      "UI for user input": "Button Based Input, Checkbox, Slider",
+      "URL": "https://www.zeit.de/mobilitaet/2025-09/elektroauto-verbrenner-preis-reichweite-rechner"
+    }
+  },
+  {
+    "id": "wie-viel-verdienen-sie-im-vergleich-zu-anderen",
+    "title": "Wie viel verdienen Sie im Vergleich zu anderen?",
+    "notation": "S → ⟦V₁⟧ → S, I₁, ⟦A(I₁)⟧ → S₁…₇ → (¬A(I₁)) → S₁…₃ → (¬V₁) → I₂ → Nds(I₂)(S → V → S → I₂ → S → V → S → I₃, Vu(I₃)) → S",
+    "meta": {
+      "Datum": "27. August 2025",
+      "Doublecheck Formula": "tricky, Vis bleibt die ganze Zeit dieselbe, Annotationen und Stories werden beim Scrollen darüber gespielt, auch die AU(I1) wird dadurch immer wieder sichtbar → wie codieren?",
+      "Input data type": "category (nominal)",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "New Data Story generated based on user input, Persistent user input reference across annotations",
+      "Topic": "Arbeitsmarkt",
+      "UI for user input": "Autocomplete/Typeahead",
+      "URL": "https://www.zeit.de/arbeit/2025-08/gehaelter-berufe-vergleich-deutschland"
+    }
+  },
+  {
+    "id": "wie-viel-geld-macht-glucklich",
+    "title": "Wie viel Geld macht glücklich?",
+    "notation": "S → I₁ → Vcuu(I₁) → (S → V)₁…₃ → S",
+    "meta": {
+      "Datum": "20. August 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Category (ordinal), Numeric (continuous), Numeric (discrete), category (nominal)",
+      "Input semantics": "Economic Attributes, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Visual comparison of user inputs across participants",
+      "Topic": "Gesellschaft, Gesundheit",
+      "UI for user input": "Button Based Input, Slider",
+      "URL": "https://www.zeit.de/geld/2025-08/zufriedenheit-geld-glueck-einkommen-grenze-vergleich"
+    }
+  },
+  {
+    "id": "was-hat-die-neue-regierung-gut-gemacht-und-was-nicht",
+    "title": "Was hat die neue Regierung gut gemacht? Und was nicht?",
+    "notation": "S → I₁ → Vcuu(I₁) → S → I₂ → Vcuu(I₂) → S → I₃ → Vcuu(I₃) → I₄ → Vcuu(I₄) → S → I₅ → Vcuu(I₅) → S → I₆ → Vcuu(I₆) → I₇ → Vcuu(I₇) → S → I₈ → Vcuu(I₈) → S → I₉ → Vcuu(I₉) → I₁₀ → Vcuu(I₁₀) → S → I₁₁ → Vcuu(I₁₁) → S → I₁₂ → Vcuu(I₁₂) → I₁₃ → Vcuu(I₁₃) → S → I₁₄ → Vcuu(I₁₄) → S → I₁₅ → Vcuu(I₁₅) → I₁₆ → Vcuu(I₁₆) → S → I₁₇ → Vcuu(I₁₇) → S → Vcuu(I₁...₁₇)",
+    "meta": {
+      "Datum": "14. August 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Category (ordinal)",
+      "Input semantics": "Opinion",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "Local highlight of user input in visualization, Visual comparison of user inputs across participants",
+      "Topic": "Politik",
+      "UI for user input": "Slider",
+      "URL": "https://www.zeit.de/politik/deutschland/2025-08/schwarz-rote-koalition-100-tage-bundesregierung-friedrich-merz-bilanz"
+    }
+  },
+  {
+    "id": "so-konnte-das-wetter-im-jahr-2100-bei-ihnen-aussehen",
+    "title": "So könnte das Wetter im Jahr 2100 bei Ihnen aussehen",
+    "notation": "S → ⟦V₁⟧ → S₁...₃ → I₁→ V₁u(I₁), Au(I₁) → (¬V₁) → S",
+    "meta": {
+      "Datum": "6. August 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic",
+      "Input semantics": "Simulation Parameter, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Mid",
+      "Response on user input": "Annotation update, Local highlight of user input in visualization, Visualization update",
+      "Topic": "Klima/wetter/Energie/Umwelt",
+      "UI for user input": "Autocomplete/Typeahead",
+      "URL": "https://www.zeit.de/wissen/2025-08/klimawandel-staedte-klimazwillinge-zukunft-erderwaermung"
+    }
+  },
+  {
+    "id": "wie-viel-zahle-ich-ein-und-was-krieg-ich-an-rente-raus",
+    "title": "Wie viel zahle ich ein – und was krieg ich an Rente raus?",
+    "notation": "S → I₁, Au(I₁), Vh(I₁), Au(I₁), Au(I₁) → S → ⟦V₁⟧ → S → Au(I₁), Su(I₁) → Au(I₁), Su(I₁) → (¬V₁) → ⟦V₂h(I₁), Au(I₁)⟧ → S₁...₅ → (¬V₂h(I₁), ¬Au(I₁)) → S → V₁...₃ → S",
+    "meta": {
+      "Datum": "31. Juli 2025",
+      "Doublecheck Formula": "Wie Scrollys formalisieren?",
+      "Input data type": "Date, category (nominal)",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Local highlight of user input in visualization, Persistent user  input reference across story paragraphs, Persistent user input reference across annotations",
+      "Topic": "Arbeitsmarkt, Sozialpolitik",
+      "UI for user input": "Button Based Input, Slider",
+      "URL": "https://www.zeit.de/wirtschaft/2025-07/rendite-rente-geburtsjahr-einzahlung-auszahlung-vergleich"
+    }
+  },
+  {
+    "id": "rucktritt-oder-nicht-entscheiden-sie",
+    "title": "Rücktritt – oder nicht? Entscheiden Sie!",
+    "notation": "S → (Iₙ → Vcuu(Iₙ))ₙ₌₁…₂₀ → S",
+    "meta": {
+      "Datum": "29. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Binary",
+      "Input semantics": "Opinion",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Visual comparison of user inputs across participants",
+      "Topic": "Politik",
+      "UI for user input": "Button Based Input",
+      "URL": "https://www.zeit.de/politik/deutschland/2025-07/fehler-von-politikern-ruecktritt-fehlerkultur"
+    }
+  },
+  {
+    "id": "so-viel-verdienen-menschen-in-ihrem-wohnort",
+    "title": "So viel verdienen Menschen in Ihrem Wohnort",
+    "notation": "S → ⟦V₁⟧ → I₁, Au(I₁) → ⟦V₁h(I₁)⟧, Au(I₁), S₁...₂ → (¬V₁) → S,⟦V₂h(I₁), Au(I₁)⟧ → S₁...₇ → (¬V₂, ¬Au(I₁)) → ⟦V₃h(I₁), Au(I₁)⟧ → S₁...₂ → (¬V₃h(I₁), ¬Au(I₁)) → I₂ → Nds(I₂)(S → A → (S → V)₁...₃ → S → I₃, Vu(I₃) → S → I₂) → S",
+    "meta": {
+      "Datum": "25. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "New Data Story generated based on user input, Persistent user input reference across annotations",
+      "Topic": "Arbeitsmarkt",
+      "UI for user input": "Autocomplete/Typeahead",
+      "URL": "https://www.zeit.de/arbeit/2025-07/gehaltsvergleich-gemeinden-deutschland-gehaelter-gehaltssteigerungen"
+    }
+  },
+  {
+    "id": "ein-eigenheim-ist-hier-wieder-fur-sie-drin",
+    "title": "Ein Eigenheim? Ist hier wieder für Sie drin",
+    "notation": "S → ⟦V₁⟧ → S₁…₃ → I₁, Vu(I₁) → (¬V₁) → (S → V)₁...₂ → S",
+    "meta": {
+      "Datum": "17. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Local highlight of user input in visualization, Visualization update",
+      "Topic": "Mieten & Wohnen",
+      "UI for user input": "Autocomplete/Typeahead",
+      "URL": "https://www.zeit.de/geld/2025-07/immobilienpreise-erschwinglichkeit-haus-wohnung-immobilienmarkt"
+    }
+  },
+  {
+    "id": "wie-gut-verstehen-sie-hunde",
+    "title": "Wie gut verstehen Sie Hunde?",
+    "notation": "S → (Iₙ → Au(Iₙ), Su(Iₙ))ₙ₌₁…₁₃ → (Vcuu(I₁…₁₃), Au(I₁…₁₃), Su(I₁…₁₃)",
+    "meta": {
+      "Datum": "16. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "category (nominal)",
+      "Input semantics": "Make a Guess",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Story update",
+      "Topic": "Gesellschaft",
+      "UI for user input": "Checkbox",
+      "URL": "https://www.zeit.de/wissen/2025-07/koerpersprache-hunde-haustier-verstehen-test"
+    }
+  },
+  {
+    "id": "wie-gefahrlich-ist-der-schulweg-ihres-kindes",
+    "title": "Wie gefährlich ist der Schulweg Ihres Kindes?",
+    "notation": "S → ⟦V₁⟧ → I₁ → V₁u(I₁), Au(I₁), Vcuo(I₁) →  (¬V₁) → S → V → S → V → S",
+    "meta": {
+      "Datum": "21. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic, category (nominal)",
+      "Input semantics": "Behavior, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Visualization update, Zoom-in existing visualization based on user input",
+      "Topic": "Verkehr/Infrastruktur",
+      "UI for user input": "Autocomplete/Typeahead, Button Based Input",
+      "URL": "https://www.zeit.de/mobilitaet/2025-07/verkehrsunfaelle-strassenverkehr-routen-karte-daten"
+    }
+  },
+  {
+    "id": "so-viel-geld-sollten-sie-in-ihrem-alter-gespart-haben",
+    "title": "So viel Geld sollten Sie in Ihrem Alter gespart haben",
+    "notation": "S → I₁ → Su(I₁), Vh(I₁), Au(I₁) → Su(I₁), Vh(I₁), Au(I₁) → (S → V)₁...₅ → S",
+    "meta": {
+      "Datum": "29. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous)",
+      "Input semantics": "Economic Attributes, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update",
+      "Topic": "Gesellschaft, Vermögen",
+      "UI for user input": "Slider",
+      "URL": "https://www.zeit.de/geld/2025-07/vermoegen-sparen-alter-vergleich-verteilung"
+    }
+  },
+  {
+    "id": "welcher-stadtteil-passt-zu-mir",
+    "title": "Welcher Stadtteil passt zu mir?",
+    "notation": "S → I₁ → ⟦V₁cuo(I₁), A₁u(I₁)⟧ → I₂ → Au(I₂) → (¬V₁cuo(I₁), ¬A₁u(I₁)) → S → V → S",
+    "meta": { 
+      "Datum": "26. Juni 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic, category (nominal)",
+      "Input semantics": "Exploratory filtering, Personal Subjective, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Visual comparison of user inputs across participants, Visualization update",
+      "Topic": "Mieten & Wohnen",
+      "UI for user input": "Autocomplete/Typeahead, Button Based Input, Dropdown",
+      "URL": "https://www.zeit.de/zeit-magazin/2025-06/stadtteile-grossstaedte-wohnen-deutschland-lebensqualitaet"
+    }
+  },
+  {
+    "id": "sind-sie-so-verheiratet-wie-andere-in-ihrem-alter",
+    "title": "Sind Sie so verheiratet wie andere in Ihrem Alter?",
+    "notation": "S → ⟦V₁⟧ → I₁, V₁u(I₁), Au(I₁)→ (¬V₁) → S₁...₂ → (S → V)₁...₃ → S",
+    "meta": {
+      "Datum": "19. Juni 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous), category (nominal)",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Mid",
+      "Response on user input": "Annotation update, Local highlight of user input in visualization, Visualization update",
+      "Topic": "Gesellschaft",
+      "UI for user input": "Button Based Input, Slider",
+      "URL": "https://www.zeit.de/zeit-magazin/2025-06/heiratsalter-deutschland-ehe-hochzeit-beziehungen"
+    }
+  },
+  {
+    "id": "sollte-ich-die-krankenkasse-wechseln",
+    "title": "Sollte ich die Krankenkasse wechseln?",
+    "notation": "S → (I₁, Vu(I₁)) → S",
+    "meta": {
+      "Datum": "25. Mai 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic, category (nominal)",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Visualization update",
+      "Topic": "Gesundheit, Konsum/Verbraucher",
+      "UI for user input": "Autocomplete/Typeahead",
+      "URL": "https://www.zeit.de/geld/2025-05/krankenkasse-vergleich-beitraege-zusatzleistungen-wechsel"
+    }
+  },
+  {
+    "id": "das-sind-die-teuersten-und-gunstigsten-stadtteile-deutschlands",
+    "title": "Das sind die teuersten und günstigsten Stadtteile Deutschlands",
+    "notation": "S → ⟦V₁⟧ → S → (I₁, Vh(I₁), Au(I₁)) → (¬V₁) → ⟦V₂h(I₁), Au(I₁)⟧ → S₁...₅ → (¬V₂), (¬Au(I₁) → V → S₁...₂ → V → S →",
+    "meta": {
+      "Datum": "28. Mai 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Persistent user input highlight across visualizations",
+      "Topic": "Mieten & Wohnen",
+      "UI for user input": "Autocomplete/Typeahead",
+      "URL": "https://www.zeit.de/wirtschaft/2025-05/mietpreise-immobilien-deutschland-staedte-stadtteile"
+    }
+  },
+  {
+    "id": "wie-viel-protein-sie-wirklich-brauchen",
+    "title": "Wie viel Protein Sie wirklich brauchen",
+    "notation": "S →  (Au(I₁), I₁, Vh(I₁), Au(I₁)) → S → Au( I₁) → V → S → Au( I₁) → V → S → Au( I₁) → V → S → V → S",
+    "meta": {
+      "Datum": "27. Mai 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Binary, Category (ordinal), Numeric (continuous)",
+      "Input semantics": "Behavior, Sociodemographic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Persistent user input highlight across visualizations, Visualization update",
+      "Topic": "Gesundheit",
+      "UI for user input": "Button Based Input, Slider",
+      "URL": "https://www.zeit.de/wissen/2025-05/protein-bedarf-ernaehrung-lebensmittel-alltag-sport"
+    }
+  },
+  {
+    "id": "wie-viel-zucker-ist-drin",
+    "title": "Wie viel Zucker ist drin?",
+    "notation": "S → I₁ → V → S",
+    "meta": {
+      "Datum": "15. April 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Category (ordinal)",
+      "Input semantics": "Make a Guess",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Visual comparison of user inputs across participants",
+      "Topic": "Gesundheit",
+      "UI for user input": "Visual Object Selection",
+      "URL": "https://www.zeit.de/zeit-magazin/wochenmarkt/2025-04/zucker-lebensmittel-inhaltsstoff-menge-spiel"
+    }
+  },
+  {
+    "id": "konnen-sie-sich-noch-eine-immobilie-in-ihrem-landkreis-leisten",
+    "title": "Können Sie sich noch eine Immobilie in Ihrem Landkreis leisten?",
+    "notation": "S → ⟦V₁⟧, I₁, V₁u(I₁) I₂, V₁z(I₂), Au(I₂) →(¬V₁) → (S → V)₁…₂ → S",
+    "meta": {
+      "Datum": "1. April 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous)",
+      "Input semantics": "Cost Parameter, Economic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Visualization update",
+      "Topic": "Mieten & Wohnen",
+      "UI for user input": "Slider",
+      "URL": "https://www.zeit.de/geld/2025-04/immobilienmarkt-bauzinsen-hauskauf-wohnung-zinsrechner"
+    }
+  },
+  {
+    "id": "ihr-msci-world-depot-ist-gecrasht-so-schlimm-waren-vergangene-krisen",
+    "title": "Ihr MSCI-World-Depot ist gecrasht? So schlimm waren vergangene Krisen",
+    "notation": "S → (I₁, ⟦V₁u(I₁)⟧) → Au(I₁), Su(I₁), V₁u(I₁) → Au(I₁), Su(I₁), V₁u(I₁) → Au(I₁), Su(I₁), V₁u(I₁) → Au(I₁), Su(I₁), V₁u(I₁) → (¬V₁) → S → V → S",
+    "meta": {
+      "Datum": "20. März 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous)",
+      "Input semantics": "Economic Attributes",
+      "News-Orga": "ZEIT",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Persistent user  input reference across story paragraphs, Persistent user input highlight across visualizations, Persistent user input reference across annotations, Visualization update",
+      "Topic": "Vermögen, Wirtschaft",
+      "UI for user input": "Slider",
+      "URL": "https://www.zeit.de/geld/2025-03/krisensichere-geldanlage-crash-depot-finanzmarkt"
+    }
+  },
+  {
+    "id": "how-snowy-could-it-be-where-you-live-this-winter-look-up-your-area",
+    "title": "How snowy could it be where you live this winter? Look up your area.",
+    "notation": "S → V → S → I₁, Vu(I₁), Au(I₁) → (S → V)₁…₆ → S",
+    "meta": {
+      "Datum": "16. November 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "The Washington Post",
+      "Position of user input in story": "Mid",
+      "Response on user input": "Visualization update",
+      "Topic": "Klima/wetter/Energie/Umwelt",
+      "UI for user input": "Autocomplete/Typeahead",
+      "URL": "https://www.washingtonpost.com/climate-environment/interactive/2025/how-snowy-could-it-be-where-you-live-this-winter-look-up-your-area/"
+    }
+  },
+  {
+    "id": "is-your-area-just-have-its-most-humid-summer-find-out-here",
+    "title": "is your area just have its most humid summer? Find out here.",
+    "notation": "(S → V)₁…₂ → S → I₁, Vu(I₁), Au(I₁) → (S → V)₁…₆ → S",
+    "meta": {
+      "Datum": "11. September 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "The Washington Post",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Visualization update",
+      "Topic": "Klima/wetter/Energie/Umwelt",
+      "UI for user input": "Autocomplete/Typeahead",
+      "URL": "https://www.washingtonpost.com/climate-environment/interactive/2025/summer-humidity-increasing-maps/"
+    }
+  },
+  {
+    "id": "what-trees-are-most-common-in-your-city-and-are-they-at-risk",
+    "title": "What trees are most common in your city? And are they at risk?",
+    "notation": "S → ⟦V₁⟧ → S₁…₅→ (¬V₁) → (S → V)₁…₂ → (I₁, Vu(I₁), Au(I₁)) → (S → V)₁…₂",
+    "meta": {
+      "Datum": "29. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "The Washington Post",
+      "Position of user input in story": "Mid",
+      "Response on user input": "Annotation update, Visualization update",
+      "Topic": "Klima/wetter/Energie/Umwelt",
+      "UI for user input": "Autocomplete/Typeahead",
+      "URL": "https://www.washingtonpost.com/climate-solutions/interactive/2025/city-tree-diversity-vulnerability-maps/"
+    }
+  },
+  {
+    "id": "your-diet-s-impact-on-the-planet-depends-on-where-you-live-look-up-your-city",
+    "title": "Your diet’s impact on the planet depends on where you live. Look up your city.",
+    "notation": "V → S → V → S → I₁, V, Au(I₁) → S → V → S",
+    "meta": {
+      "Datum": "21. Oktober 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "The Washington Post",
+      "Position of user input in story": "Mid",
+      "Response on user input": "Annotation update, Visualization update",
+      "Topic": "Gesellschaft, Klima/wetter/Energie/Umwelt, Konsum/Verbraucher",
+      "UI for user input": "Autocomplete/Typeahead",
+      "URL": "https://www.washingtonpost.com/climate-environment/interactive/2025/meat-beef-climate-impact/"
+    }
+  },
+  {
+    "id": "budget-2025-calculator-how-reeves-tax-changes-will-affect-your-money",
+    "title": "Budget 2025 calculator: how Reeves’ tax changes will affect your money",
+    "notation": "S → I₁ → Au(I₁) → (S → V)₁…₃",
+    "meta": {
+      "Datum": "26. November 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous)",
+      "Input semantics": "Economic Attributes",
+      "News-Orga": "Financial Times",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update",
+      "Topic": "Vermögen",
+      "UI for user input": "Number Input",
+      "URL": "https://www.ft.com/content/54cb448c-f1a2-46ce-914e-75728ef390ae"
+    }
+  },
+  {
+    "id": "can-you-run-a-premier-league-football-club",
+    "title": "Can you run a Premier League football club?",
+    "notation": "S₁…₃ → ⟦V₁⟧ → (Iₙ → Su(Iₙ) → V₁cu(I₁…ₙ))ₙ₌₁…₁₇ → (¬V₁)→ (Su(I₁…₁₇) → Vcuu(I₁…₁₇))",
+    "meta": {
+      "Datum": "23. August 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "category (nominal)",
+      "Input semantics": "Behavior, Simulation Parameter",
+      "News-Orga": "Financial Times",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "Local highlight of user input in visualization, Persistent user  input reference across story paragraphs, Persistent user input reference across annotations, Visual comparison of user inputs across participants",
+      "Topic": "Wirtschaft",
+      "UI for user input": "Button Based Input",
+      "URL": "https://ig.ft.com/football-game/"
+    }
+  },
+  {
+    "id": "draw-your-own-chart-game-how-taco-were-trump-s-tariffs",
+    "title": "Draw your own chart game: How Taco were Trump’s tariffs?",
+    "notation": "S→ (⟦Vₙ⟧ → Iₙ → Vₙcuo(Iₙ), Au(Iₙ) → (¬Vₙ) → S)ₙ₌₁…₅",
+    "meta": {
+      "Datum": "5. Juni 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous)",
+      "Input semantics": "Make a Guess",
+      "News-Orga": "Financial Times",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "Annotation update, User-drawn vs. actual data visualization (difference shown)",
+      "Topic": "Steuerpolitik, Wirtschaft",
+      "UI for user input": "Chart Drawing",
+      "URL": "https://www.ft.com/content/f5b2a614-3b0e-4db9-a3cd-013eca8cd49d"
+    }
+  },
+  {
+    "id": "can-you-run-the-uk-economy",
+    "title": "Can you run the UK economy?",
+    "notation": "S₁…₄ → ⟦V₁⟧ → S → I₁ → V₁cu(I₁) → S → I₂ → V₁cu(I₁…₂) → I₃ → V₁cu(I₁…₃) → S → I₄ → V₁cu(I₁…₄) → S → I₅ → V₁cu(I₁…₅) → I₆ → V₁cu(I₁…₆) → I₇ → V₁cu(I₁…₇) → S → S → I₈ → V₁cu(I₁…₈) → I₉ → V₁cu(I₁…₉) → I₁₀ → V₁cu(I₁…₁₀) → I₁₁ → V₁cu(I₁…₁₁) → I₁₂ → V₁cu(I₁…₁₂) → I₁₃ → V₁cu(I₁…₁₃) → S → (¬V₁)→ Su(I₁…₁₃) → V₁cu(I₁…₁₃) → Vcuo(I₁…₁₃) → Vcuo(I₁…₁₃) → Su(I₁…₁₃) → Su(I₁…₁₃) → Su(I₁…₁₃) → Vcuo(I₁…₁₃)",
+    "meta": {
+      "Datum": "2. Dezember 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Binary, Numeric (continuous), category (nominal)",
+      "Input semantics": "Behavior, Simulation Parameter",
+      "News-Orga": "Financial Times",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "Persistent user  input reference across story paragraphs, Persistent user input highlight across visualizations, Persistent user input reference across annotations, Visualization update",
+      "Topic": "Politik, Sozialpolitik, Steuerpolitik",
+      "UI for user input": "Button Based Input, Checkbox, Slider",
+      "URL": "https://ig.ft.com/chancellor-game/"
+    }
+  },
+ 
+  {
+    "id": "so-hat-die-inflation-ihr-fruhstuck-verteuert",
+    "title": "So hat die Inflation Ihr Frühstück verteuert",
+    "notation": "S → I₁, Vh(I₁), Au(I₁) → (S → V)₁…₄→ S",
+    "meta": {
+      "Datum": "11. November 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous), category (nominal)",
+      "Input semantics": "Behavior",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Local highlight of user input in visualization",
+      "Topic": "Konsum/Verbraucher",
+      "UI for user input": "Button Based Input, Stepper",
+      "URL": "https://www.spiegel.de/wirtschaft/service/inflation-so-haben-sich-fruehstueck-und-lebensmittel-verteuert-ein-interaktiver-vergleich-a-309665d7-2606-4d33-b785-b7e4635d27da"
+    }
+  },
+  {
+    "id": "hier-erfahren-sie-ob-sie-zu-viel-miete-zahlen",
+    "title": "Hier erfahren Sie, ob Sie zu viel Miete zahlen",
+    "notation": "S →  I₁, Au( I₁) → (S → V)₁...₂ → I₂, Au(I₂) → S → V → S",
+    "meta": {
+      "Datum": "10. Oktober 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Category (ordinal), Date, Geographic, Numeric (continuous)",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update, Visualization update",
+      "Topic": "Mieten & Wohnen",
+      "UI for user input": "Autocomplete/Typeahead, Button Based Input, Slider",
+      "URL": "https://www.spiegel.de/wirtschaft/service/mietspiegel-rechner-zahlen-sie-zu-viel-miete-a-17126383-523a-411c-aab0-06dbfef8658f"
+    }
+  },
+  {
+    "id": "war-die-em-2025-ein-tv-blockbuster",
+    "title": "War die EM 2025 ein TV-Blockbuster?",
+    "notation": "S → V₁, I₁, V₁cuuo(I₁)→ S",
+    "meta": {
+      "Datum": "29. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous)",
+      "Input semantics": "Make a Guess",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Mid",
+      "Response on user input": "User-drawn vs. actual data visualization (difference shown)",
+      "Topic": "Sport",
+      "UI for user input": "Chart Drawing",
+      "URL": "https://www.spiegel.de/sport/fussball/fussball-em-2025-war-die-europameisterschaft-ein-tv-blockbuster-a-7aae2b1a-3b16-4e01-97f2-8f69c6bea7ff"
+    }
+  },
+  {
+    "id": "benzinpreis-fahrverbot-maut-wie-entscheiden-sie",
+    "title": "Benzinpreis, Fahrverbot, Maut – wie entscheiden Sie?",
+    "notation": "S → V → S → ⟦V₁, A₁u⟧ →  (Iₙ, V₁cu(I₁…ₙ), A₁u(I₁…ₙ) → S)ₙ₌₁…₁₂ → (¬V₁, ¬Au₁)",
+    "meta": {
+      "Datum": "9. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "category (nominal)",
+      "Input semantics": "Opinion, Simulation Parameter",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "Annotation update, Story update, Visual comparison of user inputs across participants and official data, Visualization update",
+      "Topic": "Verkehr/Infrastruktur",
+      "UI for user input": "Button Based Input",
+      "URL": "https://www.spiegel.de/auto/verkehrsminister-spiel-benzinpreis-fahrverbot-maut-wie-entscheiden-sie-a-f39737a8-4bbb-48b0-82c8-af10d302e99f"
+    }
+  },
+  {
+    "id": "kubismus-trifft-streetart-und-jungfraubahn",
+    "title": "Kubismus trifft Streetart und Jungfraubahn",
+    "notation": "S → V → S → I₁ → Vcuu(I₁)",
+    "meta": {
+      "Datum": "3. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Binary",
+      "Input semantics": "Personal Subjective",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Final",
+      "Response on user input": "Visualization update",
+      "Topic": "Sport",
+      "UI for user input": "Visual Object Selection",
+      "URL": "https://www.spiegel.de/sport/fussball/fussball-em-2025-deutschland-in-weiss-oder-rot-alle-trikots-der-16-mannschaften-im-ueberblick-a-35c8d227-9514-4eea-b4f4-36bccbb6fe43"
+    }
+  },
+  {
+    "id": "rente-pflege-krankenkasse-so-schrumpft-ihr-gehalt-bis-2045-zusammen",
+    "title": "Rente, Pflege, Krankenkasse – so schrumpft Ihr Gehalt bis 2045 zusammen",
+    "notation": "S →  I₁ → ⟦V₁u(I₁)⟧, Au(I₁)→ Su(I₁) → (Su(I₁), V₁u(I₁), Au(I₁)) → (Su(I₁), V₁u(I₁), Au(I₁)) → (Su(I₁), V₁u(I₁), Au(I₁)) → (Su(I₁), V₁u(I₁), Au(I₁)) → (I₂, Au(I₂), V₁u(I₂)) → S → V₁u(I₁...₂) → S → (Su(I₂), Au(I₂)) → (¬V₁) →S",
+    "meta": {
+      "Datum": "23. Dezember 2024",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous), category (nominal)",
+      "Input semantics": "Economic Attributes, Simulation Parameter, Sociodemographic Attributes",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Mid",
+      "Response on user input": "Annotation update, Persistent user input highlight across visualizations, Story update, Visualization update",
+      "Topic": "Vermögen",
+      "UI for user input": "Button Based Input, Slider",
+      "URL": "https://www.spiegel.de/wirtschaft/soziales/rente-pflege-krankenkasse-rechner-zeigt-wie-ihr-gehalt-bis-2045-zusammenschrumpft-a-4be44dd2-7195-41be-9da2-6cea1c573616"
+    }
+  },
+  {
+    "id": "was-kostet-ein-studium",
+    "title": "Was kostet ein Studium?",
+    "notation": "S → (V₁, V₂, I₁, V₁z(I₁), V₂h(I₁), Au(I₁)) → (S → V)₁...₂ → S",
+    "meta": {
+      "Datum": "7. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic, category (nominal)",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Visualization update, Zoom-in existing visualization based on user input",
+      "Topic": "Mieten & Wohnen",
+      "UI for user input": "Autocomplete/Typeahead, Button Based Input",
+      "URL": "https://www.spiegel.de/start/studium-was-studieren-wo-in-deutschland-kostet-staedte-im-vergleich-a-2f632d00-6a7e-4ba8-a971-30cd6de8aa9b"
+    }
+  },
+  {
+    "id": "verteilen-sie-die-500-milliarden-euro-aus-dem-sondervermogen",
+    "title": "Verteilen Sie die 500 Milliarden Euro aus dem Sondervermögen",
+    "notation": "S → V₁, I₁, V₁u(I₁) → S → (V₂(I₁), I₂, V₂u(I₂)) → S → (V₃(I₁), I₃, V₃u(I₃)) → S → (V₄(I₁), I₄, V₄u(I₄)) → S →  V₅cuuo(I₁…₄)→ S",
+    "meta": {
+      "Datum": "24. Juni 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous)",
+      "Input semantics": "Opinion",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Final, Intro",
+      "Response on user input": "Annotation update, Local highlight of user input in visualization, Visual comparison of user inputs across participants and official data, Visualization update",
+      "Topic": "Politik",
+      "UI for user input": "Slider",
+      "URL": "https://www.spiegel.de/wirtschaft/sondervermoegen-wie-wuerden-sie-500-milliarden-euro-verteilen-a-abb9d6d2-a112-4984-a1bf-122a363f1e55"
+    }
+  },
+  {
+    "id": "so-verlangern-sie-2025-ihren-urlaub",
+    "title": "So verlängern Sie 2025 Ihren Urlaub",
+    "notation": "S → I₁ → Vh(I₁) → Au(I₁)) → S",
+    "meta": {
+      "Datum": "29. Dezember 2024",
+      "Doublecheck Formula": "",
+      "Input data type": "Binary, Date, Geographic",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Mid",
+      "Response on user input": "Annotation update, Visualization update",
+      "Topic": "Arbeitsmarkt, Konsum/Verbraucher",
+      "UI for user input": "Button Based Input, Checkbox, Dropdown",
+      "URL": "https://www.spiegel.de/karriere/brueckentage-rechner-so-optimieren-sie-ihren-urlaub-in-2025-a-5215baaf-b08c-46af-87d2-72173ed0de16"
+    }
+  },
+  {
+    "id": "mit-diesen-kosten-mussen-sie-bei-der-haussanierung-rechnen",
+    "title": "Mit diesen Kosten müssen Sie bei der Haussanierung rechnen",
+    "notation": "S → ⟦A₁⟧ → (S → Iₙ → A₁(I₁…ₙ))ₙ₌₁…₆ → S → (¬A₁) → A(I₁…₆) → Su(I₁…₆) → S",
+    "meta": {
+      "Datum": "18. Juli 2025",
+      "Doublecheck Formula": "",
+      "Input data type": "category (nominal)",
+      "Input semantics": "Cost Parameter",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "Persistent user input reference across annotations",
+      "Topic": "Mieten & Wohnen",
+      "UI for user input": "Button Based Input",
+      "URL": "https://www.spiegel.de/wirtschaft/service/haussanierung-rechner-mit-diesen-kosten-muessen-sie-bei-der-sanierung-rechnen-a-21d44182-15ed-44cd-8ed2-44a188079d2f"
+    }
+  },
+  {
+    "id": "wie-viel-rendite-sie-trotz-crash-mit-aktien-machen-konnen",
+    "title": "Wie viel Rendite Sie (trotz Crash) mit Aktien machen können",
+    "notation": "S → V → S → ⟦V₁⟧ → S₁…₇ → (¬V₁) → S → I₁, Vh(I₁)",
+    "meta": {
+      "Datum": "18. Juli 2022",
+      "Doublecheck Formula": "",
+      "Input data type": "Numeric (continuous)",
+      "Input semantics": "Cost Parameter",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Final",
+      "Response on user input": "Annotation update",
+      "Topic": "Vermögen",
+      "UI for user input": "Button Based Input, Number Input, Range Slider, Stepper",
+      "URL": "https://www.spiegel.de/wirtschaft/service/boerse-wie-viel-rendite-sie-trotz-crash-mit-aktien-machen-koennen-a-34cff387-3ab3-45cf-bfb6-7832abbe4584"
+    }
+  },
+  {
+    "id": "so-viel-kostet-ihre-periode-im-lauf-ihres-lebens",
+    "title": "So viel kostet Ihre Periode im Lauf Ihres Lebens",
+    "notation": "I₁ → A(I₁) → (S → V)₁…₃ → S",
+    "meta": {
+      "Datum": "28. Mai 2021",
+      "Doublecheck Formula": "",
+      "Input data type": "Binary, Category (ordinal), Numeric (continuous)",
+      "Input semantics": "Behavior, Sociodemographic Attributes",
+      "News-Orga": "Spiegel",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update",
+      "Topic": "Gesundheit",
+      "UI for user input": "Button Based Input, Dropdown",
+      "URL": "https://www.spiegel.de/ausland/menstruationsrechner-so-viel-kostet-ihre-periode-im-lauf-ihres-lebens-a-bba05bb1-016e-400c-b9ac-d0c49cfe10c2"
+    }
+  },
+  {
+    "id": "how-are-you-doing",
+    "title": "How are you doing?",
+    "notation": "S → ⟦V₁] → I₁, V₁cu(I₁) → S → A(I₁) → S → S(I₁) → I₂, V₁cu(I₁…₂) → S → I₃, V₁cu(I₁…₃) → S → I₄ → S → I₅ → S → A(I₁…₅) → S",
+    "meta": {
+      "Datum": "1. Juni 2024",
+      "Doublecheck Formula": "",
+      "Input data type": "category (nominal)",
+      "Input semantics": "Personal Subjective",
+      "News-Orga": "The Pudding",
+      "Position of user input in story": "Recurring",
+      "Response on user input": "Annotation update, Story update",
+      "Topic": "Gesundheit",
+      "UI for user input": "Button Based Input, Visual Object Selection",
+      "URL": "https://pudding.cool/2022/12/emotion-wheel/"
+    }
+  },
+  {
+    "id": "how-long-will-it-take-you-to-reach-your-savings-goals-for-the-new-year-calculator",
+    "title": "How long will it take you to reach your savings goals for the new year? – calculator",
+    "notation": "S → I₁ → Au(I₁)",
+    "meta": {
+      "Datum": "6. Januar 2026",
+      "Doublecheck Formula": "",
+      "Input data type": "Binary, Numeric (continuous)",
+      "Input semantics": "Behavior, Cost Parameter",
+      "News-Orga": "The Guardian",
+      "Position of user input in story": "Intro",
+      "Response on user input": "Annotation update",
+      "Topic": "Vermögen",
+      "UI for user input": "Button Based Input, Slider",
+      "URL": "https://www.theguardian.com/money/ng-interactive/2026/jan/06/new-year-resolutions-savings-goals-calculator"
+    }
+  },
+  {
+    "id": "what-constituency-am-i-in-new-boundary-map-for-uk-general-election-and-how-changes-may-affect-you",
+    "title": "What constituency am I in? New boundary map for UK general election – and how changes may affect you",
+    "notation": "S → (I₁, V₁z(I₁), V₁h(I₁)) → S",
+    "meta": {
+      "Datum": "3. Juli 2024",
+      "Doublecheck Formula": "",
+      "Input data type": "Geographic",
+      "Input semantics": "Sociodemographic Attributes",
+      "News-Orga": "The Guardian",
+      "Position of user input in story": "Mid",
+      "Response on user input": "Annotation update, Local highlight of user input in visualization, Zoom-in existing visualization based on user input",
+      "Topic": "Politik",
+      "UI for user input": "Autocomplete/Typeahead, Visual Object Selection",
+      "URL": "https://www.theguardian.com/politics/ng-interactive/2024/jul/03/what-constituency-am-i-in-boundary-changes-map-uk-general-election-2024-votes-postcode"
+    }
+  }
+]

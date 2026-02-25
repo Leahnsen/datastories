@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Input Story Design Space</title>
+  <style>
+    :root {
+      --text-strong:#111827;
+      --text-default:#1f2937;
+      --text-muted:#6b7280;
+      --line:#e5e7eb;
+      --line-strong:#cfd4dc;
+      --h1-size:34px;
+      --h2-size:30px;
+      --h3-size:18px;
+      --body-size:14px;
+      --line-height:1.5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background:#fff;
+      color:var(--text-default);
+      font-size:var(--body-size);
+      line-height:var(--line-height);
+    }
+    h1, h2, h3 { margin:0; color:var(--text-strong); line-height:1.2; }
+    .title-h1 { font-size:var(--h1-size); font-weight:800; margin-bottom:32px; letter-spacing:-0.01em; }
+    .title-h2 { font-size:var(--h2-size); font-weight:700; margin-bottom:16px; letter-spacing:-0.005em; }
+    .title-h3 { font-size:var(--h3-size); font-weight:600; margin-top:24px; margin-bottom:12px; }
+    .body-text { font-size:var(--body-size); line-height:var(--line-height); color:var(--text-default); }
+    .site-header {
+      padding: 14px 22px 10px;
+      background:#fff;
+      border-bottom:1px solid var(--line);
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.15;
+      color:#0f172a;
+      letter-spacing:-0.01em;
+    }
+    .wrap {
+      display:grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 460px;
+      gap:28px;
+      padding:18px 22px 24px;
+      align-items:start;
+    }
+    .panel { background:transparent; border:none; border-radius:0; padding:0; }
+    .matrix { position:relative; width:100%; max-width:410px; aspect-ratio: 1/1.14; border:none; border-radius:0; background:transparent; overflow:visible; margin:4px 0; }
+    .grid { position:absolute; inset:0; display:grid; grid-template-columns:repeat(2,1fr); grid-template-rows:repeat(2,1fr); }
+    .cell { position:relative; border-right:1px solid transparent; border-bottom:1px solid transparent; padding:14px 12px 14px; cursor:pointer; }
+    .cell:nth-child(2n){ border-right:none; }
+    .cell:nth-child(n+3){ border-bottom:none; }
+    .cell .count { position:absolute; top:12px; right:12px; font-size:38px; line-height:1; font-weight:500; color:rgba(107,114,128,0.7); }
+    .cell.active { background:#d6e0eb !important; }
+    .points-layer { position:absolute; inset:0; pointer-events:none; }
+    .point {
+      position:absolute;
+      width:23px;
+      height:23px;
+      border-radius:2px;
+      border:1px solid #7f8792;
+      pointer-events:auto;
+      cursor:pointer;
+      background:#f2f4f7;
+    }
+    .axis-x, .axis-y { font-size:16px; color:#111827; font-weight:600; }
+    .axis-x { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:12px; text-align:center; }
+    .axis-y { position:absolute; left:46px; top:0; bottom:0; width:88px; display:grid; grid-template-rows:repeat(2,1fr); align-items:center; text-align:left; padding-right:0; }
+    .matrix-shell { position:relative; margin:0 auto; width:max-content; padding-left:150px; }
+    .matrix-shell.fig1 {
+      margin: 0 auto;
+      padding-left: 154px;
+    }
+    .figure-head {
+      margin: 6px 0 26px;
+      text-align:center;
+    }
+    .figure-head .title-h2 { margin-bottom:0; font-size:32px; }
+    .axis-question-top { text-align:center; font-size:13px; color:var(--text-muted); margin:0 0 14px; line-height:1.35; }
+    .axis-x-top { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:0 0 10px; text-align:center; font-size:16px; font-weight:600; color:#111827; }
+    .axis-question-y {
+      position:absolute;
+      left:12px;
+      top:0;
+      bottom:0;
+      width:24px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size:12px;
+      color:var(--text-muted);
+      letter-spacing:0.02em;
+      text-align:center;
+    }
+    .axis-y.fig1-y {
+      left:44px;
+      width:88px;
+      font-size:16px;
+      font-weight:600;
+      color:#111827;
+      gap:18px;
+    }
+    .matrix-plain {
+      border:none;
+      border-radius:0;
+      background:transparent;
+      overflow:visible;
+    }
+    .matrix-plain .cell {
+      border-right:2px solid #5f6774;
+      border-bottom:2px solid #5f6774;
+    }
+    .matrix-plain .cell:nth-child(2n){ border-right:none; }
+    .matrix-plain .cell:nth-child(n+3){ border-bottom:none; }
+    .matrix-guide .cell {
+      border-right:1px solid var(--line-strong);
+      border-bottom:1px solid var(--line-strong);
+    }
+    .matrix-guide .cell:nth-child(2n){ border-right:none; }
+    .matrix-guide .cell:nth-child(n+3){ border-bottom:none; }
+    .matrix-title { margin: 54px 0 16px 150px; font-size:28px; font-weight:700; color:#111827; }
+    .matrix-legend { margin-top:10px; display:flex; gap:12px; justify-content:flex-end; font-size:11px; color:#6b7280; }
+    .matrix-shell.fig1 .matrix-legend { width:100%; margin-left:0; justify-content:flex-end; gap:10px; }
+    .legend-item { display:flex; align-items:center; gap:6px; }
+    .legend-swatch { width:14px; height:14px; border-radius:2px; border:1px solid #7f8792; }
+    .filter-panel { margin-top:22px; border-top:1px solid var(--line); padding-top:14px; }
+    .filter-head { display:flex; gap:8px; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .filter-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px 10px; font-size:12px; margin-bottom:8px; }
+    .filter-grid label { display:flex; align-items:center; gap:6px; white-space:nowrap; }
+    .toggle-group { display:flex; gap:10px; margin-bottom:10px; }
+    .toggle-group button { border:none; background:transparent; padding:0; border-radius:0; cursor:pointer; font-size:12px; color:#6b7280; text-decoration:underline; text-underline-offset:2px; }
+    .toggle-group button.active { color:#111827; font-weight:600; }
+    .search-row { display:flex; gap:8px; margin-bottom:8px; }
+    .search-row input { flex:1; border:1px solid #c8cdd5; border-radius:8px; padding:6px 8px; font-size:12px; }
+    .search-row button { border:1px solid #d1d5db; background:#fff; border-radius:6px; padding:6px 8px; cursor:pointer; font-size:12px; color:#374151; }
+    .count-grid { display:none; }
+    .count-chip { display:none; }
+    .list { margin-top:6px; max-height:220px; overflow:auto; border-top:1px solid var(--line); padding-top:10px; }
+    .list.list-bottom { max-height:280px; }
+    .list-item { padding:6px 0; border-bottom:1px solid #f0f2f6; }
+    .list-item a { color:#0f62fe; text-decoration:none; cursor:pointer; }
+    .summary { font-size:12px; color:#555; }
+    .detail { padding:0; }
+    .detail .meta { font-size:13px; color:#556070; margin-bottom:8px; }
+    .detail .detail-block { margin-top:32px; }
+    .detail .detail-heading { font-size:24px; font-weight:600; margin:0 0 14px; color:#111827; }
+    .detail .detail-notation {
+      white-space:pre-wrap;
+      background:#f7f8fa;
+      border:none;
+      border-radius:8px;
+      padding:10px 12px;
+      font-size:13px;
+      line-height:1.5;
+      color:#1f2937;
+      margin:0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+    .detail .detail-svg-wrap {
+      border:none;
+      border-radius:0;
+      background:#fff;
+      padding:4px 0;
+      max-height:760px;
+      overflow:auto;
+      display:flex;
+      justify-content:center;
+    }
+    .detail .detail-svg {
+      display:block;
+      width:auto;
+      height:auto;
+      max-width:none;
+    }
+    .chips { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 10px; }
+    .chip { font-size:11px; padding:3px 7px; border-radius:999px; background:#eef2f7; color:#334; }
+    .tooltip { position:fixed; z-index:1000; padding:6px 8px; background:#111; color:#fff; font-size:11px; border-radius:6px; pointer-events:none; max-width:260px; display:none; }
+    .point.filtered-match { border-color:#e85d04; box-shadow:0 0 0 1px rgba(232,93,4,0.2); }
+    .point.filtered-dim { opacity:0.28; }
+    .matrix-panel { min-width: 0; padding-left: 4px; padding-right: 6px; }
+    .center-panel { min-width: 0; }
+    .legend-panel {
+      position: sticky;
+      top: 12px;
+      max-height: calc(100vh - 16px);
+      overflow: auto;
+      border: none;
+      border-left: 1px solid var(--line);
+      border-radius: 0;
+      background: transparent;
+      padding: 0 0 0 14px;
+    }
+    .legend-section { padding: 10px 0 12px; border-bottom: 1px solid var(--line); }
+    .legend-section:last-child { border-bottom: none; }
+    .legend-head { margin:0 0 8px; }
+    .legend-head h3 { margin:0; font-size:32px; line-height:1.15; letter-spacing:0.01em; color:#111827; }
+    .legend-head .sub { margin-top:4px; font-size:12px; color:#6b7280; }
+    .legend-title { margin:0 0 8px; font-size:16px; font-weight:600; color:#1f2937; }
+    .legend-note { font-size:11px; color:#556070; line-height:1.35; margin-top:6px; }
+    .legend-list { margin:0; padding:0; list-style:none; font-size:12px; color:#2c3642; }
+    .legend-list li { display:flex; gap:8px; align-items:flex-start; margin:4px 0; }
+    .legend-symbol { width:16px; display:inline-block; text-align:center; font-weight:700; color:#1f2937; }
+    .legend-gradient { height:14px; border:1px solid #a6afba; border-radius:3px; margin:6px 0; }
+    .legend-small { font-size:11px; color:#6b7280; }
+    .detail-tag { display:inline-block; font-size:11px; color:#334155; background:#eef2f7; border:1px solid #dde4ee; border-radius:999px; padding:3px 8px; margin-bottom:8px; }
+    .legend-glyph-list { margin:0; padding:0; list-style:none; }
+    .legend-glyph-row { display:flex; align-items:center; gap:8px; margin:5px 0; font-size:13px; color:#1f2937; }
+    .legend-glyph { width:20px; height:20px; display:block; object-fit:contain; }
+    .legend-indent { margin-left:28px; margin-top:4px; }
+    .legend-subtitle { margin:6px 0 2px; font-size:11px; color:#5f6978; font-weight:600; }
+    .legend-subitem { display:flex; gap:8px; align-items:center; margin:4px 0; font-size:12px; color:#27313f; }
+    .legend-subitem .legend-glyph { width:22px; height:22px; }
+    .legend-symbol-run { display:flex; align-items:center; gap:6px; margin-bottom:4px; flex-wrap:wrap; }
+    .legend-input-dot { width:10px; height:10px; border-radius:50%; border:1px solid #aab3bf; display:inline-block; }
+    .legend-viz-dot { width:14px; height:14px; border-radius:50%; border:1px solid #9ca6b3; display:inline-block; }
+    .legend-concept { border:none; border-radius:0; padding:0; margin:14px 0; }
+    .legend-mini-stack { display:flex; flex-direction:column; gap:4px; width:22px; }
+    .legend-mini-row { display:flex; gap:4px; align-items:center; }
+    .legend-collapsible summary { cursor:pointer; font-size:12px; font-weight:600; color:#1f2937; user-select:none; }
+    .legend-collapsible[open] summary { margin-bottom:6px; }
+    .legend-glyph-mask {
+      width:28px;
+      height:28px;
+      display:inline-block;
+      background: var(--legend-fill, #8dd3c7);
+      -webkit-mask-image: var(--legend-glyph);
+      mask-image: var(--legend-glyph);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      flex:0 0 auto;
+    }
+    .legend-glyph-mask.gradient {
+      background: linear-gradient(90deg, #8dd3c7, #bebada);
+    }
+    .legend-visibility-icons .legend-glyph-mask {
+      width:30px;
+      height:30px;
+      flex:0 0 30px;
+    }
+    .legend-align-row {
+      display:grid;
+      grid-template-columns: 92px 1fr;
+      align-items:start;
+      column-gap:10px;
+      margin-top:14px;
+    }
+    .legend-align-row:first-child { margin-top:0; }
+    .legend-icon-cell { min-height:30px; display:flex; align-items:center; justify-content:center; }
+    .legend-icon-cell.vertical { flex-direction:column; gap:5px; }
+    .legend-icon-cell.horizontal { flex-direction:row; gap:6px; }
+    .legend-text-cell { font-size:12px; color:#6b7280; line-height:1.45; margin-top:1px; }
+    .legend-text-cell strong { color:#2c3642; font-weight:700; }
+    .legend-concept-row {
+      display:grid;
+      grid-template-columns: 92px 1fr;
+      column-gap:10px;
+      align-items:start;
+    }
+    .legend-mini-svg {
+      width:92px;
+      height:62px;
+      border:none;
+      display:block;
+      object-fit:contain;
+      overflow:hidden;
+      background:transparent;
+    }
+    .legend-mini-svg.persistence {
+      width:140px;
+      height:170px;
+    }
+    .legend-mini-svg.repetition {
+      width:140px;
+      height:86px;
+    }
+    .legend-visibility-row {
+      display:grid;
+      grid-template-columns: 92px 1fr;
+      column-gap:10px;
+      align-items:center;
+      margin:8px 0;
+    }
+    .legend-visibility-icons {
+      width:92px;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap:0;
+      min-height:28px;
+      overflow:visible;
+    }
+    .legend-visibility-icons object {
+      width:32px;
+      height:32px;
+      display:block;
+      flex:0 0 32px;
+      pointer-events:none;
+      transform: scale(1.25);
+      transform-origin: left center;
+    }
+    .legend-visibility-icons object + object {
+      margin-left: -10px;
+    }
+    .legend-flow .legend-icon-cell { justify-content:flex-start; }
+    .legend-flow .legend-align-row + .legend-align-row { margin-top:24px; }
+    .legend-syntax-mini { font-size:11px; color:#303947; line-height:1.35; }
+    .legend-syntax-mini .line { display:block; margin:1px 0; white-space:nowrap; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <h1>Integration of User Input in Data Stories</h1>
+  </header>
+  <main class="wrap">
+    <section class="panel matrix-panel">
+      <div class="figure-head">
+        <h2 class="title-h2">Structural Distribution</h2>
+      </div>
+      <div class="matrix-shell fig1">
+        <div class="axis-question-top">How is user input embedded in the narrative structure?</div>
+        <div class="axis-x-top">
+          <div>Local Embedded</div>
+          <div>Distributed Embedded</div>
+        </div>
+        <div class="axis-question-y">How is user input processed at the data level?</div>
+        <div class="axis-y fig1-y">
+          <div>Parametric</div>
+          <div>Generative</div>
+        </div>
+        <div class="matrix matrix-plain" id="matrix">
+          <div class="grid" id="grid"></div>
+          <div class="points-layer" id="points"></div>
+        </div>
+        <div class="matrix-legend">
+          <div class="legend-item"><span id="legend-single" class="legend-swatch"></span><span>Single Input</span></div>
+          <div class="legend-item"><span id="legend-multiple" class="legend-swatch"></span><span>Multiple Inputs</span></div>
+        </div>
+      </div>
+      <div class="matrix-title">Structural Distribution by Narrative Layer Impact</div>
+      <div class="matrix-shell">
+        <div class="axis-y">
+          <div>Parametric</div>
+          <div>Generative</div>
+        </div>
+        <div class="matrix matrix-guide" id="matrix2">
+          <div class="grid" id="grid2"></div>
+          <div class="points-layer" id="points2"></div>
+        </div>
+        <div class="axis-x">
+          <div>Local</div>
+          <div>Distributed</div>
+        </div>
+        <div class="matrix-legend">
+          <div class="legend-item"><span id="legend-depth-1" class="legend-swatch"></span><span>Single-layer impact</span></div>
+          <div class="legend-item"><span id="legend-depth-2" class="legend-swatch"></span><span>Dual-layer impact</span></div>
+          <div class="legend-item"><span id="legend-depth-3" class="legend-swatch"></span><span>Triple-layer impact</span></div>
+        </div>
+      </div>
+      <div class="filter-panel">
+        <div class="filter-head">
+          <span class="title-h3" style="margin:0;">Visualization Type Filter</span>
+          <span id="articles-count" class="summary"></span>
+        </div>
+        <div class="toggle-group">
+          <button id="logic-and" class="active">AND</button>
+          <button id="logic-or">OR</button>
+        </div>
+        <div id="viz-filter-grid" class="filter-grid"></div>
+        <div class="search-row">
+          <input id="title-search" type="text" placeholder="Search article title">
+          <button id="clear-viz-filters">Clear Filters</button>
+        </div>
+        <div id="viz-count-grid" class="count-grid"></div>
+      </div>
+      <div class="filter-panel">
+        <div class="filter-head">
+          <span class="title-h3" style="margin:0;">Articles</span>
+        </div>
+        <div class="list list-bottom" id="cell-list"></div>
+      </div>
+    </section>
+    <section class="panel detail center-panel">
+      <div id="detail">
+        <h2 class="title-h2">Select a point</h2>
+        <div class="meta">Click an article point to view formal and visual structure.</div>
+      </div>
+    </section>
+    <aside class="panel legend-panel">
+      <div class="legend-head">
+        <h3>Legend</h3>
+        <div class="sub">Visual Syntax of User Input in Data Stories</div>
+      </div>
+      <div class="legend-section">
+        <h4 class="legend-title">Narrative Elements</h4>
+        <div class="legend-small">Shapes represent structural narrative components.</div>
+        <ul class="legend-glyph-list">
+          <li class="legend-glyph-row"><img class="legend-glyph" src="../../../design/glyphs/S.svg" alt="Story glyph"><span>Story</span></li>
+          <li class="legend-glyph-row"><img class="legend-glyph" src="../../../design/glyphs/A.svg" alt="Annotation glyph"><span>Annotation</span></li>
+          <li class="legend-glyph-row"><img class="legend-glyph" src="../../../design/glyphs/I.svg" alt="Input glyph"><span>User Input</span></li>
+          <li class="legend-glyph-row"><img class="legend-glyph" src="../../../design/glyphs/Nds.svg" alt="Nds glyph"><span>Data Story</span></li>
+          <li class="legend-glyph-row"><img class="legend-glyph" src="../../../design/glyphs/V.svg" alt="Visualization glyph"><span>Visualization</span></li>
+        </ul>
+        <div class="legend-indent">
+          <div class="legend-subtitle">How User Input gets visible</div>
+          <div class="legend-subitem"><img class="legend-glyph" src="../../../design/glyphs/Vh.svg" alt="Highlight glyph"><div>Highlight in visualization</div></div>
+          <div class="legend-subitem"><img class="legend-glyph" src="../../../design/glyphs/Vu.svg" alt="Update glyph"><div>Update in visualization</div></div>
+          <div class="legend-subitem"><img class="legend-glyph" src="../../../design/glyphs/Vz.svg" alt="Zoom glyph"><div>Zoom in visualization</div></div>
+          <div class="legend-subitem"><img class="legend-glyph" src="../../../design/glyphs/Vcu.svg" alt="Comparison glyph"><div>Comparison user vs herself</div></div>
+          <div class="legend-subitem"><img class="legend-glyph" src="../../../design/glyphs/Vcuu.svg" alt="User vs users glyph"><div>Comparison user vs users</div></div>
+          <div class="legend-subitem"><img class="legend-glyph" src="../../../design/glyphs/Vcuo.svg" alt="User vs official glyph"><div>Comparison user vs official</div></div>
+          <div class="legend-subitem"><img class="legend-glyph" src="../../../design/glyphs/Vcuuo.svg" alt="User vs users vs official glyph"><div>Comparison user vs users vs official</div></div>
+        </div>
+      </div>
+      <div class="legend-section">
+        <h4 class="legend-title">Visibility of User Input by color</h4>
+        <div class="legend-visibility-row">
+          <div class="legend-visibility-icons">
+            <object type="image/svg+xml" data="./legend/legend-input-i1.svg"></object>
+          </div>
+          <div class="legend-text-cell">Concrete User Input</div>
+        </div>
+        <div class="legend-visibility-row">
+          <div class="legend-visibility-icons">
+            <object type="image/svg+xml" data="./legend/legend-input-i1.svg"></object>
+            <object type="image/svg+xml" data="./legend/legend-vu-i1.svg"></object>
+          </div>
+          <div class="legend-text-cell">Visualization is updated based on User Input</div>
+        </div>
+        <div class="legend-visibility-row">
+          <div class="legend-visibility-icons">
+            <object type="image/svg+xml" data="./legend/legend-input-i1.svg"></object>
+            <object type="image/svg+xml" data="./legend/legend-input-i2.svg"></object>
+            <object type="image/svg+xml" data="./legend/legend-vu-i12.svg"></object>
+          </div>
+          <div class="legend-text-cell">Visualization is updated based on two distinct User Inputs</div>
+        </div>
+      </div>
+      <div class="legend-section">
+        <h4 class="legend-title">Narrative Flow</h4>
+        <div class="legend-concept legend-flow">
+          <div class="legend-align-row">
+            <div class="legend-icon-cell vertical">
+              <img class="legend-glyph" src="../../../design/glyphs/V.svg" alt="V">
+              <img class="legend-glyph" src="../../../design/glyphs/A.svg" alt="A">
+            </div>
+            <div class="legend-text-cell"><strong>Vertical alignment</strong> = sequential progression. Elements appear one after another in narrative flow.</div>
+          </div>
+          <div class="legend-align-row">
+            <div class="legend-icon-cell horizontal">
+              <img class="legend-glyph" src="../../../design/glyphs/V.svg" alt="V">
+              <img class="legend-glyph" src="../../../design/glyphs/A.svg" alt="A">
+            </div>
+            <div class="legend-text-cell"><strong>Horizontal alignment</strong> = simultaneous event window. Elements are active at the same narrative moment.</div>
+          </div>
+        </div>
+        <div class="legend-concept">
+          <div class="legend-concept-row">
+            <object class="legend-mini-svg persistence" type="image/svg+xml" data="./legend/legend-persistence.svg"></object>
+            <div class="legend-text-cell"><strong>Persistence</strong><br>The framed element remains visible across steps. Matching bracket-like framing marks the persistent element; when input-dependent, updated instances are shown with the same frame.</div>
+          </div>
+        </div>
+        <div class="legend-concept">
+          <div class="legend-subtitle">Repetition</div>
+          <div class="legend-concept-row">
+            <object class="legend-mini-svg repetition" type="image/svg+xml" data="./legend/legend-repetition.svg"></object>
+            <div class="legend-text-cell"><strong>Repetition</strong><br>User-input independent repetitions can be compactly aggregated.</div>
+          </div>
+        </div>
+      </div>
+      <div class="legend-section">
+        <details class="legend-collapsible">
+          <summary>Structural Notation Syntax</summary>
+          <ul class="legend-list">
+            <li><span class="legend-symbol">→</span><span>Sequencing: <code>S → V → A</code></span></li>
+            <li><span class="legend-symbol">,</span><span>Event window: <code>V, A, I</code></span></li>
+            <li><span class="legend-symbol">⟦ ⟧</span><span>Persistence: <code>⟦V₁⟧ ... (¬V₁)</code></span></li>
+            <li><span class="legend-symbol">(¬X)</span><span>Removal marker</span></li>
+            <li><span class="legend-symbol">X₁…ₖ</span><span>Range abbreviation</span></li>
+            <li><span class="legend-symbol">(X)ₙ</span><span>Iteration block</span></li>
+          </ul>
+        </details>
+      </div>
+    </aside>
+  </main>
+  <div class="tooltip" id="tooltip"></div>
+  <script>
+    const records = [{"article_id":"wine-animals","title":"wine animals","x_category":"parametric","y_category":"distributed_single","integrated_badge":false,"visualization_types":["Vu","Vh"],"narrative_layers":["visualization","story"],"structural_pattern_summary":"distributed embedding + same-input across steps + persistence span","notation_string":"S → I₁ → Su(I₁) → S → ⟦V₁h⟧(I₁) → V₁u(I₁), Su(I₁) → V₁u(I₁), Su(I₁) → S, (¬V₁h) → S → ⟦V₂h⟧(I₁) → S → S → S → S → S → S, V₂u(I₁) → S → S → Su(I₁) → S → S → S → S → (¬V₂h), S → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.","key_structural_features":["frames: 27","distinct inputs: 1","notation input ids: 1","reaction window (comma group)","persistence span","distributed embedding","same input referenced across multiple steps"]},{"article_id":"nyc-street-view","title":"nyc street view","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":[],"narrative_layers":["visualization"],"structural_pattern_summary":"single-window local dependency","notation_string":"(S → V)₁…₈ → S→ I₁ → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 5","distinct inputs: 1","notation input ids: 1","structural range/abbreviation"]},{"article_id":"so-viel-wurden-sie-verdienen-wenn-sie-beamter-waren","title":"So viel würden Sie verdienen, wenn Sie Beamter wären","x_category":"parametric","y_category":"local_multiple","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"multiple inputs + persistence span + simultaneous reactions","notation_string":"S → ⟦V₁, Au₁⟧ → S₁…₅ → I₁, V₁u(I₁), Au₁(I₁) → S → (¬V₁) → S → I₂, Vu(I₂), Au(I₂) → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme.","key_structural_features":["frames: 9","distinct inputs: 2","notation input ids: 2","structural range/abbreviation","reaction window (comma group)","persistence span","multiple input set"]},{"article_id":"so-konnten-ihre-kinder-die-klimakrise-erleben","title":"So könnten Ihre Kinder die Klimakrise erleben","x_category":"parametric","y_category":"distributed_single","integrated_badge":false,"visualization_types":[],"narrative_layers":["visualization","annotation","story"],"structural_pattern_summary":"distributed embedding + same-input across steps","notation_string":"S → I₁ → Au(I₁) → Su(I₁) → S → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.","key_structural_features":["frames: 7","distinct inputs: 1","notation input ids: 1","distributed embedding","same input referenced across multiple steps"]},{"article_id":"schlafen-sie-genug","title":"Schlafen Sie genug?","x_category":"generative","y_category":"local_single","integrated_badge":false,"visualization_types":["Vcuu"],"narrative_layers":["visualization"],"structural_pattern_summary":"Vcuu/Vcuuo comparison","notation_string":"S → I₁ → Vcuu(I₁) → (S → V)₁…₂","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.","key_structural_features":["frames: 4","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","Vcuu/Vcuuo present"]},{"article_id":"zahlen-sie-ihrem-kind-genug-taschengeld","title":"Zahlen Sie Ihrem Kind genug Taschengeld?","x_category":"generative","y_category":"local_single","integrated_badge":false,"visualization_types":["Vcuu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"Vcuu/Vcuuo comparison + simultaneous reactions","notation_string":"S → I₁ → Vcuu(I₁), Au(I₁) → S → V → S","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.","key_structural_features":["frames: 6","distinct inputs: 1","notation input ids: 1","reaction window (comma group)","Vcuu/Vcuuo present"]},{"article_id":"gehoren-sie-zur-politischen-mitte","title":"Gehören Sie zur politischen Mitte?","x_category":"parametric","y_category":"distributed_multiple","integrated_badge":true,"visualization_types":["Vcuo"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"iterated cumulative Vcu* + integrated multi-input expression + distributed embedding","notation_string":"S → I₁…₁₃ → (Vcuo(I₁…₁₃), Au(I₁…₁₃)) → (Vcuo(Iₙ), Au(Iₙ))ₙ₌₁…₁₃ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Iteration + kumulative Vcu*-Referenz erkannt. Integrated badge: Multi-Input-Argument erkannt.","key_structural_features":["frames: 17","distinct inputs: 1","notation input ids: 26","explicit iteration block","structural range/abbreviation","reaction window (comma group)","multiple input set","distributed embedding","Integrated","iterated cumulative Vcu* pattern"]},{"article_id":"lohnt-sich-eine-warmepumpe-fur-ihr-haus","title":"Lohnt sich eine Wärmepumpe für Ihr Haus?","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"simultaneous reactions","notation_string":"S → I₁, Vu( I₁), Au( I₁) → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 3","distinct inputs: 1","notation input ids: 1","reaction window (comma group)"]},{"article_id":"lohnt-sich-die-ehe-fur-sie","title":"Lohnt sich die Ehe für Sie?","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"simultaneous reactions","notation_string":"S → I₁, Au(I₁), Vu(I₁) → S → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 5","distinct inputs: 1","notation input ids: 1","reaction window (comma group)"]},{"article_id":"wie-zufrieden-sind-sie-mit-ihrem-leben","title":"Wie zufrieden sind Sie mit Ihrem Leben?","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization","story"],"structural_pattern_summary":"persistence span + simultaneous reactions","notation_string":"S → ⟦V₁⟧ → I₁ → Su(I₁), V₁u(I₁) → S₁…₃→ (¬V₁) → S → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 9","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)","persistence span"]},{"article_id":"wie-weit-darf-ihr-kind-allein-gehen","title":"Wie weit darf Ihr Kind allein gehen?","x_category":"generative","y_category":"local_multiple","integrated_badge":false,"visualization_types":["Vcuu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"Vcuu/Vcuuo comparison + multiple inputs + explicit iteration","notation_string":"S → I₁ → Au(I₁) → (Iₙ → Vcuu(Iₙ))ₙ₌₂…₈ → S → I₉","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.","key_structural_features":["frames: 19","distinct inputs: 9","notation input ids: 16","explicit iteration block","structural range/abbreviation","multiple input set","Vcuu/Vcuuo present"]},{"article_id":"wie-riskant-ist-ihr-alkoholkonsum","title":"Wie riskant ist Ihr Alkoholkonsum?","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vcuo"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"simultaneous reactions","notation_string":"S → I₁, Au(I₁), Vcuo(I₁) → (S → V)₁…₄ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 4","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)"]},{"article_id":"wie-gut-passt-mein-job-zu-mir","title":"Wie gut passt mein Job zu mir?","x_category":"generative","y_category":"local_multiple","integrated_badge":false,"visualization_types":["Vcuu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"Vcuu/Vcuuo comparison + multiple inputs + explicit iteration","notation_string":"S → I₁…₁₂ → (Vcuu(Iₙ), Au(Iₙ))ₙ₌₁…₁₂ → S","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.","key_structural_features":["frames: 15","distinct inputs: 1","notation input ids: 24","explicit iteration block","structural range/abbreviation","reaction window (comma group)","multiple input set","Vcuu/Vcuuo present"]},{"article_id":"lohnt-sich-ein-e-auto-fur-sie-testen-sie-es-mit-unserem-rechner","title":"Lohnt sich ein E-Auto für Sie? Testen Sie es mit unserem Rechner","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu","Vh"],"narrative_layers":["visualization"],"structural_pattern_summary":"persistence span + simultaneous reactions","notation_string":"S, ⟦V₁⟧ → S₁…₆ → I₁, V₁u(I₁), V₁h(I₁) → (¬V₁) → S → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 7","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)","persistence span"]},{"article_id":"wie-viel-verdienen-sie-im-vergleich-zu-anderen","title":"Wie viel verdienen Sie im Vergleich zu anderen?","x_category":"parametric","y_category":"distributed_multiple","integrated_badge":false,"visualization_types":["Nds"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"spawned sub-story (Nds) + distributed embedding + multiple inputs","notation_string":"S → ⟦V₁⟧ → S, I₁, ⟦A(I₁)⟧ → S₁…₇ → (¬A(I₁)) → S₁…₃ → (¬V₁) → I₂ → Nds(I₂)(S → V → S → I₂ → S → V → S → I₃, Vu(I₃)) → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Nds-Block erkannt.","key_structural_features":["frames: 10","distinct inputs: 2","notation input ids: 2","structural range/abbreviation","reaction window (comma group)","persistence span","spawned sub-story (Nds)","multiple input set","distributed embedding","same input referenced across multiple steps"]},{"article_id":"wie-viel-geld-macht-glucklich","title":"Wie viel Geld macht glücklich?","x_category":"generative","y_category":"local_single","integrated_badge":false,"visualization_types":["Vcuu"],"narrative_layers":["visualization"],"structural_pattern_summary":"Vcuu/Vcuuo comparison","notation_string":"S → I₁ → Vcuu(I₁) → (S → V)₁…₃ → S","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.","key_structural_features":["frames: 5","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","Vcuu/Vcuuo present"]},{"article_id":"was-hat-die-neue-regierung-gut-gemacht-und-was-nicht","title":"Was hat die neue Regierung gut gemacht? Und was nicht?","x_category":"generative","y_category":"distributed_multiple","integrated_badge":true,"visualization_types":["Vcuu"],"narrative_layers":["visualization"],"structural_pattern_summary":"Vcuu/Vcuuo comparison + integrated multi-input expression + distributed embedding","notation_string":"S → I₁ → Vcuu(I₁) → S → I₂ → Vcuu(I₂) → S → I₃ → Vcuu(I₃) → I₄ → Vcuu(I₄) → S → I₅ → Vcuu(I₅) → S → I₆ → Vcuu(I₆) → I₇ → Vcuu(I₇) → S → I₈ → Vcuu(I₈) → S → I₉ → Vcuu(I₉) → I₁₀ → Vcuu(I₁₀) → S → I₁₁ → Vcuu(I₁₁) → S → I₁₂ → Vcuu(I₁₂) → I₁₃ → Vcuu(I₁₃) → S → I₁₄ → Vcuu(I₁₄) → S → I₁₅ → Vcuu(I₁₅) → I₁₆ → Vcuu(I₁₆) → S → I₁₇ → Vcuu(I₁₇) → S → Vcuu(I₁...₁₇)","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Vcuu/Vcuuo als generativer Marker erkannt. Integrated badge: Multi-Input-Argument erkannt.","key_structural_features":["frames: 48","distinct inputs: 17","notation input ids: 17","structural range/abbreviation","multiple input set","distributed embedding","Integrated","Vcuu/Vcuuo present"]},{"article_id":"so-konnte-das-wetter-im-jahr-2100-bei-ihnen-aussehen","title":"So könnte das Wetter im Jahr 2100 bei Ihnen aussehen","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"persistence span + simultaneous reactions","notation_string":"S → ⟦V₁⟧ → S₁...₃ → I₁→ V₁u(I₁), Au(I₁) → (¬V₁) → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 7","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)","persistence span"]},{"article_id":"wie-viel-zahle-ich-ein-und-was-krieg-ich-an-rente-raus","title":"Wie viel zahle ich ein – und was krieg ich an Rente raus?","x_category":"parametric","y_category":"distributed_single","integrated_badge":false,"visualization_types":["Vh"],"narrative_layers":["visualization","annotation","story"],"structural_pattern_summary":"distributed embedding + same-input across steps + persistence span","notation_string":"S → I₁, Au(I₁), Vh(I₁), Au(I₁), Au(I₁) → S → ⟦V₁⟧ → S → Au(I₁), Su(I₁) → Au(I₁), Su(I₁) → (¬V₁) → ⟦V₂h(I₁), Au(I₁)⟧ → S₁...₅ → (¬V₂h(I₁), ¬Au(I₁)) → S → V₁...₃ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.","key_structural_features":["frames: 14","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)","persistence span","distributed embedding","same input referenced across multiple steps"]},{"article_id":"rucktritt-oder-nicht-entscheiden-sie","title":"Rücktritt – oder nicht? Entscheiden Sie!","x_category":"generative","y_category":"local_multiple","integrated_badge":false,"visualization_types":["Vcuu"],"narrative_layers":["visualization"],"structural_pattern_summary":"Vcuu/Vcuuo comparison + multiple inputs + explicit iteration","notation_string":"S → (Iₙ → Vcuu(Iₙ))ₙ₌₁…₂₀ → S","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.","key_structural_features":["frames: 42","distinct inputs: 20","notation input ids: 40","explicit iteration block","structural range/abbreviation","multiple input set","Vcuu/Vcuuo present"]},{"article_id":"so-viel-verdienen-menschen-in-ihrem-wohnort","title":"So viel verdienen Menschen in Ihrem Wohnort","x_category":"parametric","y_category":"distributed_multiple","integrated_badge":false,"visualization_types":["Vh","Nds"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"spawned sub-story (Nds) + distributed embedding + multiple inputs","notation_string":"S → ⟦V₁⟧ → I₁, Au(I₁) → ⟦V₁h(I₁)⟧, Au(I₁), S₁...₂ → (¬V₁) → S,⟦V₂h(I₁), Au(I₁)⟧ → S₁...₇ → (¬V₂, ¬Au(I₁)) → ⟦V₃h(I₁), Au(I₁)⟧ → S₁...₂ → (¬V₃h(I₁), ¬Au(I₁)) → I₂ → Nds(I₂)(S → A → (S → V)₁...₃ → S → I₃, Vu(I₃) → S → I₂) → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Nds-Block erkannt.","key_structural_features":["frames: 14","distinct inputs: 2","notation input ids: 2","structural range/abbreviation","reaction window (comma group)","persistence span","spawned sub-story (Nds)","multiple input set","distributed embedding","same input referenced across multiple steps"]},{"article_id":"ein-eigenheim-ist-hier-wieder-fur-sie-drin","title":"Ein Eigenheim? Ist hier wieder für Sie drin","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization"],"structural_pattern_summary":"persistence span + simultaneous reactions","notation_string":"S → ⟦V₁⟧ → S₁…₃ → I₁, Vu(I₁) → (¬V₁) → (S → V)₁...₂ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 7","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)","persistence span"]},{"article_id":"wie-gut-verstehen-sie-hunde","title":"Wie gut verstehen Sie Hunde?","x_category":"generative","y_category":"distributed_multiple","integrated_badge":true,"visualization_types":["Vcuu"],"narrative_layers":["visualization","annotation","story"],"structural_pattern_summary":"iterated cumulative Vcu* + Vcuu/Vcuuo comparison + integrated multi-input expression","notation_string":"S → (Iₙ → Au(Iₙ), Su(Iₙ))ₙ₌₁…₁₃ → (Vcuu(I₁…₁₃), Au(I₁…₁₃), Su(I₁…₁₃)","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Iteration + kumulative Vcu*-Referenz erkannt. Vcuu/Vcuuo als generativer Marker erkannt. Integrated badge: Multi-Input-Argument erkannt.","key_structural_features":["frames: 28","distinct inputs: 13","notation input ids: 26","explicit iteration block","structural range/abbreviation","reaction window (comma group)","multiple input set","distributed embedding","Integrated","iterated cumulative Vcu* pattern","Vcuu/Vcuuo present"]},{"article_id":"wie-gefahrlich-ist-der-schulweg-ihres-kindes","title":"Wie gefährlich ist der Schulweg Ihres Kindes?","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu","Vcuo"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"persistence span + simultaneous reactions","notation_string":"S → ⟦V₁⟧ → I₁ → V₁u(I₁), Au(I₁), Vcuo(I₁) →  (¬V₁) → S → V → S → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 10","distinct inputs: 1","notation input ids: 1","reaction window (comma group)","persistence span"]},{"article_id":"so-viel-geld-sollten-sie-in-ihrem-alter-gespart-haben","title":"So viel Geld sollten Sie in Ihrem Alter gespart haben","x_category":"parametric","y_category":"distributed_single","integrated_badge":false,"visualization_types":["Vh"],"narrative_layers":["visualization","annotation","story"],"structural_pattern_summary":"distributed embedding + same-input across steps + simultaneous reactions","notation_string":"S → I₁ → Su(I₁), Vh(I₁), Au(I₁) → Su(I₁), Vh(I₁), Au(I₁) → (S → V)₁...₅ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.","key_structural_features":["frames: 6","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)","distributed embedding","same input referenced across multiple steps"]},{"article_id":"welcher-stadtteil-passt-zu-mir","title":"Welcher Stadtteil passt zu mir?","x_category":"parametric","y_category":"distributed_multiple","integrated_badge":false,"visualization_types":["Vcuo"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"distributed embedding + multiple inputs + same-input across steps","notation_string":"S → I₁ → ⟦V₁cuo(I₁), A₁u(I₁)⟧ → I₂ → Au(I₂) → (¬V₁cuo(I₁), ¬A₁u(I₁)) → S → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration.","key_structural_features":["frames: 9","distinct inputs: 2","notation input ids: 2","reaction window (comma group)","persistence span","multiple input set","distributed embedding","same input referenced across multiple steps"]},{"article_id":"sind-sie-so-verheiratet-wie-andere-in-ihrem-alter","title":"Sind Sie so verheiratet wie andere in Ihrem Alter?","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"persistence span + simultaneous reactions","notation_string":"S → ⟦V₁⟧ → I₁, V₁u(I₁), Au(I₁)→ (¬V₁) → S₁...₂ → (S → V)₁...₃ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 7","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)","persistence span"]},{"article_id":"sollte-ich-die-krankenkasse-wechseln","title":"Sollte ich die Krankenkasse wechseln?","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization"],"structural_pattern_summary":"simultaneous reactions","notation_string":"S → (I₁, Vu(I₁)) → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 3","distinct inputs: 1","notation input ids: 1","reaction window (comma group)"]},{"article_id":"das-sind-die-teuersten-und-gunstigsten-stadtteile-deutschlands","title":"Das sind die teuersten und günstigsten Stadtteile Deutschlands","x_category":"parametric","y_category":"distributed_single","integrated_badge":false,"visualization_types":["Vh"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"distributed embedding + same-input across steps + persistence span","notation_string":"S → ⟦V₁⟧ → S → (I₁, Vh(I₁), Au(I₁)) → (¬V₁) → ⟦V₂h(I₁), Au(I₁)⟧ → S₁...₅ → (¬V₂), (¬Au(I₁) → V → S₁...₂ → V → S →","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.","key_structural_features":["frames: 13","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)","persistence span","distributed embedding","same input referenced across multiple steps"]},{"article_id":"wie-viel-protein-sie-wirklich-brauchen","title":"Wie viel Protein Sie wirklich brauchen","x_category":"parametric","y_category":"distributed_single","integrated_badge":false,"visualization_types":["Vh"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"distributed embedding + same-input across steps + simultaneous reactions","notation_string":"S →  (Au(I₁), I₁, Vh(I₁), Au(I₁)) → S → Au( I₁) → V → S → Au( I₁) → V → S → Au( I₁) → V → S → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.","key_structural_features":["frames: 14","distinct inputs: 1","notation input ids: 1","reaction window (comma group)","distributed embedding","same input referenced across multiple steps"]},{"article_id":"wie-viel-zucker-ist-drin","title":"Wie viel Zucker ist drin?","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":[],"narrative_layers":["visualization"],"structural_pattern_summary":"single-window local dependency","notation_string":"S → I₁ → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 4","distinct inputs: 1","notation input ids: 1"]},{"article_id":"konnen-sie-sich-noch-eine-immobilie-in-ihrem-landkreis-leisten","title":"Können Sie sich noch eine Immobilie in Ihrem Landkreis leisten?","x_category":"parametric","y_category":"local_multiple","integrated_badge":false,"visualization_types":["Vu","Vz"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"multiple inputs + persistence span + simultaneous reactions","notation_string":"S → ⟦V₁⟧, I₁, V₁u(I₁) I₂, V₁z(I₂), Au(I₂) →(¬V₁) → (S → V)₁…₂ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme.","key_structural_features":["frames: 5","distinct inputs: 2","notation input ids: 2","structural range/abbreviation","reaction window (comma group)","persistence span","multiple input set"]},{"article_id":"ihr-msci-world-depot-ist-gecrasht-so-schlimm-waren-vergangene-krisen","title":"Ihr MSCI-World-Depot ist gecrasht? So schlimm waren vergangene Krisen","x_category":"parametric","y_category":"distributed_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization","annotation","story"],"structural_pattern_summary":"distributed embedding + same-input across steps + persistence span","notation_string":"S → (I₁, ⟦V₁u(I₁)⟧) → Au(I₁), Su(I₁), V₁u(I₁) → Au(I₁), Su(I₁), V₁u(I₁) → Au(I₁), Su(I₁), V₁u(I₁) → Au(I₁), Su(I₁), V₁u(I₁) → (¬V₁) → S → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.","key_structural_features":["frames: 10","distinct inputs: 1","notation input ids: 1","reaction window (comma group)","persistence span","distributed embedding","same input referenced across multiple steps"]},{"article_id":"how-snowy-could-it-be-where-you-live-this-winter-look-up-your-area","title":"How snowy could it be where you live this winter? Look up your area.","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"simultaneous reactions","notation_string":"S → V → S → I₁, Vu(I₁), Au(I₁) → (S → V)₁…₆ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 6","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)"]},{"article_id":"is-your-area-just-have-its-most-humid-summer-find-out-here","title":"is your area just have its most humid summer? Find out here.","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"simultaneous reactions","notation_string":"(S → V)₁…₂ → S → I₁, Vu(I₁), Au(I₁) → (S → V)₁…₆ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 5","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)"]},{"article_id":"what-trees-are-most-common-in-your-city-and-are-they-at-risk","title":"What trees are most common in your city? And are they at risk?","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"persistence span + simultaneous reactions","notation_string":"S → ⟦V₁⟧ → S₁…₅→ (¬V₁) → (S → V)₁…₂ → (I₁, Vu(I₁), Au(I₁)) → (S → V)₁…₂","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 7","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)","persistence span"]},{"article_id":"your-diet-s-impact-on-the-planet-depends-on-where-you-live-look-up-your-city","title":"Your diet’s impact on the planet depends on where you live. Look up your city.","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":[],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"simultaneous reactions","notation_string":"V → S → V → S → I₁, V, Au(I₁) → S → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 8","distinct inputs: 1","notation input ids: 1","reaction window (comma group)"]},{"article_id":"budget-2025-calculator-how-reeves-tax-changes-will-affect-your-money","title":"Budget 2025 calculator: how Reeves’ tax changes will affect your money","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":[],"narrative_layers":["annotation"],"structural_pattern_summary":"single-window local dependency","notation_string":"S → I₁ → Au(I₁) → (S → V)₁…₃","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 4","distinct inputs: 1","notation input ids: 1","structural range/abbreviation"]},{"article_id":"can-you-run-a-premier-league-football-club","title":"Can you run a Premier League football club?","x_category":"generative","y_category":"distributed_multiple","integrated_badge":true,"visualization_types":["Vcu","Vcuu"],"narrative_layers":["visualization","story"],"structural_pattern_summary":"iterated cumulative Vcu* + Vcuu/Vcuuo comparison + integrated multi-input expression","notation_string":"S₁…₃ → ⟦V₁⟧ → (Iₙ → Su(Iₙ) → V₁cu(I₁…ₙ))ₙ₌₁…₁₇ → (¬V₁)→ (Su(I₁…₁₇) → Vcuu(I₁…₁₇))","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Iteration + kumulative Vcu*-Referenz erkannt. Vcuu/Vcuuo als generativer Marker erkannt. Integrated badge: Multi-Input-Argument erkannt.","key_structural_features":["frames: 56","distinct inputs: 17","notation input ids: 34","explicit iteration block","structural range/abbreviation","persistence span","multiple input set","distributed embedding","Integrated","iterated cumulative Vcu* pattern","Vcuu/Vcuuo present"]},{"article_id":"draw-your-own-chart-game-how-taco-were-trump-s-tariffs","title":"Draw your own chart game: How Taco were Trump’s tariffs?","x_category":"parametric","y_category":"local_multiple","integrated_badge":false,"visualization_types":["Vcuo"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"multiple inputs + persistence span + explicit iteration","notation_string":"S→ (⟦Vₙ⟧ → Iₙ → Vₙcuo(Iₙ), Au(Iₙ) → (¬Vₙ) → S)ₙ₌₁…₅","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme.","key_structural_features":["frames: 26","distinct inputs: 5","notation input ids: 10","explicit iteration block","structural range/abbreviation","reaction window (comma group)","persistence span","multiple input set"]},{"article_id":"can-you-run-the-uk-economy","title":"Can you run the UK economy?","x_category":"parametric","y_category":"distributed_multiple","integrated_badge":true,"visualization_types":["Vcu","Vcuo"],"narrative_layers":["visualization","story"],"structural_pattern_summary":"integrated multi-input expression + distributed embedding + multiple inputs","notation_string":"S₁…₄ → ⟦V₁⟧ → S → I₁ → V₁cu(I₁) → S → I₂ → V₁cu(I₁…₂) → I₃ → V₁cu(I₁…₃) → S → I₄ → V₁cu(I₁…₄) → S → I₅ → V₁cu(I₁…₅) → I₆ → V₁cu(I₁…₆) → I₇ → V₁cu(I₁…₇) → S → S → I₈ → V₁cu(I₁…₈) → I₉ → V₁cu(I₁…₉) → I₁₀ → V₁cu(I₁…₁₀) → I₁₁ → V₁cu(I₁…₁₁) → I₁₂ → V₁cu(I₁…₁₂) → I₁₃ → V₁cu(I₁…₁₃) → S → (¬V₁)→ Su(I₁…₁₃) → V₁cu(I₁…₁₃) → Vcuo(I₁…₁₃) → Vcuo(I₁…₁₃) → Su(I₁…₁₃) → Su(I₁…₁₃) → Su(I₁…₁₃) → Vcuo(I₁…₁₃)","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Integrated badge: Multi-Input-Argument erkannt.","key_structural_features":["frames: 44","distinct inputs: 13","notation input ids: 13","structural range/abbreviation","persistence span","multiple input set","distributed embedding","Integrated"]},{"article_id":"so-hat-die-inflation-ihr-fruhstuck-verteuert","title":"So hat die Inflation Ihr Frühstück verteuert","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vh"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"simultaneous reactions","notation_string":"S → I₁, Vh(I₁), Au(I₁) → (S → V)₁…₄→ S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 4","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)"]},{"article_id":"hier-erfahren-sie-ob-sie-zu-viel-miete-zahlen","title":"Hier erfahren Sie, ob Sie zu viel Miete zahlen","x_category":"parametric","y_category":"local_multiple","integrated_badge":false,"visualization_types":[],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"multiple inputs + simultaneous reactions","notation_string":"S →  I₁, Au( I₁) → (S → V)₁...₂ → I₂, Au(I₂) → S → V → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme.","key_structural_features":["frames: 7","distinct inputs: 2","notation input ids: 2","structural range/abbreviation","reaction window (comma group)","multiple input set"]},{"article_id":"war-die-em-2025-ein-tv-blockbuster","title":"War die EM 2025 ein TV-Blockbuster?","x_category":"generative","y_category":"local_single","integrated_badge":false,"visualization_types":["Vcuuo"],"narrative_layers":["visualization"],"structural_pattern_summary":"Vcuu/Vcuuo comparison + simultaneous reactions","notation_string":"S → V₁, I₁, V₁cuuo(I₁)→ S","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.","key_structural_features":["frames: 3","distinct inputs: 1","notation input ids: 1","reaction window (comma group)","Vcuu/Vcuuo present"]},{"article_id":"benzinpreis-fahrverbot-maut-wie-entscheiden-sie","title":"Benzinpreis, Fahrverbot, Maut – wie entscheiden Sie?","x_category":"parametric","y_category":"distributed_multiple","integrated_badge":true,"visualization_types":["Vcu"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"iterated cumulative Vcu* + integrated multi-input expression + distributed embedding","notation_string":"S → V → S → ⟦V₁, A₁u⟧ →  (Iₙ, V₁cu(I₁…ₙ), A₁u(I₁…ₙ) → S)ₙ₌₁…₁₂ → (¬V₁, ¬Au₁)","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Iteration + kumulative Vcu*-Referenz erkannt. Integrated badge: Multi-Input-Argument erkannt.","key_structural_features":["frames: 29","distinct inputs: 12","notation input ids: 12","explicit iteration block","structural range/abbreviation","reaction window (comma group)","persistence span","multiple input set","distributed embedding","Integrated","iterated cumulative Vcu* pattern"]},{"article_id":"kubismus-trifft-streetart-und-jungfraubahn","title":"Kubismus trifft Streetart und Jungfraubahn","x_category":"generative","y_category":"local_single","integrated_badge":false,"visualization_types":["Vcuu"],"narrative_layers":["visualization"],"structural_pattern_summary":"Vcuu/Vcuuo comparison","notation_string":"S → V → S → I₁ → Vcuu(I₁)","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.","key_structural_features":["frames: 5","distinct inputs: 1","notation input ids: 1","Vcuu/Vcuuo present"]},{"article_id":"rente-pflege-krankenkasse-so-schrumpft-ihr-gehalt-bis-2045-zusammen","title":"Rente, Pflege, Krankenkasse – so schrumpft Ihr Gehalt bis 2045 zusammen","x_category":"parametric","y_category":"distributed_multiple","integrated_badge":true,"visualization_types":["Vu"],"narrative_layers":["visualization","annotation","story"],"structural_pattern_summary":"integrated multi-input expression + distributed embedding + multiple inputs","notation_string":"S →  I₁ → ⟦V₁u(I₁)⟧, Au(I₁)→ Su(I₁) → (Su(I₁), V₁u(I₁), Au(I₁)) → (Su(I₁), V₁u(I₁), Au(I₁)) → (Su(I₁), V₁u(I₁), Au(I₁)) → (Su(I₁), V₁u(I₁), Au(I₁)) → (I₂, Au(I₂), V₁u(I₂)) → S → V₁u(I₁...₂) → S → (Su(I₂), Au(I₂)) → (¬V₁) →S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Integrated badge: Multi-Input-Argument erkannt.","key_structural_features":["frames: 15","distinct inputs: 2","notation input ids: 2","structural range/abbreviation","reaction window (comma group)","persistence span","multiple input set","distributed embedding","Integrated","same input referenced across multiple steps"]},{"article_id":"was-kostet-ein-studium","title":"Was kostet ein Studium?","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vh","Vz"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"simultaneous reactions","notation_string":"S → (V₁, V₂, I₁, V₁z(I₁), V₂h(I₁), Au(I₁)) → (S → V)₁...₂ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 4","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)"]},{"article_id":"verteilen-sie-die-500-milliarden-euro-aus-dem-sondervermogen","title":"Verteilen Sie die 500 Milliarden Euro aus dem Sondervermögen","x_category":"generative","y_category":"distributed_multiple","integrated_badge":true,"visualization_types":["Vu","Vcuuo"],"narrative_layers":["visualization"],"structural_pattern_summary":"Vcuu/Vcuuo comparison + integrated multi-input expression + distributed embedding","notation_string":"S → V₁, I₁, V₁u(I₁) → S → (V₂(I₁), I₂, V₂u(I₂)) → S → (V₃(I₁), I₃, V₃u(I₃)) → S → (V₄(I₁), I₄, V₄u(I₄)) → S →  V₅cuuo(I₁…₄)→ S","analytical_interpretation":"Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Vcuu/Vcuuo als generativer Marker erkannt. Integrated badge: Multi-Input-Argument erkannt.","key_structural_features":["frames: 11","distinct inputs: 4","notation input ids: 4","structural range/abbreviation","reaction window (comma group)","multiple input set","distributed embedding","Integrated","same input referenced across multiple steps","Vcuu/Vcuuo present"]},{"article_id":"so-verlangern-sie-2025-ihren-urlaub","title":"So verlängern Sie 2025 Ihren Urlaub","x_category":"parametric","y_category":"distributed_single","integrated_badge":false,"visualization_types":["Vh"],"narrative_layers":["visualization","annotation"],"structural_pattern_summary":"distributed embedding + same-input across steps","notation_string":"S → I₁ → Vh(I₁) → Au(I₁)) → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.","key_structural_features":["frames: 4","distinct inputs: 1","notation input ids: 1","distributed embedding","same input referenced across multiple steps"]},{"article_id":"mit-diesen-kosten-mussen-sie-bei-der-haussanierung-rechnen","title":"Mit diesen Kosten müssen Sie bei der Haussanierung rechnen","x_category":"parametric","y_category":"distributed_multiple","integrated_badge":true,"visualization_types":[],"narrative_layers":["annotation","story"],"structural_pattern_summary":"integrated multi-input expression + distributed embedding + multiple inputs","notation_string":"S → ⟦A₁⟧ → (S → Iₙ → A₁(I₁…ₙ))ₙ₌₁…₆ → S → (¬A₁) → A(I₁…₆) → Su(I₁…₆) → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Integrated badge: Multi-Input-Argument erkannt.","key_structural_features":["frames: 25","distinct inputs: 6","notation input ids: 6","explicit iteration block","structural range/abbreviation","persistence span","multiple input set","distributed embedding","Integrated"]},{"article_id":"wie-viel-rendite-sie-trotz-crash-mit-aktien-machen-konnen","title":"Wie viel Rendite Sie (trotz Crash) mit Aktien machen können","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vh"],"narrative_layers":["visualization"],"structural_pattern_summary":"persistence span + simultaneous reactions","notation_string":"S → V → S → ⟦V₁⟧ → S₁…₇ → (¬V₁) → S → I₁, Vh(I₁)","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 8","distinct inputs: 1","notation input ids: 1","structural range/abbreviation","reaction window (comma group)","persistence span"]},{"article_id":"so-viel-kostet-ihre-periode-im-lauf-ihres-lebens","title":"So viel kostet Ihre Periode im Lauf Ihres Lebens","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":[],"narrative_layers":["annotation"],"structural_pattern_summary":"single-window local dependency","notation_string":"I₁ → A(I₁) → (S → V)₁…₃ → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 4","distinct inputs: 1","notation input ids: 1","structural range/abbreviation"]},{"article_id":"how-are-you-doing","title":"How are you doing?","x_category":"parametric","y_category":"distributed_multiple","integrated_badge":true,"visualization_types":["Vcu"],"narrative_layers":["visualization","annotation","story"],"structural_pattern_summary":"integrated multi-input expression + distributed embedding + multiple inputs","notation_string":"S → ⟦V₁] → I₁, V₁cu(I₁) → S → A(I₁) → S → S(I₁) → I₂, V₁cu(I₁…₂) → S → I₃, V₁cu(I₁…₃) → S → I₄ → S → I₅ → S → A(I₁…₅) → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Integrated badge: Multi-Input-Argument erkannt.","key_structural_features":["frames: 17","distinct inputs: 5","notation input ids: 5","structural range/abbreviation","reaction window (comma group)","persistence span","multiple input set","distributed embedding","Integrated","same input referenced across multiple steps"]},{"article_id":"how-long-will-it-take-you-to-reach-your-savings-goals-for-the-new-year-calculator","title":"How long will it take you to reach your savings goals for the new year? – calculator","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":[],"narrative_layers":["annotation"],"structural_pattern_summary":"single-window local dependency","notation_string":"S → I₁ → Au(I₁)","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 3","distinct inputs: 1","notation input ids: 1"]},{"article_id":"what-constituency-am-i-in-new-boundary-map-for-uk-general-election-and-how-changes-may-affect-you","title":"What constituency am I in? New boundary map for UK general election – and how changes may affect you","x_category":"parametric","y_category":"local_single","integrated_badge":false,"visualization_types":["Vh","Vz"],"narrative_layers":["visualization"],"structural_pattern_summary":"simultaneous reactions","notation_string":"S → (I₁, V₁z(I₁), V₁h(I₁)) → S","analytical_interpretation":"Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.","key_structural_features":["frames: 3","distinct inputs: 1","notation input ids: 1","reaction window (comma group)"]}];
+    const xOrder = ["local", "distributed"];
+    const yOrder = ["parametric", "generative"];
+    const xLabel = { local:"Local", distributed:"Distributed" };
+    const yLabel = { parametric:"Parametric", generative:"Generative" };
+    const grid = document.getElementById("grid");
+    const pointsLayer = document.getElementById("points");
+    const grid2 = document.getElementById("grid2");
+    const pointsLayer2 = document.getElementById("points2");
+    const cellList = document.getElementById("cell-list");
+    const detail = document.getElementById("detail");
+    const tooltip = document.getElementById("tooltip");
+    const logicAndBtn = document.getElementById("logic-and");
+    const logicOrBtn = document.getElementById("logic-or");
+    const vizFilterGrid = document.getElementById("viz-filter-grid");
+    const vizCountGrid = document.getElementById("viz-count-grid");
+    const clearVizFiltersBtn = document.getElementById("clear-viz-filters");
+    const titleSearchInput = document.getElementById("title-search");
+    const articlesCount = document.getElementById("articles-count");
+    let activeCell = null;
+    let vizFilterLogic = "and";
+    const selectedVizTypes = new Set();
+    let titleQuery = "";
+    const vizTypeOrder = ["Vu", "Vh", "Vz", "Vcu", "Vcuo", "Vcuu", "Vcuuo", "Nds"];
+    const BASE_INPUT_PALETTE = ["#8dd3c7","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ffffb3"];
+    const SINGLE_COLOR = BASE_INPUT_PALETTE[0];
+    const MULTI_GRADIENT = "linear-gradient(90deg, " + BASE_INPUT_PALETTE.join(", ") + ")";
+    const DEPTH_COLORS = {
+      single: "#d8dde5",
+      dual: "#aeb6c1",
+      triple: "#6e7886",
+    };
+
+    const embeddingFromY = (yCat) => String(yCat || "").startsWith("distributed_") ? "distributed" : "local";
+    const multiplicityFromY = (yCat) => String(yCat || "").endsWith("_multiple") ? "multiple" : "single";
+    const epistemicFromX = (xCat) => (xCat === "generative" ? "generative" : "parametric");
+    const cellKey = (x,y) => x + "::" + y;
+    const grouped = new Map();
+    for (const r of records) {
+      const key = cellKey(embeddingFromY(r.y_category), epistemicFromX(r.x_category));
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(r);
+    }
+    function renderGridFor(targetGrid) {
+      targetGrid.innerHTML = "";
+      for (const y of yOrder) {
+        for (const x of xOrder) {
+          const key = cellKey(x,y);
+          const cellRows = grouped.get(key) || [];
+          const count = cellRows.length;
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.dataset.x = x;
+          cell.dataset.y = y;
+          if (activeCell && activeCell.x === x && activeCell.y === y) cell.classList.add("active");
+          cell.style.background = activeCell && activeCell.x === x && activeCell.y === y ? "#d6e0eb" : "#fff";
+          const c = document.createElement("div");
+          c.className = "count";
+          c.textContent = String(count);
+          cell.appendChild(c);
+          cell.onclick = () => selectCell(x, y);
+          targetGrid.appendChild(cell);
+        }
+      }
+    }
+
+    function hasAnyActiveListFilter() {
+      return selectedVizTypes.size > 0 || titleQuery.length > 0;
+    }
+
+    function normalizeTitle(value) {
+      return String(value || "").toLowerCase();
+    }
+
+    function matchesVizTypes(record) {
+      if (selectedVizTypes.size === 0) return true;
+      const types = Array.isArray(record.visualization_types) ? record.visualization_types : [];
+      if (vizFilterLogic === "or") {
+        for (const t of selectedVizTypes) {
+          if (types.includes(t)) return true;
+        }
+        return false;
+      }
+      for (const t of selectedVizTypes) {
+        if (!types.includes(t)) return false;
+      }
+      return true;
+    }
+
+    function matchesTitleQuery(record) {
+      if (!titleQuery) return true;
+      const hay = normalizeTitle(record.title) + " " + normalizeTitle(record.article_id);
+      return hay.includes(titleQuery);
+    }
+
+    function getCellFilteredRows() {
+      let rows = records;
+      if (activeCell) {
+        rows = rows.filter((r) =>
+          embeddingFromY(r.y_category) === activeCell.x &&
+          epistemicFromX(r.x_category) === activeCell.y
+        );
+      }
+      return rows;
+    }
+
+    function getVisibleRows() {
+      return getCellFilteredRows().filter((r) => matchesVizTypes(r) && matchesTitleQuery(r));
+    }
+
+    function layerComboKey(record) {
+      const layers = new Set(Array.isArray(record.narrative_layers) ? record.narrative_layers : []);
+      const parts = [];
+      if (layers.has("visualization")) parts.push("V");
+      if (layers.has("annotation")) parts.push("A");
+      if (layers.has("story")) parts.push("S");
+      return parts.join("") || "V";
+    }
+
+    function layerDepthColor(combo) {
+      if (combo.length >= 3) return DEPTH_COLORS.triple;
+      if (combo.length === 2) return DEPTH_COLORS.dual;
+      return DEPTH_COLORS.single;
+    }
+
+    function renderPointsFor(targetLayer, modeName) {
+      targetLayer.innerHTML = "";
+      document.getElementById("legend-single").style.background = SINGLE_COLOR;
+      document.getElementById("legend-multiple").style.backgroundImage = MULTI_GRADIENT;
+      document.getElementById("legend-depth-1").style.background = DEPTH_COLORS.single;
+      document.getElementById("legend-depth-2").style.background = DEPTH_COLORS.dual;
+      document.getElementById("legend-depth-3").style.background = DEPTH_COLORS.triple;
+      const box = targetLayer.getBoundingClientRect();
+      const cw = box.width / xOrder.length;
+      const ch = box.height / yOrder.length;
+      const highlightByFilter = hasAnyActiveListFilter() || selectedVizTypes.size > 0;
+      const squareSize = 24;
+      const gap = 3;
+      const leftPadding = 8;
+      const bottomPadding = 8;
+      const maxPerColumn = 5;
+
+      const groupedPoints = new Map();
+      for (const r of records) {
+        const embed = embeddingFromY(r.y_category);
+        const epi = epistemicFromX(r.x_category);
+        const xi = xOrder.indexOf(embed);
+        const yi = yOrder.indexOf(epi);
+        if (xi < 0 || yi < 0) continue;
+        const key = [xi, yi].join(":");
+        if (!groupedPoints.has(key)) groupedPoints.set(key, []);
+        groupedPoints.get(key).push({ r, xi, yi });
+      }
+
+      for (const entries of groupedPoints.values()) {
+        if (modeName === "layer") {
+          const comboOrder = ["V", "A", "S", "VA", "VS", "AS", "VAS"];
+          entries.sort((a, b) => {
+            const ca = layerComboKey(a.r);
+            const cb = layerComboKey(b.r);
+            const oa = comboOrder.indexOf(ca);
+            const ob = comboOrder.indexOf(cb);
+            if (oa !== ob) return oa - ob;
+            const t = String(a.r.title || "").localeCompare(String(b.r.title || ""), undefined, { sensitivity: "base" });
+            if (t !== 0) return t;
+            return String(a.r.article_id || "").localeCompare(String(b.r.article_id || ""), undefined, { numeric: true, sensitivity: "base" });
+          });
+        } else {
+          entries.sort((a, b) => {
+            const ma = multiplicityFromY(a.r.y_category) === "multiple" ? 1 : 0;
+            const mb = multiplicityFromY(b.r.y_category) === "multiple" ? 1 : 0;
+            if (ma !== mb) return ma - mb; // single first
+            const t = String(a.r.title || "").localeCompare(String(b.r.title || ""), undefined, { sensitivity: "base" });
+            if (t !== 0) return t;
+            return String(a.r.article_id || "").localeCompare(String(b.r.article_id || ""), undefined, { numeric: true, sensitivity: "base" });
+          });
+        }
+        const first = entries[0];
+        const cellLeft = first.xi * cw;
+        const cellTop = first.yi * ch;
+        const cellBottom = cellTop + ch;
+
+        for (let i = 0; i < entries.length; i += 1) {
+          const r = entries[i].r;
+          const columnIndex = Math.floor(i / maxPerColumn);
+          const rowIndex = i % maxPerColumn;
+          const x = cellLeft + leftPadding + columnIndex * (squareSize + gap);
+          const y = cellBottom - bottomPadding - squareSize - rowIndex * (squareSize + gap);
+          const p = document.createElement("button");
+          p.className = "point";
+          if (modeName === "layer") {
+            p.style.backgroundImage = "";
+            p.style.background = layerDepthColor(layerComboKey(r));
+          } else {
+            const isMultiple = multiplicityFromY(r.y_category) === "multiple";
+            p.style.background = isMultiple ? "#fff" : SINGLE_COLOR;
+            if (isMultiple) p.style.backgroundImage = MULTI_GRADIENT;
+          }
+          if (highlightByFilter) {
+            if (matchesVizTypes(r) && matchesTitleQuery(r)) p.classList.add("filtered-match");
+            else p.classList.add("filtered-dim");
+          }
+          p.style.left = x + "px";
+          p.style.top = y + "px";
+          p.onmouseenter = (e) => {
+            tooltip.style.display = "block";
+            tooltip.textContent = r.title;
+            tooltip.style.left = (e.clientX + 12) + "px";
+            tooltip.style.top = (e.clientY + 12) + "px";
+          };
+          p.onmousemove = (e) => {
+            tooltip.style.left = (e.clientX + 12) + "px";
+            tooltip.style.top = (e.clientY + 12) + "px";
+          };
+          p.onmouseleave = () => { tooltip.style.display = "none"; };
+          p.onclick = () => showDetail(r);
+          p.dataset.articleId = String(r.article_id || "");
+          targetLayer.appendChild(p);
+        }
+      }
+    }
+
+    function renderVizTypeFilters() {
+      const counts = new Map();
+      for (const key of vizTypeOrder) counts.set(key, 0);
+      for (const r of records) {
+        const types = Array.isArray(r.visualization_types) ? r.visualization_types : [];
+        for (const t of types) {
+          if (!counts.has(t)) counts.set(t, 0);
+          counts.set(t, counts.get(t) + 1);
+        }
+      }
+      vizFilterGrid.innerHTML = vizTypeOrder.map((typeKey) => {
+        const checked = selectedVizTypes.has(typeKey) ? "checked" : "";
+        const total = counts.get(typeKey) || 0;
+        return '<label><input type="checkbox" data-viz-type="' + typeKey + '" ' + checked + '> ' + typeKey + ' <span class="summary">(' + total + ')</span></label>';
+      }).join("");
+      vizFilterGrid.querySelectorAll("input[data-viz-type]").forEach((el) => {
+        el.onchange = () => {
+          const key = el.dataset.vizType;
+          if (el.checked) selectedVizTypes.add(key);
+          else selectedVizTypes.delete(key);
+          renderAll();
+        };
+      });
+    }
+
+    function renderVizTypeCounts(rows) {
+      const counts = new Map();
+      for (const key of vizTypeOrder) counts.set(key, 0);
+      for (const r of rows) {
+        const types = Array.isArray(r.visualization_types) ? r.visualization_types : [];
+        for (const t of types) {
+          if (!counts.has(t)) counts.set(t, 0);
+          counts.set(t, counts.get(t) + 1);
+        }
+      }
+      vizCountGrid.innerHTML = vizTypeOrder
+        .map((key) => '<div class="count-chip">' + key + ': ' + (counts.get(key) || 0) + "</div>")
+        .join("");
+    }
+
+    function renderCellList() {
+      const rowsInCell = getCellFilteredRows();
+      const rows = getVisibleRows();
+      let title = "Articles";
+      if (activeCell) title = yLabel[activeCell.y] + " + " + xLabel[activeCell.x];
+      const items = rows.map((r) =>
+        '<div class="list-item"><a data-id="' + r.article_id + '">' + r.title + '</a></div>'
+      ).join("");
+      cellList.innerHTML =
+        '<div class="summary"><strong>' + title + ":</strong> " + rows.length + " of " + rowsInCell.length + "</div>" +
+        items;
+      articlesCount.textContent = rows.length + " of " + rowsInCell.length + " articles";
+      renderVizTypeCounts(rows);
+      cellList.querySelectorAll("a[data-id]").forEach((el) => {
+        el.onclick = () => {
+          const rec = records.find((r) => r.article_id === el.dataset.id);
+          if (rec) showDetail(rec);
+        };
+      });
+    }
+
+    function showDetail(r) {
+      const classTag = (yLabel[epistemicFromX(r.x_category)] || "Parametric") + " – " + ((xLabel[embeddingFromY(r.y_category)] || "Local") + " Embedded");
+      const notationEsc = String(r.notation_string || "").replace(/[&<>]/g, (ch) => ({ "&":"&amp;","<":"&lt;",">":"&gt;" }[ch]));
+      detail.innerHTML = ""
+        + '<h2 class="title-h2">' + r.title + "</h2>"
+        + '<div class="detail-tag">' + classTag + "</div>"
+        + '<div class="detail-block">'
+        + '<h3 class="detail-heading">Visual Structural Representation</h3>'
+        + '<div class="detail-svg-wrap"><img class="detail-svg" src="../svg-vertical/' + encodeURIComponent(r.article_id) + '.svg" alt="' + String(r.title || "").replace(/"/g, "&quot;") + '"></div>'
+        + "</div>"
+        + '<div class="detail-block">'
+        + '<h3 class="detail-heading">Formula Notation</h3>'
+        + '<pre class="detail-notation">' + notationEsc + "</pre>"
+        + "</div>"
+        + '<div class="detail-block">'
+        + '<h3 class="detail-heading">Structural Pattern</h3>'
+        + '<div class="body-text">' + r.structural_pattern_summary + "</div>"
+        + "</div>";
+    }
+
+    function selectCell(x, y) {
+      if (activeCell && activeCell.x === x && activeCell.y === y) activeCell = null;
+      else activeCell = { x, y };
+      renderGridFor(grid);
+      renderGridFor(grid2);
+      renderPointsFor(pointsLayer, "input");
+      renderPointsFor(pointsLayer2, "layer");
+      renderCellList();
+    }
+
+    function renderAll() {
+      renderGridFor(grid);
+      renderGridFor(grid2);
+      renderPointsFor(pointsLayer, "input");
+      renderPointsFor(pointsLayer2, "layer");
+      renderCellList();
+      logicAndBtn.classList.toggle("active", vizFilterLogic === "and");
+      logicOrBtn.classList.toggle("active", vizFilterLogic === "or");
+    }
+
+    logicAndBtn.onclick = () => {
+      vizFilterLogic = "and";
+      renderAll();
+    };
+    logicOrBtn.onclick = () => {
+      vizFilterLogic = "or";
+      renderAll();
+    };
+    clearVizFiltersBtn.onclick = () => {
+      selectedVizTypes.clear();
+      titleQuery = "";
+      titleSearchInput.value = "";
+      renderVizTypeFilters();
+      renderAll();
+    };
+    titleSearchInput.oninput = () => {
+      titleQuery = normalizeTitle(titleSearchInput.value).trim();
+      renderAll();
+    };
+    window.addEventListener("resize", () => {
+      renderPointsFor(pointsLayer, "input");
+      renderPointsFor(pointsLayer2, "layer");
+    });
+    renderVizTypeFilters();
+    renderAll();
+  </script>
+</body>
+</html>

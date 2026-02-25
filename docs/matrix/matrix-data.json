@@ -1,0 +1,1411 @@
+[
+  {
+    "article_id": "wine-animals",
+    "title": "wine animals",
+    "x_category": "parametric",
+    "y_category": "distributed_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu",
+      "Vh"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "story"
+    ],
+    "structural_pattern_summary": "distributed embedding + same-input across steps + persistence span",
+    "notation_string": "S → I₁ → Su(I₁) → S → ⟦V₁h⟧(I₁) → V₁u(I₁), Su(I₁) → V₁u(I₁), Su(I₁) → S, (¬V₁h) → S → ⟦V₂h⟧(I₁) → S → S → S → S → S → S, V₂u(I₁) → S → S → Su(I₁) → S → S → S → S → (¬V₂h), S → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.",
+    "key_structural_features": [
+      "frames: 27",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)",
+      "persistence span",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "nyc-street-view",
+    "title": "nyc street view",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "single-window local dependency",
+    "notation_string": "(S → V)₁…₈ → S→ I₁ → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 5",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation"
+    ]
+  },
+  {
+    "article_id": "so-viel-wurden-sie-verdienen-wenn-sie-beamter-waren",
+    "title": "So viel würden Sie verdienen, wenn Sie Beamter wären",
+    "x_category": "parametric",
+    "y_category": "local_multiple",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "multiple inputs + persistence span + simultaneous reactions",
+    "notation_string": "S → ⟦V₁, Au₁⟧ → S₁…₅ → I₁, V₁u(I₁), Au₁(I₁) → S → (¬V₁) → S → I₂, Vu(I₂), Au(I₂) → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 9",
+      "distinct inputs: 2",
+      "notation input ids: 2",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span",
+      "multiple input set"
+    ]
+  },
+  {
+    "article_id": "so-konnten-ihre-kinder-die-klimakrise-erleben",
+    "title": "So könnten Ihre Kinder die Klimakrise erleben",
+    "x_category": "parametric",
+    "y_category": "distributed_single",
+    "integrated_badge": false,
+    "visualization_types": [],
+    "narrative_layers": [
+      "visualization",
+      "annotation",
+      "story"
+    ],
+    "structural_pattern_summary": "distributed embedding + same-input across steps",
+    "notation_string": "S → I₁ → Au(I₁) → Su(I₁) → S → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.",
+    "key_structural_features": [
+      "frames: 7",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "schlafen-sie-genug",
+    "title": "Schlafen Sie genug?",
+    "x_category": "generative",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuu"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "Vcuu/Vcuuo comparison",
+    "notation_string": "S → I₁ → Vcuu(I₁) → (S → V)₁…₂",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.",
+    "key_structural_features": [
+      "frames: 4",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "zahlen-sie-ihrem-kind-genug-taschengeld",
+    "title": "Zahlen Sie Ihrem Kind genug Taschengeld?",
+    "x_category": "generative",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "Vcuu/Vcuuo comparison + simultaneous reactions",
+    "notation_string": "S → I₁ → Vcuu(I₁), Au(I₁) → S → V → S",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.",
+    "key_structural_features": [
+      "frames: 6",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "gehoren-sie-zur-politischen-mitte",
+    "title": "Gehören Sie zur politischen Mitte?",
+    "x_category": "parametric",
+    "y_category": "distributed_multiple",
+    "integrated_badge": true,
+    "visualization_types": [
+      "Vcuo"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "iterated cumulative Vcu* + integrated multi-input expression + distributed embedding",
+    "notation_string": "S → I₁…₁₃ → (Vcuo(I₁…₁₃), Au(I₁…₁₃)) → (Vcuo(Iₙ), Au(Iₙ))ₙ₌₁…₁₃ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Iteration + kumulative Vcu*-Referenz erkannt. Integrated badge: Multi-Input-Argument erkannt.",
+    "key_structural_features": [
+      "frames: 17",
+      "distinct inputs: 1",
+      "notation input ids: 26",
+      "explicit iteration block",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "multiple input set",
+      "distributed embedding",
+      "Integrated",
+      "iterated cumulative Vcu* pattern"
+    ]
+  },
+  {
+    "article_id": "lohnt-sich-eine-warmepumpe-fur-ihr-haus",
+    "title": "Lohnt sich eine Wärmepumpe für Ihr Haus?",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "simultaneous reactions",
+    "notation_string": "S → I₁, Vu( I₁), Au( I₁) → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 3",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)"
+    ]
+  },
+  {
+    "article_id": "lohnt-sich-die-ehe-fur-sie",
+    "title": "Lohnt sich die Ehe für Sie?",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "simultaneous reactions",
+    "notation_string": "S → I₁, Au(I₁), Vu(I₁) → S → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 5",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)"
+    ]
+  },
+  {
+    "article_id": "wie-zufrieden-sind-sie-mit-ihrem-leben",
+    "title": "Wie zufrieden sind Sie mit Ihrem Leben?",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "story"
+    ],
+    "structural_pattern_summary": "persistence span + simultaneous reactions",
+    "notation_string": "S → ⟦V₁⟧ → I₁ → Su(I₁), V₁u(I₁) → S₁…₃→ (¬V₁) → S → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 9",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span"
+    ]
+  },
+  {
+    "article_id": "wie-weit-darf-ihr-kind-allein-gehen",
+    "title": "Wie weit darf Ihr Kind allein gehen?",
+    "x_category": "generative",
+    "y_category": "local_multiple",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "Vcuu/Vcuuo comparison + multiple inputs + explicit iteration",
+    "notation_string": "S → I₁ → Au(I₁) → (Iₙ → Vcuu(Iₙ))ₙ₌₂…₈ → S → I₉",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.",
+    "key_structural_features": [
+      "frames: 19",
+      "distinct inputs: 9",
+      "notation input ids: 16",
+      "explicit iteration block",
+      "structural range/abbreviation",
+      "multiple input set",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "wie-riskant-ist-ihr-alkoholkonsum",
+    "title": "Wie riskant ist Ihr Alkoholkonsum?",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuo"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "simultaneous reactions",
+    "notation_string": "S → I₁, Au(I₁), Vcuo(I₁) → (S → V)₁…₄ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 4",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)"
+    ]
+  },
+  {
+    "article_id": "wie-gut-passt-mein-job-zu-mir",
+    "title": "Wie gut passt mein Job zu mir?",
+    "x_category": "generative",
+    "y_category": "local_multiple",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "Vcuu/Vcuuo comparison + multiple inputs + explicit iteration",
+    "notation_string": "S → I₁…₁₂ → (Vcuu(Iₙ), Au(Iₙ))ₙ₌₁…₁₂ → S",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.",
+    "key_structural_features": [
+      "frames: 15",
+      "distinct inputs: 1",
+      "notation input ids: 24",
+      "explicit iteration block",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "multiple input set",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "lohnt-sich-ein-e-auto-fur-sie-testen-sie-es-mit-unserem-rechner",
+    "title": "Lohnt sich ein E-Auto für Sie? Testen Sie es mit unserem Rechner",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu",
+      "Vh"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "persistence span + simultaneous reactions",
+    "notation_string": "S, ⟦V₁⟧ → S₁…₆ → I₁, V₁u(I₁), V₁h(I₁) → (¬V₁) → S → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 7",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span"
+    ]
+  },
+  {
+    "article_id": "wie-viel-verdienen-sie-im-vergleich-zu-anderen",
+    "title": "Wie viel verdienen Sie im Vergleich zu anderen?",
+    "x_category": "parametric",
+    "y_category": "distributed_multiple",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Nds"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "spawned sub-story (Nds) + distributed embedding + multiple inputs",
+    "notation_string": "S → ⟦V₁⟧ → S, I₁, ⟦A(I₁)⟧ → S₁…₇ → (¬A(I₁)) → S₁…₃ → (¬V₁) → I₂ → Nds(I₂)(S → V → S → I₂ → S → V → S → I₃, Vu(I₃)) → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Nds-Block erkannt.",
+    "key_structural_features": [
+      "frames: 10",
+      "distinct inputs: 2",
+      "notation input ids: 2",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span",
+      "spawned sub-story (Nds)",
+      "multiple input set",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "wie-viel-geld-macht-glucklich",
+    "title": "Wie viel Geld macht glücklich?",
+    "x_category": "generative",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuu"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "Vcuu/Vcuuo comparison",
+    "notation_string": "S → I₁ → Vcuu(I₁) → (S → V)₁…₃ → S",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.",
+    "key_structural_features": [
+      "frames: 5",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "was-hat-die-neue-regierung-gut-gemacht-und-was-nicht",
+    "title": "Was hat die neue Regierung gut gemacht? Und was nicht?",
+    "x_category": "generative",
+    "y_category": "distributed_multiple",
+    "integrated_badge": true,
+    "visualization_types": [
+      "Vcuu"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "Vcuu/Vcuuo comparison + integrated multi-input expression + distributed embedding",
+    "notation_string": "S → I₁ → Vcuu(I₁) → S → I₂ → Vcuu(I₂) → S → I₃ → Vcuu(I₃) → I₄ → Vcuu(I₄) → S → I₅ → Vcuu(I₅) → S → I₆ → Vcuu(I₆) → I₇ → Vcuu(I₇) → S → I₈ → Vcuu(I₈) → S → I₉ → Vcuu(I₉) → I₁₀ → Vcuu(I₁₀) → S → I₁₁ → Vcuu(I₁₁) → S → I₁₂ → Vcuu(I₁₂) → I₁₃ → Vcuu(I₁₃) → S → I₁₄ → Vcuu(I₁₄) → S → I₁₅ → Vcuu(I₁₅) → I₁₆ → Vcuu(I₁₆) → S → I₁₇ → Vcuu(I₁₇) → S → Vcuu(I₁...₁₇)",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Vcuu/Vcuuo als generativer Marker erkannt. Integrated badge: Multi-Input-Argument erkannt.",
+    "key_structural_features": [
+      "frames: 48",
+      "distinct inputs: 17",
+      "notation input ids: 17",
+      "structural range/abbreviation",
+      "multiple input set",
+      "distributed embedding",
+      "Integrated",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "so-konnte-das-wetter-im-jahr-2100-bei-ihnen-aussehen",
+    "title": "So könnte das Wetter im Jahr 2100 bei Ihnen aussehen",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "persistence span + simultaneous reactions",
+    "notation_string": "S → ⟦V₁⟧ → S₁...₃ → I₁→ V₁u(I₁), Au(I₁) → (¬V₁) → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 7",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span"
+    ]
+  },
+  {
+    "article_id": "wie-viel-zahle-ich-ein-und-was-krieg-ich-an-rente-raus",
+    "title": "Wie viel zahle ich ein – und was krieg ich an Rente raus?",
+    "x_category": "parametric",
+    "y_category": "distributed_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vh"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation",
+      "story"
+    ],
+    "structural_pattern_summary": "distributed embedding + same-input across steps + persistence span",
+    "notation_string": "S → I₁, Au(I₁), Vh(I₁), Au(I₁), Au(I₁) → S → ⟦V₁⟧ → S → Au(I₁), Su(I₁) → Au(I₁), Su(I₁) → (¬V₁) → ⟦V₂h(I₁), Au(I₁)⟧ → S₁...₅ → (¬V₂h(I₁), ¬Au(I₁)) → S → V₁...₃ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.",
+    "key_structural_features": [
+      "frames: 14",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "rucktritt-oder-nicht-entscheiden-sie",
+    "title": "Rücktritt – oder nicht? Entscheiden Sie!",
+    "x_category": "generative",
+    "y_category": "local_multiple",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuu"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "Vcuu/Vcuuo comparison + multiple inputs + explicit iteration",
+    "notation_string": "S → (Iₙ → Vcuu(Iₙ))ₙ₌₁…₂₀ → S",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.",
+    "key_structural_features": [
+      "frames: 42",
+      "distinct inputs: 20",
+      "notation input ids: 40",
+      "explicit iteration block",
+      "structural range/abbreviation",
+      "multiple input set",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "so-viel-verdienen-menschen-in-ihrem-wohnort",
+    "title": "So viel verdienen Menschen in Ihrem Wohnort",
+    "x_category": "parametric",
+    "y_category": "distributed_multiple",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vh",
+      "Nds"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "spawned sub-story (Nds) + distributed embedding + multiple inputs",
+    "notation_string": "S → ⟦V₁⟧ → I₁, Au(I₁) → ⟦V₁h(I₁)⟧, Au(I₁), S₁...₂ → (¬V₁) → S,⟦V₂h(I₁), Au(I₁)⟧ → S₁...₇ → (¬V₂, ¬Au(I₁)) → ⟦V₃h(I₁), Au(I₁)⟧ → S₁...₂ → (¬V₃h(I₁), ¬Au(I₁)) → I₂ → Nds(I₂)(S → A → (S → V)₁...₃ → S → I₃, Vu(I₃) → S → I₂) → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Nds-Block erkannt.",
+    "key_structural_features": [
+      "frames: 14",
+      "distinct inputs: 2",
+      "notation input ids: 2",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span",
+      "spawned sub-story (Nds)",
+      "multiple input set",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "ein-eigenheim-ist-hier-wieder-fur-sie-drin",
+    "title": "Ein Eigenheim? Ist hier wieder für Sie drin",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "persistence span + simultaneous reactions",
+    "notation_string": "S → ⟦V₁⟧ → S₁…₃ → I₁, Vu(I₁) → (¬V₁) → (S → V)₁...₂ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 7",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span"
+    ]
+  },
+  {
+    "article_id": "wie-gut-verstehen-sie-hunde",
+    "title": "Wie gut verstehen Sie Hunde?",
+    "x_category": "generative",
+    "y_category": "distributed_multiple",
+    "integrated_badge": true,
+    "visualization_types": [
+      "Vcuu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation",
+      "story"
+    ],
+    "structural_pattern_summary": "iterated cumulative Vcu* + Vcuu/Vcuuo comparison + integrated multi-input expression",
+    "notation_string": "S → (Iₙ → Au(Iₙ), Su(Iₙ))ₙ₌₁…₁₃ → (Vcuu(I₁…₁₃), Au(I₁…₁₃), Su(I₁…₁₃)",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Iteration + kumulative Vcu*-Referenz erkannt. Vcuu/Vcuuo als generativer Marker erkannt. Integrated badge: Multi-Input-Argument erkannt.",
+    "key_structural_features": [
+      "frames: 28",
+      "distinct inputs: 13",
+      "notation input ids: 26",
+      "explicit iteration block",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "multiple input set",
+      "distributed embedding",
+      "Integrated",
+      "iterated cumulative Vcu* pattern",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "wie-gefahrlich-ist-der-schulweg-ihres-kindes",
+    "title": "Wie gefährlich ist der Schulweg Ihres Kindes?",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu",
+      "Vcuo"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "persistence span + simultaneous reactions",
+    "notation_string": "S → ⟦V₁⟧ → I₁ → V₁u(I₁), Au(I₁), Vcuo(I₁) →  (¬V₁) → S → V → S → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 10",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)",
+      "persistence span"
+    ]
+  },
+  {
+    "article_id": "so-viel-geld-sollten-sie-in-ihrem-alter-gespart-haben",
+    "title": "So viel Geld sollten Sie in Ihrem Alter gespart haben",
+    "x_category": "parametric",
+    "y_category": "distributed_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vh"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation",
+      "story"
+    ],
+    "structural_pattern_summary": "distributed embedding + same-input across steps + simultaneous reactions",
+    "notation_string": "S → I₁ → Su(I₁), Vh(I₁), Au(I₁) → Su(I₁), Vh(I₁), Au(I₁) → (S → V)₁...₅ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.",
+    "key_structural_features": [
+      "frames: 6",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "welcher-stadtteil-passt-zu-mir",
+    "title": "Welcher Stadtteil passt zu mir?",
+    "x_category": "parametric",
+    "y_category": "distributed_multiple",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuo"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "distributed embedding + multiple inputs + same-input across steps",
+    "notation_string": "S → I₁ → ⟦V₁cuo(I₁), A₁u(I₁)⟧ → I₂ → Au(I₂) → (¬V₁cuo(I₁), ¬A₁u(I₁)) → S → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration.",
+    "key_structural_features": [
+      "frames: 9",
+      "distinct inputs: 2",
+      "notation input ids: 2",
+      "reaction window (comma group)",
+      "persistence span",
+      "multiple input set",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "sind-sie-so-verheiratet-wie-andere-in-ihrem-alter",
+    "title": "Sind Sie so verheiratet wie andere in Ihrem Alter?",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "persistence span + simultaneous reactions",
+    "notation_string": "S → ⟦V₁⟧ → I₁, V₁u(I₁), Au(I₁)→ (¬V₁) → S₁...₂ → (S → V)₁...₃ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 7",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span"
+    ]
+  },
+  {
+    "article_id": "sollte-ich-die-krankenkasse-wechseln",
+    "title": "Sollte ich die Krankenkasse wechseln?",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "simultaneous reactions",
+    "notation_string": "S → (I₁, Vu(I₁)) → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 3",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)"
+    ]
+  },
+  {
+    "article_id": "das-sind-die-teuersten-und-gunstigsten-stadtteile-deutschlands",
+    "title": "Das sind die teuersten und günstigsten Stadtteile Deutschlands",
+    "x_category": "parametric",
+    "y_category": "distributed_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vh"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "distributed embedding + same-input across steps + persistence span",
+    "notation_string": "S → ⟦V₁⟧ → S → (I₁, Vh(I₁), Au(I₁)) → (¬V₁) → ⟦V₂h(I₁), Au(I₁)⟧ → S₁...₅ → (¬V₂), (¬Au(I₁) → V → S₁...₂ → V → S →",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.",
+    "key_structural_features": [
+      "frames: 13",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "wie-viel-protein-sie-wirklich-brauchen",
+    "title": "Wie viel Protein Sie wirklich brauchen",
+    "x_category": "parametric",
+    "y_category": "distributed_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vh"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "distributed embedding + same-input across steps + simultaneous reactions",
+    "notation_string": "S →  (Au(I₁), I₁, Vh(I₁), Au(I₁)) → S → Au( I₁) → V → S → Au( I₁) → V → S → Au( I₁) → V → S → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.",
+    "key_structural_features": [
+      "frames: 14",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "wie-viel-zucker-ist-drin",
+    "title": "Wie viel Zucker ist drin?",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "single-window local dependency",
+    "notation_string": "S → I₁ → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 4",
+      "distinct inputs: 1",
+      "notation input ids: 1"
+    ]
+  },
+  {
+    "article_id": "konnen-sie-sich-noch-eine-immobilie-in-ihrem-landkreis-leisten",
+    "title": "Können Sie sich noch eine Immobilie in Ihrem Landkreis leisten?",
+    "x_category": "parametric",
+    "y_category": "local_multiple",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu",
+      "Vz"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "multiple inputs + persistence span + simultaneous reactions",
+    "notation_string": "S → ⟦V₁⟧, I₁, V₁u(I₁) I₂, V₁z(I₂), Au(I₂) →(¬V₁) → (S → V)₁…₂ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 5",
+      "distinct inputs: 2",
+      "notation input ids: 2",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span",
+      "multiple input set"
+    ]
+  },
+  {
+    "article_id": "ihr-msci-world-depot-ist-gecrasht-so-schlimm-waren-vergangene-krisen",
+    "title": "Ihr MSCI-World-Depot ist gecrasht? So schlimm waren vergangene Krisen",
+    "x_category": "parametric",
+    "y_category": "distributed_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation",
+      "story"
+    ],
+    "structural_pattern_summary": "distributed embedding + same-input across steps + persistence span",
+    "notation_string": "S → (I₁, ⟦V₁u(I₁)⟧) → Au(I₁), Su(I₁), V₁u(I₁) → Au(I₁), Su(I₁), V₁u(I₁) → Au(I₁), Su(I₁), V₁u(I₁) → Au(I₁), Su(I₁), V₁u(I₁) → (¬V₁) → S → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.",
+    "key_structural_features": [
+      "frames: 10",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)",
+      "persistence span",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "how-snowy-could-it-be-where-you-live-this-winter-look-up-your-area",
+    "title": "How snowy could it be where you live this winter? Look up your area.",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "simultaneous reactions",
+    "notation_string": "S → V → S → I₁, Vu(I₁), Au(I₁) → (S → V)₁…₆ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 6",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)"
+    ]
+  },
+  {
+    "article_id": "is-your-area-just-have-its-most-humid-summer-find-out-here",
+    "title": "is your area just have its most humid summer? Find out here.",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "simultaneous reactions",
+    "notation_string": "(S → V)₁…₂ → S → I₁, Vu(I₁), Au(I₁) → (S → V)₁…₆ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 5",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)"
+    ]
+  },
+  {
+    "article_id": "what-trees-are-most-common-in-your-city-and-are-they-at-risk",
+    "title": "What trees are most common in your city? And are they at risk?",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "persistence span + simultaneous reactions",
+    "notation_string": "S → ⟦V₁⟧ → S₁…₅→ (¬V₁) → (S → V)₁…₂ → (I₁, Vu(I₁), Au(I₁)) → (S → V)₁…₂",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 7",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span"
+    ]
+  },
+  {
+    "article_id": "your-diet-s-impact-on-the-planet-depends-on-where-you-live-look-up-your-city",
+    "title": "Your diet’s impact on the planet depends on where you live. Look up your city.",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "simultaneous reactions",
+    "notation_string": "V → S → V → S → I₁, V, Au(I₁) → S → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 8",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)"
+    ]
+  },
+  {
+    "article_id": "budget-2025-calculator-how-reeves-tax-changes-will-affect-your-money",
+    "title": "Budget 2025 calculator: how Reeves’ tax changes will affect your money",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [],
+    "narrative_layers": [
+      "annotation"
+    ],
+    "structural_pattern_summary": "single-window local dependency",
+    "notation_string": "S → I₁ → Au(I₁) → (S → V)₁…₃",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 4",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation"
+    ]
+  },
+  {
+    "article_id": "can-you-run-a-premier-league-football-club",
+    "title": "Can you run a Premier League football club?",
+    "x_category": "generative",
+    "y_category": "distributed_multiple",
+    "integrated_badge": true,
+    "visualization_types": [
+      "Vcu",
+      "Vcuu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "story"
+    ],
+    "structural_pattern_summary": "iterated cumulative Vcu* + Vcuu/Vcuuo comparison + integrated multi-input expression",
+    "notation_string": "S₁…₃ → ⟦V₁⟧ → (Iₙ → Su(Iₙ) → V₁cu(I₁…ₙ))ₙ₌₁…₁₇ → (¬V₁)→ (Su(I₁…₁₇) → Vcuu(I₁…₁₇))",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Iteration + kumulative Vcu*-Referenz erkannt. Vcuu/Vcuuo als generativer Marker erkannt. Integrated badge: Multi-Input-Argument erkannt.",
+    "key_structural_features": [
+      "frames: 56",
+      "distinct inputs: 17",
+      "notation input ids: 34",
+      "explicit iteration block",
+      "structural range/abbreviation",
+      "persistence span",
+      "multiple input set",
+      "distributed embedding",
+      "Integrated",
+      "iterated cumulative Vcu* pattern",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "draw-your-own-chart-game-how-taco-were-trump-s-tariffs",
+    "title": "Draw your own chart game: How Taco were Trump’s tariffs?",
+    "x_category": "parametric",
+    "y_category": "local_multiple",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuo"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "multiple inputs + persistence span + explicit iteration",
+    "notation_string": "S→ (⟦Vₙ⟧ → Iₙ → Vₙcuo(Iₙ), Au(Iₙ) → (¬Vₙ) → S)ₙ₌₁…₅",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 26",
+      "distinct inputs: 5",
+      "notation input ids: 10",
+      "explicit iteration block",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span",
+      "multiple input set"
+    ]
+  },
+  {
+    "article_id": "can-you-run-the-uk-economy",
+    "title": "Can you run the UK economy?",
+    "x_category": "parametric",
+    "y_category": "distributed_multiple",
+    "integrated_badge": true,
+    "visualization_types": [
+      "Vcu",
+      "Vcuo"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "story"
+    ],
+    "structural_pattern_summary": "integrated multi-input expression + distributed embedding + multiple inputs",
+    "notation_string": "S₁…₄ → ⟦V₁⟧ → S → I₁ → V₁cu(I₁) → S → I₂ → V₁cu(I₁…₂) → I₃ → V₁cu(I₁…₃) → S → I₄ → V₁cu(I₁…₄) → S → I₅ → V₁cu(I₁…₅) → I₆ → V₁cu(I₁…₆) → I₇ → V₁cu(I₁…₇) → S → S → I₈ → V₁cu(I₁…₈) → I₉ → V₁cu(I₁…₉) → I₁₀ → V₁cu(I₁…₁₀) → I₁₁ → V₁cu(I₁…₁₁) → I₁₂ → V₁cu(I₁…₁₂) → I₁₃ → V₁cu(I₁…₁₃) → S → (¬V₁)→ Su(I₁…₁₃) → V₁cu(I₁…₁₃) → Vcuo(I₁…₁₃) → Vcuo(I₁…₁₃) → Su(I₁…₁₃) → Su(I₁…₁₃) → Su(I₁…₁₃) → Vcuo(I₁…₁₃)",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Integrated badge: Multi-Input-Argument erkannt.",
+    "key_structural_features": [
+      "frames: 44",
+      "distinct inputs: 13",
+      "notation input ids: 13",
+      "structural range/abbreviation",
+      "persistence span",
+      "multiple input set",
+      "distributed embedding",
+      "Integrated"
+    ]
+  },
+  {
+    "article_id": "so-hat-die-inflation-ihr-fruhstuck-verteuert",
+    "title": "So hat die Inflation Ihr Frühstück verteuert",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vh"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "simultaneous reactions",
+    "notation_string": "S → I₁, Vh(I₁), Au(I₁) → (S → V)₁…₄→ S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 4",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)"
+    ]
+  },
+  {
+    "article_id": "hier-erfahren-sie-ob-sie-zu-viel-miete-zahlen",
+    "title": "Hier erfahren Sie, ob Sie zu viel Miete zahlen",
+    "x_category": "parametric",
+    "y_category": "local_multiple",
+    "integrated_badge": false,
+    "visualization_types": [],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "multiple inputs + simultaneous reactions",
+    "notation_string": "S →  I₁, Au( I₁) → (S → V)₁...₂ → I₂, Au(I₂) → S → V → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1b Local + Multiple: mehrere Inputs, lokal eingebettet und ohne verteilte Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 7",
+      "distinct inputs: 2",
+      "notation input ids: 2",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "multiple input set"
+    ]
+  },
+  {
+    "article_id": "war-die-em-2025-ein-tv-blockbuster",
+    "title": "War die EM 2025 ein TV-Blockbuster?",
+    "x_category": "generative",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuuo"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "Vcuu/Vcuuo comparison + simultaneous reactions",
+    "notation_string": "S → V₁, I₁, V₁cuuo(I₁)→ S",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.",
+    "key_structural_features": [
+      "frames: 3",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "benzinpreis-fahrverbot-maut-wie-entscheiden-sie",
+    "title": "Benzinpreis, Fahrverbot, Maut – wie entscheiden Sie?",
+    "x_category": "parametric",
+    "y_category": "distributed_multiple",
+    "integrated_badge": true,
+    "visualization_types": [
+      "Vcu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "iterated cumulative Vcu* + integrated multi-input expression + distributed embedding",
+    "notation_string": "S → V → S → ⟦V₁, A₁u⟧ →  (Iₙ, V₁cu(I₁…ₙ), A₁u(I₁…ₙ) → S)ₙ₌₁…₁₂ → (¬V₁, ¬Au₁)",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Iteration + kumulative Vcu*-Referenz erkannt. Integrated badge: Multi-Input-Argument erkannt.",
+    "key_structural_features": [
+      "frames: 29",
+      "distinct inputs: 12",
+      "notation input ids: 12",
+      "explicit iteration block",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span",
+      "multiple input set",
+      "distributed embedding",
+      "Integrated",
+      "iterated cumulative Vcu* pattern"
+    ]
+  },
+  {
+    "article_id": "kubismus-trifft-streetart-und-jungfraubahn",
+    "title": "Kubismus trifft Streetart und Jungfraubahn",
+    "x_category": "generative",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vcuu"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "Vcuu/Vcuuo comparison",
+    "notation_string": "S → V → S → I₁ → Vcuu(I₁)",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme. Vcuu/Vcuuo als generativer Marker erkannt.",
+    "key_structural_features": [
+      "frames: 5",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "rente-pflege-krankenkasse-so-schrumpft-ihr-gehalt-bis-2045-zusammen",
+    "title": "Rente, Pflege, Krankenkasse – so schrumpft Ihr Gehalt bis 2045 zusammen",
+    "x_category": "parametric",
+    "y_category": "distributed_multiple",
+    "integrated_badge": true,
+    "visualization_types": [
+      "Vu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation",
+      "story"
+    ],
+    "structural_pattern_summary": "integrated multi-input expression + distributed embedding + multiple inputs",
+    "notation_string": "S →  I₁ → ⟦V₁u(I₁)⟧, Au(I₁)→ Su(I₁) → (Su(I₁), V₁u(I₁), Au(I₁)) → (Su(I₁), V₁u(I₁), Au(I₁)) → (Su(I₁), V₁u(I₁), Au(I₁)) → (Su(I₁), V₁u(I₁), Au(I₁)) → (I₂, Au(I₂), V₁u(I₂)) → S → V₁u(I₁...₂) → S → (Su(I₂), Au(I₂)) → (¬V₁) →S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Integrated badge: Multi-Input-Argument erkannt.",
+    "key_structural_features": [
+      "frames: 15",
+      "distinct inputs: 2",
+      "notation input ids: 2",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span",
+      "multiple input set",
+      "distributed embedding",
+      "Integrated",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "was-kostet-ein-studium",
+    "title": "Was kostet ein Studium?",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vh",
+      "Vz"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "simultaneous reactions",
+    "notation_string": "S → (V₁, V₂, I₁, V₁z(I₁), V₂h(I₁), Au(I₁)) → (S → V)₁...₂ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 4",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)"
+    ]
+  },
+  {
+    "article_id": "verteilen-sie-die-500-milliarden-euro-aus-dem-sondervermogen",
+    "title": "Verteilen Sie die 500 Milliarden Euro aus dem Sondervermögen",
+    "x_category": "generative",
+    "y_category": "distributed_multiple",
+    "integrated_badge": true,
+    "visualization_types": [
+      "Vu",
+      "Vcuuo"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "Vcuu/Vcuuo comparison + integrated multi-input expression + distributed embedding",
+    "notation_string": "S → V₁, I₁, V₁u(I₁) → S → (V₂(I₁), I₂, V₂u(I₂)) → S → (V₃(I₁), I₃, V₃u(I₃)) → S → (V₄(I₁), I₄, V₄u(I₄)) → S →  V₅cuuo(I₁…₄)→ S",
+    "analytical_interpretation": "Generativ: Vcuu/Vcuuo zeigt nutzeruebergreifend erzeugten/erweiterten Datenraum. Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Vcuu/Vcuuo als generativer Marker erkannt. Integrated badge: Multi-Input-Argument erkannt.",
+    "key_structural_features": [
+      "frames: 11",
+      "distinct inputs: 4",
+      "notation input ids: 4",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "multiple input set",
+      "distributed embedding",
+      "Integrated",
+      "same input referenced across multiple steps",
+      "Vcuu/Vcuuo present"
+    ]
+  },
+  {
+    "article_id": "so-verlangern-sie-2025-ihren-urlaub",
+    "title": "So verlängern Sie 2025 Ihren Urlaub",
+    "x_category": "parametric",
+    "y_category": "distributed_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vh"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation"
+    ],
+    "structural_pattern_summary": "distributed embedding + same-input across steps",
+    "notation_string": "S → I₁ → Vh(I₁) → Au(I₁)) → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2a Distributed + Single: ein Input wird ueber mehrere Segmente wiederverwendet.",
+    "key_structural_features": [
+      "frames: 4",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "distributed embedding",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "mit-diesen-kosten-mussen-sie-bei-der-haussanierung-rechnen",
+    "title": "Mit diesen Kosten müssen Sie bei der Haussanierung rechnen",
+    "x_category": "parametric",
+    "y_category": "distributed_multiple",
+    "integrated_badge": true,
+    "visualization_types": [],
+    "narrative_layers": [
+      "annotation",
+      "story"
+    ],
+    "structural_pattern_summary": "integrated multi-input expression + distributed embedding + multiple inputs",
+    "notation_string": "S → ⟦A₁⟧ → (S → Iₙ → A₁(I₁…ₙ))ₙ₌₁…₆ → S → (¬A₁) → A(I₁…₆) → Su(I₁…₆) → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Integrated badge: Multi-Input-Argument erkannt.",
+    "key_structural_features": [
+      "frames: 25",
+      "distinct inputs: 6",
+      "notation input ids: 6",
+      "explicit iteration block",
+      "structural range/abbreviation",
+      "persistence span",
+      "multiple input set",
+      "distributed embedding",
+      "Integrated"
+    ]
+  },
+  {
+    "article_id": "wie-viel-rendite-sie-trotz-crash-mit-aktien-machen-konnen",
+    "title": "Wie viel Rendite Sie (trotz Crash) mit Aktien machen können",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vh"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "persistence span + simultaneous reactions",
+    "notation_string": "S → V → S → ⟦V₁⟧ → S₁…₇ → (¬V₁) → S → I₁, Vh(I₁)",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 8",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span"
+    ]
+  },
+  {
+    "article_id": "so-viel-kostet-ihre-periode-im-lauf-ihres-lebens",
+    "title": "So viel kostet Ihre Periode im Lauf Ihres Lebens",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [],
+    "narrative_layers": [
+      "annotation"
+    ],
+    "structural_pattern_summary": "single-window local dependency",
+    "notation_string": "I₁ → A(I₁) → (S → V)₁…₃ → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 4",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "structural range/abbreviation"
+    ]
+  },
+  {
+    "article_id": "how-are-you-doing",
+    "title": "How are you doing?",
+    "x_category": "parametric",
+    "y_category": "distributed_multiple",
+    "integrated_badge": true,
+    "visualization_types": [
+      "Vcu"
+    ],
+    "narrative_layers": [
+      "visualization",
+      "annotation",
+      "story"
+    ],
+    "structural_pattern_summary": "integrated multi-input expression + distributed embedding + multiple inputs",
+    "notation_string": "S → ⟦V₁] → I₁, V₁cu(I₁) → S → A(I₁) → S → S(I₁) → I₂, V₁cu(I₁…₂) → S → I₃, V₁cu(I₁…₃) → S → I₄ → S → I₅ → S → A(I₁…₅) → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y2b Distributed + Multiple: mehrere Inputs mit verteilter Wiederverwendung/Integration. Integrated badge: Multi-Input-Argument erkannt.",
+    "key_structural_features": [
+      "frames: 17",
+      "distinct inputs: 5",
+      "notation input ids: 5",
+      "structural range/abbreviation",
+      "reaction window (comma group)",
+      "persistence span",
+      "multiple input set",
+      "distributed embedding",
+      "Integrated",
+      "same input referenced across multiple steps"
+    ]
+  },
+  {
+    "article_id": "how-long-will-it-take-you-to-reach-your-savings-goals-for-the-new-year-calculator",
+    "title": "How long will it take you to reach your savings goals for the new year? – calculator",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [],
+    "narrative_layers": [
+      "annotation"
+    ],
+    "structural_pattern_summary": "single-window local dependency",
+    "notation_string": "S → I₁ → Au(I₁)",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 3",
+      "distinct inputs: 1",
+      "notation input ids: 1"
+    ]
+  },
+  {
+    "article_id": "what-constituency-am-i-in-new-boundary-map-for-uk-general-election-and-how-changes-may-affect-you",
+    "title": "What constituency am I in? New boundary map for UK general election – and how changes may affect you",
+    "x_category": "parametric",
+    "y_category": "local_single",
+    "integrated_badge": false,
+    "visualization_types": [
+      "Vh",
+      "Vz"
+    ],
+    "narrative_layers": [
+      "visualization"
+    ],
+    "structural_pattern_summary": "simultaneous reactions",
+    "notation_string": "S → (I₁, V₁z(I₁), V₁h(I₁)) → S",
+    "analytical_interpretation": "Parametrisch: User wird im bestehenden Daten-/Modellraum positioniert (Default ohne Vcuu/Vcuuo). Y1a Local + Single: ein Input, lokal eingebettet ohne spaetere Wiederaufnahme.",
+    "key_structural_features": [
+      "frames: 3",
+      "distinct inputs: 1",
+      "notation input ids: 1",
+      "reaction window (comma group)"
+    ]
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "name": "tools",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build:figures": "node src/cli.js"
+  },
+  "dependencies": {
+    "node.js": "^0.0.1-security"
+  }
+}
