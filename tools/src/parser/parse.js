@@ -31,7 +31,39 @@ function normalizeSubscriptDigits(value) {
     .replace(/₇/g, '7')
     .replace(/₈/g, '8')
     .replace(/₉/g, '9')
-    .replace(/ₙ/g, 'n');
+    .replace(/ₙ/g, 'n')
+    .replace(/ⱼ/g, 'j')
+    // Superscript variants used in notation, e.g. V₁ʰ, Vᶜᵘᵒ
+    .replace(/ᵃ/g, 'a')
+    .replace(/ᵇ/g, 'b')
+    .replace(/ᶜ/g, 'c')
+    .replace(/ᵈ/g, 'd')
+    .replace(/ᵉ/g, 'e')
+    .replace(/ᶠ/g, 'f')
+    .replace(/ᵍ/g, 'g')
+    .replace(/ʰ/g, 'h')
+    .replace(/ⁱ/g, 'i')
+    .replace(/ʲ/g, 'j')
+    .replace(/ᵏ/g, 'k')
+    .replace(/ˡ/g, 'l')
+    .replace(/ᵐ/g, 'm')
+    .replace(/ⁿ/g, 'n')
+    .replace(/ᵒ/g, 'o')
+    .replace(/ᵖ/g, 'p')
+    .replace(/ʳ/g, 'r')
+    .replace(/ˢ/g, 's')
+    .replace(/ᵗ/g, 't')
+    .replace(/ᵘ/g, 'u')
+    .replace(/ᵛ/g, 'v')
+    .replace(/ʷ/g, 'w')
+    .replace(/ˣ/g, 'x')
+    .replace(/ʸ/g, 'y')
+    .replace(/ᶻ/g, 'z');
+}
+
+function isIterationVar(value) {
+  const normalized = String(value ?? '').toLowerCase();
+  return normalized === 'n' || normalized === 'j';
 }
 
 function parseSubscriptRange(raw, warnings, contextLabel = 'range') {
@@ -56,11 +88,11 @@ function parseSubscriptRange(raw, warnings, contextLabel = 'range') {
 function parseInputRangeRef(raw) {
   if (!raw) return null;
   const normalized = normalizeSubscriptDigits(raw).replace(/\s+/g, '');
-  const m = normalized.match(/^I(?:\()?(\d+)(?:…|\.\.\.)I?(\d+|n)(?:\))?$/i);
+  const m = normalized.match(/^I(?:\()?(\d+)(?:…|\.\.\.)I?(\d+|[nj])(?:\))?$/i);
   if (!m) return null;
   const from = Number.parseInt(m[1], 10);
   if (!Number.isFinite(from)) return null;
-  const to = /^\d+$/.test(m[2]) ? Number.parseInt(m[2], 10) : 'n';
+  const to = /^\d+$/.test(m[2]) ? Number.parseInt(m[2], 10) : m[2].toLowerCase();
   return { from, to };
 }
 
@@ -74,11 +106,11 @@ function parseInputListRef(raw) {
   for (let idx = 0; idx < parts.length; idx += 1) {
     const part = parts[idx];
     // Accept both I1,I2 and shorthand I1,2 (or I1,n).
-    let m = part.match(/^I(\d+|n)$/i);
-    if (!m && idx > 0) m = part.match(/^(\d+|n)$/i);
+    let m = part.match(/^I(\d+|[nj])$/i);
+    if (!m && idx > 0) m = part.match(/^(\d+|[nj])$/i);
     if (!m) return null;
     const token = m[1];
-    refs.push(token === 'n' ? 'n' : Number.parseInt(token, 10));
+    refs.push(isIterationVar(token) ? token.toLowerCase() : Number.parseInt(token, 10));
   }
   return refs;
 }
@@ -88,21 +120,21 @@ function parseVisualizationRest(restRaw) {
   if (!rest) return { visIndex: null, variant: null, visAction: 'V' };
 
   // V1u / Vnu
-  let m = rest.match(/^(\d+|n)([A-Za-z]+)$/);
+  let m = rest.match(/^(\d+|[nj])([A-Za-z]+)$/);
   if (m) {
     const [, visIndex, variant] = m;
     return { visIndex, variant, visAction: `V${variant}` };
   }
 
   // Vu1 / Vun
-  m = rest.match(/^([A-Za-z]+)(\d+|n)$/);
+  m = rest.match(/^([A-Za-z]+)(\d+|[nj])$/);
   if (m) {
     const [, variant, visIndex] = m;
     return { visIndex, variant, visAction: `V${variant}` };
   }
 
   // V1 / Vn
-  m = rest.match(/^(\d+|n)$/);
+  m = rest.match(/^(\d+|[nj])$/);
   if (m) {
     const [, visIndex] = m;
     return { visIndex, variant: null, visAction: 'V' };
@@ -123,21 +155,21 @@ function parseAnnotationRest(restRaw) {
   if (!rest) return { annIndex: null, variant: null };
 
   // A1u / Anu
-  let m = rest.match(/^(\d+|n)([A-Za-z]+)$/);
+  let m = rest.match(/^(\d+|[nj])([A-Za-z]+)$/);
   if (m) {
     const [, annIndex, variant] = m;
     return { annIndex, variant };
   }
 
   // Au1 / Aun (legacy token forms)
-  m = rest.match(/^([A-Za-z]+)(\d+|n)$/);
+  m = rest.match(/^([A-Za-z]+)(\d+|[nj])$/);
   if (m) {
     const [, variant, annIndex] = m;
     return { annIndex, variant };
   }
 
   // A1 / An
-  m = rest.match(/^(\d+|n)$/);
+  m = rest.match(/^(\d+|[nj])$/);
   if (m) {
     const [, annIndex] = m;
     return { annIndex, variant: null };
@@ -197,7 +229,7 @@ function parseElement(value, warnings) {
     variant = parsedAnn.variant;
     annIndex = parsedAnn.annIndex;
   } else {
-    const restMatch = rest.match(/^([A-Za-z]*)([0-9n]*)$/);
+    const restMatch = rest.match(/^([A-Za-z]*)([0-9nj]*)$/);
     if (!restMatch) {
       warnings.push(`Unrecognized element token "${value}"`);
       return null;
@@ -230,7 +262,7 @@ function parseElement(value, warnings) {
         }
         inputRef = null;
       } else {
-        const hasVariableN = /[ₙn]/.test(dependencyRaw);
+        const hasVariableN = /[ₙnⱼj]/.test(dependencyRaw);
         const depNum = dependencyRaw.match(/[₀-₉0-9]+/);
         if (depNum) {
           inputRef = normalizeNumber(depNum[0]);
@@ -320,36 +352,36 @@ function substituteIterationElement(element, iterValue, iterKey) {
   const normalizedSource = normalizeSubscriptDigits(cloned.sourceRaw || '');
   const iterText = String(iterValue);
 
-  if (cloned.type === 'I' && /^In$/i.test(normalizedRaw)) {
+  if (cloned.type === 'I' && /^I[nj]$/i.test(normalizedRaw)) {
     cloned.raw = `I${iterText}`;
     cloned.inputRef = iterKey;
     if (cloned.sourceRaw) {
-      cloned.sourceRaw = cloned.sourceRaw.replace(/I[ₙn]/g, `I${iterText}`);
+      cloned.sourceRaw = cloned.sourceRaw.replace(/I[ₙnⱼj]/g, `I${iterText}`);
     }
   }
 
-  if (/\(In\)/i.test(normalizedSource)) {
+  if (/\(I[nj]\)/i.test(normalizedSource)) {
     cloned.inputRef = iterKey;
   }
 
   if (Array.isArray(cloned.inputRefs) && cloned.inputRefs.length > 0) {
-    cloned.inputRefs = cloned.inputRefs.map((ref) => (String(ref).toLowerCase() === 'n' ? iterKey : ref));
+    cloned.inputRefs = cloned.inputRefs.map((ref) => (isIterationVar(ref) ? iterKey : ref));
   }
 
-  if (cloned.dependsOnAccumulatedInputs && cloned.inputRange && cloned.inputRange.to === 'n') {
+  if (cloned.dependsOnAccumulatedInputs && cloned.inputRange && isIterationVar(cloned.inputRange.to)) {
     cloned.inputRange = {
       from: cloned.inputRange.from,
       to: iterValue,
     };
   }
 
-  if (cloned.type === 'V' && String(cloned.visIndex || '').toLowerCase() === 'n') {
+  if (cloned.type === 'V' && isIterationVar(cloned.visIndex)) {
     cloned.visIndex = iterText;
     if (cloned.raw) {
-      cloned.raw = cloned.raw.replace(/V[ₙn]/g, `V${iterText}`);
+      cloned.raw = cloned.raw.replace(/V[ₙnⱼj]/g, `V${iterText}`);
     }
     if (cloned.sourceRaw) {
-      cloned.sourceRaw = cloned.sourceRaw.replace(/V[ₙn]/g, `V${iterText}`);
+      cloned.sourceRaw = cloned.sourceRaw.replace(/V[ₙnⱼj]/g, `V${iterText}`);
     }
   }
 
@@ -469,6 +501,28 @@ function parseSequence(tokens, startIndex, warnings, state) {
     }
 
     if (token.type === 'PERSIST_END') {
+      // Support new close marker syntax: ]X[
+      // Example: ]V1[, ]A(I1)[
+      if (tokens[pos + 1]?.type === 'ELEMENT') {
+        let elementValue = tokens[pos + 1].value;
+        let consumeUntil = pos + 2;
+        const dep = readElementDependency(tokens, consumeUntil);
+        if (dep && /^I/i.test(dep.raw || '')) {
+          elementValue = `${tokens[pos + 1].value}(${dep.raw})`;
+          consumeUntil = dep.nextPos;
+        }
+        if (tokens[consumeUntil]?.type === 'PERSIST_START') {
+          const element = parseElement(elementValue, warnings);
+          if (element) {
+            element.persistentEnd = true;
+            currentElements.push(element);
+          }
+          pos = consumeUntil + 1;
+          continue;
+        }
+      }
+
+      // Legacy/default behaviour: close open persistence scope (⟦X⟧ / [X])
       persistentStartScope = false;
       pos += 1;
       continue;

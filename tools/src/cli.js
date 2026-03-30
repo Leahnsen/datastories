@@ -3383,70 +3383,6 @@ async function writeVisualizationResponseFrequencyFigure(baseOutDir, records) {
     return `rgb(${r},${g},${b})`;
   }
 
-  function getDistinctInputCount(record) {
-    const featureRows = Array.isArray(record?.key_structural_features) ? record.key_structural_features : [];
-    for (const raw of featureRows) {
-      const text = String(raw || "").trim();
-      let m = text.match(/^distinct inputs:\s*(\d+)/i);
-      if (m) return Number.parseInt(m[1], 10);
-      m = text.match(/^notation input ids:\s*(\d+)/i);
-      if (m) return Number.parseInt(m[1], 10);
-    }
-    return null;
-  }
-
-  const distinctInputCounts = (records || [])
-    .map((record) => getDistinctInputCount(record))
-    .filter((value) => Number.isFinite(value) && value >= 0);
-  const distinctMin = distinctInputCounts.length > 0 ? Math.min(...distinctInputCounts) : null;
-  const distinctMax = distinctInputCounts.length > 0 ? Math.max(...distinctInputCounts) : null;
-  const distinctValues = distinctMin != null && distinctMax != null
-    ? Array.from({ length: distinctMax - distinctMin + 1 }, (_, idx) => distinctMin + idx)
-    : [];
-  const distinctFreq = new Map(distinctValues.map((v) => [v, 0]));
-  for (const value of distinctInputCounts) {
-    if (!distinctFreq.has(value)) continue;
-    distinctFreq.set(value, (distinctFreq.get(value) || 0) + 1);
-  }
-  const distinctMaxFreq = distinctValues.length > 0
-    ? Math.max(...distinctValues.map((v) => distinctFreq.get(v) || 0))
-    : 0;
-  const sparkBarGap = 1;
-  const sparkBarWidth = distinctValues.length > 28 ? 2 : 3;
-  const sparkHeight = 32;
-  const sparkInnerHeight = 28;
-  const sparkWidth = distinctValues.length > 0
-    ? distinctValues.length * sparkBarWidth + Math.max(0, distinctValues.length - 1) * sparkBarGap
-    : 36;
-  const sparkBars = distinctValues.map((v, idx) => {
-    const freq = distinctFreq.get(v) || 0;
-    // Use log scaling so small non-zero bins remain distinguishable (e.g. 1 vs 3 stories).
-    const norm = distinctMaxFreq > 0
-      ? (Math.log(freq + 1) / Math.log(distinctMaxFreq + 1))
-      : 0;
-    const h = freq <= 0 ? 1 : Math.max(2, Math.round(norm * sparkInnerHeight));
-    const x = idx * (sparkBarWidth + sparkBarGap);
-    const y = sparkHeight - h;
-    const step = sparkBarWidth + sparkBarGap;
-    const hitW = step;
-    const hitX = x;
-    const cls = freq <= 0 ? "bar zero" : "bar";
-    const segmentsLabel = `${v} input segment${v === 1 ? "" : "s"}`;
-    const storiesLabel = `${freq} data stor${freq === 1 ? "y" : "ies"}`;
-    const title = escapeHtml(`${segmentsLabel}: ${storiesLabel}`);
-    const tipAttr = escapeHtml(`${segmentsLabel}: ${storiesLabel}`);
-    return [
-      `<g class="bar-bin">`,
-      `<rect class="${cls}" x="${x}" y="${y}" width="${sparkBarWidth}" height="${h}" rx="0.6"/>`,
-      `<rect class="bar-hit" data-tip="${tipAttr}" x="${hitX}" y="0" width="${hitW}" height="${sparkHeight}" rx="1">`,
-      `<title>${title}</title>`,
-      `</rect>`,
-      `</g>`,
-    ].join("");
-  }).join("");
-  const distinctMinText = distinctMin != null ? String(distinctMin) : "–";
-  const distinctMaxText = distinctMax != null ? String(distinctMax) : "–";
-
   const glyphDir = path.resolve(__dirname, "../../design/glyphs");
   const symbols = [];
   for (const row of rowDefs) {
@@ -3533,65 +3469,7 @@ async function writeVisualizationResponseFrequencyFigure(baseOutDir, records) {
       color:#111827;
     }
     .figure-wrap { max-width:100%; }
-    .figure-toolbar {
-      display:flex;
-      gap:8px;
-      align-items:center;
-      margin-bottom:10px;
-    }
-    .figure-btn {
-      border:1px solid #cfd4dc;
-      background:#fff;
-      color:#1f2937;
-      border-radius:6px;
-      padding:6px 10px;
-      font-size:12px;
-      font-weight:600;
-      cursor:pointer;
-    }
-    .figure-btn:hover { background:#f8fafc; border-color:#aebed1; }
-    .figure-note { font-size:11px; color:#667085; margin-left:6px; }
-    .dist-overview {
-      display:flex;
-      align-items:flex-end;
-      gap:6px;
-      margin:2px 0 8px;
-      white-space:nowrap;
-    }
-    .dist-label {
-      font-size:11px;
-      color:#374151;
-    }
-    .dist-min, .dist-max {
-      font-size:11px;
-      font-weight:600;
-      color:#111827;
-      line-height:1;
-    }
-    .dist-spark {
-      display:block;
-      width:${sparkWidth}px;
-      height:${sparkHeight}px;
-    }
-    .dist-spark .baseline { stroke:#cfd4dc; stroke-width:1; }
-    .dist-spark .bar { fill:#6e7886; }
-    .dist-spark .bar.zero { fill:#eef2f7; }
-    .dist-spark .bar-hit { fill: transparent; pointer-events: all; cursor: default; }
-    .dist-tooltip {
-      position: fixed;
-      z-index: 2000;
-      display: none;
-      pointer-events: none;
-      background: #111827;
-      color: #f9fafb;
-      border: 1px solid #1f2937;
-      border-radius: 4px;
-      padding: 3px 6px;
-      font-size: 11px;
-      line-height: 1.2;
-      white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-    }
+    .figure-note { font-size:11px; color:#667085; margin:0 0 8px; }
     svg { display:block; background:#fff; }
     .col-head {
       font-size:12px;
@@ -3621,20 +3499,7 @@ async function writeVisualizationResponseFrequencyFigure(baseOutDir, records) {
 </head>
 <body>
   <div class="figure-wrap">
-    <div class="figure-toolbar">
-      <button id="download-svg" class="figure-btn" type="button">Download SVG</button>
-      <button id="download-pdf" class="figure-btn" type="button">Download PDF</button>
-      <span class="figure-note">PL=Positioning,Local · PD=Positioning,Distributed · CL=Creating,Local · CD=Creating,Distributed · All=Overall</span>
-    </div>
-    <div class="dist-overview">
-      <span class="dist-label">Input segments per data story</span>
-      <span class="dist-min">${distinctMinText}</span>
-      <svg class="dist-spark" viewBox="0 0 ${sparkWidth} ${sparkHeight}" preserveAspectRatio="none" aria-label="Input segments per data story distribution">
-        <line class="baseline" x1="0" y1="${sparkHeight - 0.5}" x2="${sparkWidth}" y2="${sparkHeight - 0.5}"></line>
-        ${sparkBars}
-      </svg>
-      <span class="dist-max">${distinctMaxText}</span>
-    </div>
+    <p class="figure-note">PL=Positioning,Local · PD=Positioning,Distributed · CL=Creating,Local · CD=Creating,Distributed · All=Overall</p>
     <svg id="response-frequency-svg" xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}">
       <title>Visualization response type frequencies across quadrants</title>
       <defs>
@@ -3644,91 +3509,6 @@ ${symbolMarkup}
       ${rowMarkup}
     </svg>
   </div>
-  <div id="dist-tooltip" class="dist-tooltip" role="status" aria-live="polite"></div>
-
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/svg2pdf.js@2.2.3/dist/svg2pdf.umd.min.js"></script>
-  <script>
-    const distTooltip = document.getElementById("dist-tooltip");
-    const distSpark = document.querySelector(".dist-spark");
-    function moveDistTooltip(evt) {
-      if (!distTooltip || distTooltip.style.display === "none") return;
-      const offset = 10;
-      distTooltip.style.left = (evt.clientX + offset) + "px";
-      distTooltip.style.top = (evt.clientY + offset) + "px";
-    }
-    function hideDistTooltip() {
-      if (!distTooltip) return;
-      distTooltip.style.display = "none";
-    }
-    if (distSpark && distTooltip) {
-      const hits = distSpark.querySelectorAll(".bar-hit");
-      hits.forEach((hit) => {
-        hit.addEventListener("mouseenter", (evt) => {
-          const tip = evt.currentTarget.getAttribute("data-tip") || "";
-          if (!tip) return;
-          distTooltip.textContent = tip;
-          distTooltip.style.display = "block";
-          moveDistTooltip(evt);
-        });
-        hit.addEventListener("mousemove", moveDistTooltip);
-        hit.addEventListener("mouseleave", hideDistTooltip);
-      });
-      distSpark.addEventListener("mouseleave", hideDistTooltip);
-    }
-
-    const svgEl = document.getElementById("response-frequency-svg");
-    const embeddedSvgStyle = [
-      ".col-head { font-size:12px; font-weight:700; letter-spacing:0.01em; fill:#1f2937; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }",
-      ".row-formula-base { font-family: Cambria Math, STIX Two Text, Times New Roman, serif; font-size:18px; fill:#111827; font-style:italic; }",
-      ".row-formula-sup { font-family: Cambria Math, STIX Two Text, Times New Roman, serif; font-size:11px; fill:#111827; font-style:normal; }",
-      ".cell-count { font-size:12px; font-weight:600; fill:#111827; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }",
-    ].join("\\n");
-    function downloadSvg() {
-      const clone = svgEl.cloneNode(true);
-      clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-      let defs = clone.querySelector("defs");
-      if (!defs) {
-        defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-        clone.insertBefore(defs, clone.firstChild);
-      }
-      const styleEl = document.createElementNS("http://www.w3.org/2000/svg", "style");
-      styleEl.setAttribute("type", "text/css");
-      styleEl.textContent = embeddedSvgStyle;
-      defs.insertBefore(styleEl, defs.firstChild);
-      const payload = '<?xml version="1.0" encoding="UTF-8"?>\\n' + clone.outerHTML;
-      const blob = new Blob([payload], { type: "image/svg+xml;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "visualization-response-frequency.svg";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-    async function downloadPdf() {
-      const jspdfNs = window.jspdf || {};
-      const jsPDF = jspdfNs.jsPDF;
-      const svg2pdfFn = typeof window.svg2pdf === "function" ? window.svg2pdf : null;
-      if (!jsPDF || !svg2pdfFn) {
-        alert("PDF export requires jsPDF + svg2pdf.js.");
-        return;
-      }
-      const vb = svgEl.viewBox.baseVal;
-      const pageW = vb && vb.width ? vb.width : svgEl.clientWidth;
-      const pageH = vb && vb.height ? vb.height : svgEl.clientHeight;
-      const doc = new jsPDF({
-        orientation: pageW >= pageH ? "landscape" : "portrait",
-        unit: "pt",
-        format: [pageW, pageH],
-      });
-      await svg2pdfFn(svgEl, doc, { xOffset: 0, yOffset: 0, width: pageW, height: pageH });
-      doc.save("visualization-response-frequency.pdf");
-    }
-    document.getElementById("download-svg").addEventListener("click", downloadSvg);
-    document.getElementById("download-pdf").addEventListener("click", () => { downloadPdf(); });
-  </script>
 </body>
 </html>`;
 

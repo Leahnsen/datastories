@@ -12,7 +12,8 @@ const SUBSCRIPT_DIGITS = {
   '₇': '7',
   '₈': '8',
   '₉': '9',
-  'ₙ': 'n'
+  'ₙ': 'n',
+  'ⱼ': 'j'
 };
 
 const DELIMITERS = new Set(['→', ',', '(', ')', '⟦', '⟧', '[', ']', '¬', '-']);
@@ -27,8 +28,8 @@ function mapSubscripts(value) {
 }
 
 function tryParseRepeat(text) {
-  // Matches patterns like ₙ₌1…20 or ₙ₌1...20
-  const match = text.match(/^ₙ₌([₀-₉\d]+)(?:…|\.\.\.)([₀-₉\d]+)/);
+  // Matches patterns like ₙ₌1…20 / ⱼ₌1…20 (and ... variants).
+  const match = text.match(/^[ₙⱼ]₌([₀-₉\d]+)(?:…|\.\.\.)([₀-₉\d]+)/);
   if (!match) return null;
 
   const startStr = mapSubscripts(match[1]);
@@ -112,7 +113,7 @@ export function tokenize(input) {
       continue;
     }
 
-    if (ch === 'ₙ') {
+    if (ch === 'ₙ' || ch === 'ⱼ') {
       const repeat = tryParseRepeat(cleaned.slice(i));
       if (repeat) {
         tokens.push({ type: 'REPEAT', ...repeat });
@@ -129,7 +130,7 @@ export function tokenize(input) {
       cleaned[i] !== '→'
     ) {
       // Stop before a repetition suffix so it can be tokenised separately
-      if (cleaned[i] === 'ₙ' && tryParseRepeat(cleaned.slice(i))) break;
+      if ((cleaned[i] === 'ₙ' || cleaned[i] === 'ⱼ') && tryParseRepeat(cleaned.slice(i))) break;
       i += 1;
     }
 
