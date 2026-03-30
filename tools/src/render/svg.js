@@ -22,6 +22,8 @@ const DEFAULTS = {
 
 let tokenCache = null;
 
+const INVALID_FILENAME_CHARS = /[<>:"/\\|?*\u0000-\u001f]/g;
+
 // Order of stacking inside a block (your variant 1)
 const STACK_ORDER = ["input", "story", "annotation", "visualization"];
 const SUBSTORY_ARROW_LEN = 16;
@@ -37,7 +39,7 @@ function stripOuterSvg(svgText) {
 }
 
 function safeToken(node) {
-  if (node.kind === "substory") return "Nds";
+  if (node.kind === "substory") return "N";
   if (node.kind === "visualization") {
     const rawKey = normalizeRawKey(node.raw).toLowerCase();
     const wantsAccumulatedVcu = node.dependsOnAccumulatedInputs &&
@@ -52,10 +54,28 @@ function safeToken(node) {
     if (node.visAction) return node.visAction;
   }
   if (node.kind === "annotation") {
-    return node.isInPersistentAnnotationSpan ? "Au" : "A";
+    return node.isInPersistentAnnotationSpan
+      ? (node.persistentAnnotationGlyphToken || "Apd")
+      : "A";
   }
-  if (node.kind === "input") return "I";
+  if (node.kind === "input") {
+    return node.isInPersistentInputSpan ? "Iu" : "I";
+  }
   return normalizeRawKey(node.raw);
+}
+
+function assignAnnotationPersistenceGlyphTokens(nodes, rails) {
+  for (const node of nodes || []) {
+    if (node.kind !== "annotation") continue;
+    node.persistentAnnotationGlyphToken = "Apd";
+    if (!node.isInPersistentAnnotationSpan) continue;
+    const rank = Number.isFinite(node.persistenceStyleRank) ? node.persistenceStyleRank : 1;
+    if (rank <= 0) {
+      node.persistentAnnotationGlyphToken = "Aps";
+    } else {
+      node.persistentAnnotationGlyphToken = "Apd";
+    }
+  }
 }
 
 function normalizeRawKey(rawValue) {
@@ -85,6 +105,16 @@ function getViewBoxWidth(svgText) {
   if (!m) return 24;
   const width = Number.parseFloat(m[1]);
   return Number.isFinite(width) && width > 0 ? width : 24;
+}
+
+export function toSafeSvgBaseName(value) {
+  const raw = String(value ?? "").trim();
+  const replaced = raw
+    .replace(INVALID_FILENAME_CHARS, "-")
+    .replace(/\s+/g, " ")
+    .replace(/[. ]+$/g, "")
+    .trim();
+  return replaced || "story";
 }
 
 function isMultiInputBlock(node) {
@@ -160,7 +190,7 @@ function recolorDependencyMarkers(glyphInner, color) {
 }
 
 function recolorNdsBackground(glyphInner, color) {
-  // Nds.svg uses #737373 for the outer base shape; recolor only that base.
+  // N glyph uses #737373 for the outer base shape; recolor only that base.
   return glyphInner.replace(/fill="#737373"/i, `fill="${color}"`);
 }
 
@@ -176,6 +206,17 @@ function recolorBasicVisualizationBase(glyphInner, color) {
 function recolorPersistentAnnotationGlyph(glyphInner, color) {
   // A-pers.svg: keep baked black dashed/details black, recolor only neutral base fill.
   return glyphInner
+    .replace(/fill="#737373"/gi, `fill="${color}"`)
+    .replace(/fill="#000000"/gi, `fill="#000000"`)
+    .replace(/stroke="#000000"/gi, `stroke="#000000"`);
+}
+
+function recolorPersistentInputGlyph(glyphInner, color) {
+  // I-pers.svg: remove exported white artboard rects, recolor only neutral base fill,
+  // and keep black persistence marks/details untouched.
+  return glyphInner
+    .replace(/<rect[^>]*fill="#ffffff"[^>]*\/>/gi, "")
+    .replace(/<rect[^>]*fill="rgb\(\s*255\s*,\s*255\s*,\s*255\s*\)"[^>]*\/>/gi, "")
     .replace(/fill="#737373"/gi, `fill="${color}"`)
     .replace(/fill="#000000"/gi, `fill="#000000"`)
     .replace(/stroke="#000000"/gi, `stroke="#000000"`);
@@ -235,7 +276,7 @@ function gradientStopsStepped(colors) {
 }
 
 function applyAccumulatedGradientToGlyph(glyphInner, gradientId) {
-  // S/A/Au base fills are exported as #737373.
+  // S/A base fills are exported as #737373.
   return glyphInner.replace(/fill="#737373"/gi, `fill="url(#${gradientId})"`);
 }
 
@@ -276,10 +317,14 @@ async function loadGlyph(token, mapping, node) {
   const glyphPath = path.resolve(__dirname, "../../../design/glyphs", fileName);
   const svgText = await fs.readFile(glyphPath, "utf-8");
   let inner = stripOuterSvg(svgText);
-  if (node.kind === "input" && node.inputId && !isMultiInputBlock(node)) {
+  if (node.kind === "input" && token === "Iu" && node.inputId) {
+    inner = recolorPersistentInputGlyph(inner, getInputColor(node.inputId));
+  } else if (node.kind === "input" && node.inputId && !isMultiInputBlock(node)) {
     inner = recolorInputGlyph(inner, getInputColor(node.inputId));
-  } else if (node.kind === "annotation" && token === "Au" && node.dependsOnInput && node.inputId) {
-    inner = recolorPersistentAnnotationGlyph(inner, getInputColor(node.inputId));
+  } else if (node.kind === "annotation" && (token === "Aps" || token === "Apd")) {
+    if (node.dependsOnInput && node.inputId) {
+      inner = recolorPersistentAnnotationGlyph(inner, getInputColor(node.inputId));
+    }
   } else if (
     node.kind === "visualization" &&
     node.inNdsSubstory &&
@@ -288,8 +333,12 @@ async function loadGlyph(token, mapping, node) {
     (node.visAction === "V" || node.visAction == null)
   ) {
     inner = recolorBasicVisualizationBase(inner, getInputColor(node.substoryDependencyInput));
-  } else if (node.kind === "visualization" && token === "Nds" && node.dependsOnInput && node.inputId) {
-    inner = recolorNdsBackground(inner, getInputColor(node.inputId));
+  } else if (node.kind === "visualization" && token === "N" && node.dependsOnInput && node.inputId) {
+    const dependencyColor = getInputColor(node.inputId);
+    inner = recolorNdsBackground(inner, dependencyColor);
+    // New N glyph variants can use dependency-marker green instead of neutral gray.
+    // Apply marker recoloring here as well so N always follows its input dependency color.
+    inner = recolorDependencyMarkers(inner, dependencyColor);
   } else if ((node.kind === "story" || node.kind === "annotation") && node.dependsOnInput && node.inputId) {
     inner = recolorInputGlyph(inner, getInputColor(node.inputId));
   } else if (node.dependsOnInput && node.inputId) {
@@ -334,11 +383,12 @@ function renderFallbackCircle(x, y, size, color) {
   return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="2"/>`;
 }
 
-function renderIndexRing(out, x, y, size, color = "#000") {
+function renderIndexRing(out, x, y, size, color = "#000", dash = null) {
   const r = size / 2 + 2;
   const cx = x + size / 2;
   const cy = y + size / 2;
-  out.push(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="2"/>`);
+  const dashAttr = dash ? ` stroke-dasharray="${dash}"` : "";
+  out.push(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="2"${dashAttr}/>`);
 }
 
 function rangeCount(node) {
@@ -540,21 +590,7 @@ function accumulatedSegmentColors(node) {
 }
 
 function accumulatedMarkerOverlayRight(node) {
-  if (
-    (node?.kind === "story" || node?.kind === "annotation") &&
-    node?.dependsOnAccumulatedInputs &&
-    node?.inputRange
-  ) {
-    return 0;
-  }
-  if (
-    node?.kind === "visualization" &&
-    node?.dependsOnAccumulatedInputs &&
-    node?.inputRange &&
-    (node?.visAction === "Vcu" || normalizeRawKey(node?.raw).toLowerCase() === "vcu")
-  ) {
-    return 0;
-  }
+  if (node?.dependsOnAccumulatedInputs && node?.inputRange) return 0;
   if (!node?.dependsOnAccumulatedInputs || !node?.inputRange) return 0;
   const label = accumulatedRangeLabel(node);
   const textW = label ? Math.max(20, label.length * 6) : 0;
@@ -562,21 +598,7 @@ function accumulatedMarkerOverlayRight(node) {
 }
 
 function renderAccumulatedInputMarker(out, node, x, y, size) {
-  if (
-    (node?.kind === "story" || node?.kind === "annotation") &&
-    node?.dependsOnAccumulatedInputs &&
-    node?.inputRange
-  ) {
-    return;
-  }
-  if (
-    node?.kind === "visualization" &&
-    node?.dependsOnAccumulatedInputs &&
-    node?.inputRange &&
-    (node?.visAction === "Vcu" || normalizeRawKey(node?.raw).toLowerCase() === "vcu")
-  ) {
-    return;
-  }
+  if (node?.dependsOnAccumulatedInputs && node?.inputRange) return;
   if (!node?.dependsOnAccumulatedInputs || !node?.inputRange) return;
   const colors = accumulatedSegmentColors(node);
   if (colors.length === 0) return;
@@ -618,8 +640,8 @@ async function renderSubStoryNode(out, node, gx, gy, size, mapping, cfg) {
   const metrics = subStoryMetrics(node, cfg);
   const ndsNode = {
     kind: "visualization",
-    raw: "Nds",
-    visAction: "Nds",
+    raw: "N",
+    visAction: "N",
     visIndex: null,
     dependsOnInput: Boolean(node.scopeInputId),
     inputId: node.scopeInputId || null,
@@ -638,7 +660,7 @@ async function renderSubStoryNode(out, node, gx, gy, size, mapping, cfg) {
   const containerY = gy - SUBSTORY_PAD_Y;
   const containerW = metrics.width;
   const containerH = metrics.height;
-  const label = node.scopeInputId ? `Nds(I${node.scopeInputId})` : "Nds";
+  const label = node.scopeInputId ? `N(${formatInputRef(node.scopeInputId)})` : "N";
   out.push(
     `<text x="${containerX + 6}" y="${containerY - 4}" text-anchor="start" fill="#333" font-size="10" font-family="sans-serif">${label}</text>`
   );
@@ -750,8 +772,14 @@ async function renderSingleGlyphNode(out, node, gx, gy, size, mapping) {
     out.push(renderFallbackCircle(gx, gy, size, color));
   }
 
+  const rank = Number.isFinite(node.persistenceStyleRank) ? node.persistenceStyleRank : null;
+  const rankDash = rank == null ? null : persistenceDashForRank(rank);
   if (node.kind === "visualization" && node.visIndex != null && node.isInPersistentVisualizationSpan) {
-    renderIndexRing(out, gx, gy, size, "#000");
+    renderIndexRing(out, gx, gy, size, "#000", rankDash);
+  } else if (node.kind === "input" && node.isInPersistentInputSpan) {
+    renderIndexRing(out, gx, gy, size, "#000", rankDash);
+  } else if (node.kind === "annotation" && node.isInPersistentAnnotationSpan && rank != null && rank >= 2) {
+    renderIndexRing(out, gx, gy, size, "#000", rankDash);
   }
 }
 
@@ -809,12 +837,60 @@ function buildFrameMetrics(maxFrameIndex, rowsByFrame, cfg) {
   };
 }
 
+function toSubscriptDigits(value) {
+  return String(value || "")
+    .replace(/0/g, "₀")
+    .replace(/1/g, "₁")
+    .replace(/2/g, "₂")
+    .replace(/3/g, "₃")
+    .replace(/4/g, "₄")
+    .replace(/5/g, "₅")
+    .replace(/6/g, "₆")
+    .replace(/7/g, "₇")
+    .replace(/8/g, "₈")
+    .replace(/9/g, "₉");
+}
+
+function formatIndexedSymbol(prefix, rawIndex) {
+  const idx = String(rawIndex ?? "").trim();
+  if (!idx || /^n$/i.test(idx)) return `${prefix}`;
+  if (/^\d+$/.test(idx)) return `${prefix}${toSubscriptDigits(idx)}`;
+  return `${prefix}${idx}`;
+}
+
+function formatInputRef(rawInputId) {
+  return formatIndexedSymbol("I", rawInputId);
+}
+
+function formatAnnotationRailLabel(rawKey) {
+  const key = String(rawKey || "").trim();
+  if (!key) return "A";
+  const normalized = key.replace(/\s+/g, "");
+  const match = normalized.match(/^A(\d+|n)?$/i);
+  if (!match) return normalized;
+  const idx = match[1] || "";
+  return formatIndexedSymbol("A", idx);
+}
+
+function formatInputRailLabel(rawKey) {
+  const key = String(rawKey || "").trim();
+  if (!key) return "I";
+  const normalized = key.replace(/\s+/g, "");
+  const match = normalized.match(/^I(\d+|n)?$/i);
+  if (!match) return normalized;
+  const idx = match[1] || "";
+  return formatIndexedSymbol("I", idx);
+}
+
 function railLabel(rail) {
   if (rail.kind === "visualization") {
-    return `V${rail.visIndex ?? ""}`.replace(/\s+/g, "");
+    return formatIndexedSymbol("V", rail.visIndex ?? "");
   }
   if (rail.kind === "annotation") {
-    return rail.key || "Au";
+    return formatAnnotationRailLabel(rail.key);
+  }
+  if (rail.kind === "input") {
+    return formatInputRailLabel(rail.key);
   }
   return rail.key || "";
 }
@@ -836,16 +912,20 @@ function buildPersistenceRects(rails, frameRows, frameTops, frameHeights, cfg) {
     for (let fi = rail.startFrame; fi <= rail.endFrame; fi += 1) {
       const rows = frameRows.get(fi) ?? [];
       for (const row of rows) {
+        if (row.substoryOnly) continue;
         minX = Math.min(minX, row.startX);
         maxX = Math.max(maxX, row.endX);
       }
     }
 
     out.push({
+      railId: rail.railId || `${rail.kind}:${rail.key}:${rail.startFrame}:${rail.endFrame}`,
       key: rail.key,
       kind: rail.kind || "visualization",
       label: railLabel(rail),
       visIndex: rail.visIndex || null,
+      startFrame: rail.startFrame,
+      endFrame: rail.endFrame,
       x: minX - padX,
       y: yStart,
       width: (maxX - minX) + padX * 2,
@@ -867,12 +947,75 @@ function unifyPersistenceRectsWidth(rects, extraPadding = 16) {
   return rects;
 }
 
+function sortPersistenceRailsByOrder(rails) {
+  return [...(rails || [])].sort((a, b) => {
+    const ao = Number.isFinite(a?.startOrder) ? a.startOrder : Number.MAX_SAFE_INTEGER;
+    const bo = Number.isFinite(b?.startOrder) ? b.startOrder : Number.MAX_SAFE_INTEGER;
+    if (ao !== bo) return ao - bo;
+    if ((a?.startFrame ?? 0) !== (b?.startFrame ?? 0)) return (a?.startFrame ?? 0) - (b?.startFrame ?? 0);
+    if ((a?.endFrame ?? 0) !== (b?.endFrame ?? 0)) return (a?.endFrame ?? 0) - (b?.endFrame ?? 0);
+    return String(a?.railId || "").localeCompare(String(b?.railId || ""));
+  });
+}
+
 function buildPersistenceFills(rects, rails, placements) {
-  const rectByKey = new Map(rects.map((r) => [`${r.kind}::${r.key}`, r]));
-  const visRails = (rails || [])
-    .filter((r) => r.kind === "visualization")
-    .sort((a, b) => a.startFrame - b.startFrame);
-  const annRails = (rails || []).filter((r) => r.kind === "annotation");
+  function nodePersistentKey(node) {
+    if (!node) return null;
+    if (node.kind === "visualization") return node.persistentKey || null;
+    if (node.kind === "annotation") return node.annIndex ? `A${node.annIndex}` : (node.persistentKey || null);
+    if (node.kind === "input") return node.inputId ? `I${node.inputId}` : (node.persistentKey || null);
+    return node.persistentKey || null;
+  }
+
+  function findTriggerBand(rail, fillTop, fillHeight) {
+    if (!rail || !Number.isFinite(fillTop) || !Number.isFinite(fillHeight) || fillHeight <= 0) return null;
+    const fillBottom = fillTop + fillHeight;
+    const railKey = String(rail.key || "");
+    const kind = String(rail.kind || "");
+
+    const inStartFrame = (placements || []).filter((p) =>
+      p?.node &&
+      String(p.node.kind || "") === kind &&
+      Number(p.node.frameIndex) === Number(rail.startFrame) &&
+      String(nodePersistentKey(p.node) || "") === railKey &&
+      !p.node.persistentEnd
+    );
+    const inSpan = (placements || []).filter((p) =>
+      p?.node &&
+      String(p.node.kind || "") === kind &&
+      Number(p.node.frameIndex) >= Number(rail.startFrame) &&
+      Number(p.node.frameIndex) <= Number(rail.endFrame) &&
+      String(nodePersistentKey(p.node) || "") === railKey &&
+      !p.node.persistentEnd
+    );
+    const candidates = inStartFrame.length > 0 ? inStartFrame : inSpan;
+    if (candidates.length === 0) return null;
+
+    candidates.sort((a, b) => {
+      if (a.node.frameIndex !== b.node.frameIndex) return a.node.frameIndex - b.node.frameIndex;
+      return (a.gy || 0) - (b.gy || 0);
+    });
+    const first = candidates[0];
+    const nodeTop = Number(first.gy);
+    const nodeHeight = Number(first.height ?? first.size ?? 0);
+    if (!Number.isFinite(nodeTop) || !Number.isFinite(nodeHeight) || nodeHeight <= 0) return null;
+
+    const bandTop = Math.max(fillTop, nodeTop - 2);
+    const bandBottom = Math.min(fillBottom, nodeTop + nodeHeight + 2);
+    const bandHeight = bandBottom - bandTop;
+    if (!(bandHeight > 0)) return null;
+    return { y: bandTop, height: bandHeight };
+  }
+
+  const railRectKey = (rail) => (
+    rail.railId || `${rail.kind}:${rail.key}:${rail.startFrame}:${rail.endFrame}`
+  );
+  const rectByRailId = new Map(
+    rects.map((r) => [r.railId || `${r.kind}:${r.key}:${r.startFrame}:${r.endFrame}`, r])
+  );
+  const visRails = sortPersistenceRailsByOrder((rails || []).filter((r) => r.kind === "visualization"));
+  const annRails = sortPersistenceRailsByOrder((rails || []).filter((r) => r.kind === "annotation"));
+  const inputRails = sortPersistenceRailsByOrder((rails || []).filter((r) => r.kind === "input"));
   const out = [];
   const railCapInset = 8;
   const interSpanGap = 3;
@@ -880,7 +1023,7 @@ function buildPersistenceFills(rects, rails, placements) {
   let prevBottom = Number.NEGATIVE_INFINITY;
 
   for (const rail of visRails) {
-    const rect = rectByKey.get(`visualization::${rail.key}`);
+    const rect = rectByRailId.get(railRectKey(rail));
     if (!rect) continue;
 
     const railTop = rect.y + railCapInset;
@@ -904,30 +1047,64 @@ function buildPersistenceFills(rects, rails, placements) {
     );
     const activeAnnAtStart = annOverlappingBlock
       .filter((ar) => ar.startFrame <= rail.startFrame && ar.endFrame >= rail.startFrame)
-      .map((ar) => rectByKey.get(`annotation::${ar.key}`)?.label)
+      .map((ar) => rectByRailId.get(railRectKey(ar))?.label)
       .filter(Boolean);
     const fallbackAnnLabel = activeAnnAtStart.length === 0
       ? annOverlappingBlock
-          .map((ar) => rectByKey.get(`annotation::${ar.key}`)?.label)
+          .map((ar) => rectByRailId.get(railRectKey(ar))?.label)
           .find(Boolean)
       : null;
-    const labels = [...new Set([rect.label, ...activeAnnAtStart, fallbackAnnLabel].filter(Boolean))]
+    const inputOverlappingBlock = inputRails.filter(
+      (ir) => ir.startFrame <= rail.endFrame && ir.endFrame >= rail.startFrame
+    );
+    const activeInputAtStart = inputOverlappingBlock
+      .filter((ir) => ir.startFrame <= rail.startFrame && ir.endFrame >= rail.startFrame)
+      .map((ir) => railLabel(ir))
+      .filter(Boolean);
+    const fallbackInputLabel = activeInputAtStart.length === 0
+      ? inputOverlappingBlock
+          .map((ir) => railLabel(ir))
+          .find(Boolean)
+      : null;
+
+    const layerRails = sortPersistenceRailsByOrder([
+      rail,
+      ...annOverlappingBlock,
+      ...inputOverlappingBlock,
+    ]);
+
+    const labels = [
+      ...new Set([
+        rect.label,
+        ...activeAnnAtStart,
+        fallbackAnnLabel,
+        ...activeInputAtStart,
+        fallbackInputLabel,
+      ].filter(Boolean)),
+    ]
       .sort((a, b) => {
-        const pa = /^V/i.test(a) ? 0 : 1;
-        const pb = /^V/i.test(b) ? 0 : 1;
+        const priority = (value) => {
+          if (/^V/i.test(value)) return 0;
+          if (/^A/i.test(value)) return 1;
+          if (/^I/i.test(value)) return 2;
+          return 3;
+        };
+        const pa = priority(a);
+        const pb = priority(b);
         if (pa !== pb) return pa - pb;
         return a.localeCompare(b);
       });
 
     out.push({
+      railId: rail.railId || `${rail.kind}:${rail.key}:${rail.startFrame}:${rail.endFrame}`,
       key: rail.key,
       x: rect.x,
       y: fillTop,
       width: rect.width,
       height,
+      triggerBand: findTriggerBand(rail, fillTop, height),
       labels,
-      hasSolidLayer: true,
-      hasAnnotationLayer: annOverlappingBlock.length > 0,
+      layerRails,
     });
     prevBottom = fillTop + height;
   }
@@ -939,7 +1116,7 @@ function buildPersistenceFills(rects, rails, placements) {
     );
     if (overlapsVisualization) continue;
 
-    const rect = rectByKey.get(`annotation::${rail.key}`);
+    const rect = rectByRailId.get(railRectKey(rail));
     if (!rect) continue;
 
     const railTop = rect.y + railCapInset;
@@ -958,16 +1135,85 @@ function buildPersistenceFills(rects, rails, placements) {
     const height = Math.max(0, fillBottom - fillTop);
     if (height <= 0) continue;
 
-    const label = rect.label || rail.key || "Au";
+    const inputOverlappingBlock = inputRails.filter(
+      (ir) => ir.startFrame <= rail.endFrame && ir.endFrame >= rail.startFrame
+    );
+    const activeInputAtStart = inputOverlappingBlock
+      .filter((ir) => ir.startFrame <= rail.startFrame && ir.endFrame >= rail.startFrame)
+      .map((ir) => railLabel(ir))
+      .filter(Boolean);
+    const fallbackInputLabel = activeInputAtStart.length === 0
+      ? inputOverlappingBlock
+          .map((ir) => railLabel(ir))
+          .find(Boolean)
+      : null;
+    const layerRails = sortPersistenceRailsByOrder([
+      rail,
+      ...inputOverlappingBlock,
+    ]);
+
+    const labels = [
+      ...new Set([
+        rect.label || railLabel(rail) || "A",
+        ...activeInputAtStart,
+        fallbackInputLabel,
+      ].filter(Boolean)),
+    ].sort((a, b) => a.localeCompare(b));
+
     out.push({
+      railId: rail.railId || `${rail.kind}:${rail.key}:${rail.startFrame}:${rail.endFrame}`,
       key: rail.key,
       x: rect.x,
       y: fillTop,
       width: rect.width,
       height,
-      labels: [label],
-      hasSolidLayer: false,
-      hasAnnotationLayer: true,
+      triggerBand: findTriggerBand(rail, fillTop, height),
+      labels,
+      layerRails,
+    });
+    prevBottom = fillTop + height;
+  }
+
+  // Input-only persistence blocks (no overlapping visualization or annotation span).
+  for (const rail of inputRails) {
+    const overlapsVisualization = visRails.some(
+      (vr) => vr.startFrame <= rail.endFrame && vr.endFrame >= rail.startFrame
+    );
+    if (overlapsVisualization) continue;
+    const overlapsAnnotation = annRails.some(
+      (ar) => ar.startFrame <= rail.endFrame && ar.endFrame >= rail.startFrame
+    );
+    if (overlapsAnnotation) continue;
+
+    const rect = rectByRailId.get(railRectKey(rail));
+    if (!rect) continue;
+
+    const railTop = rect.y + railCapInset;
+    const railBottom = rect.y + rect.height - railCapInset;
+    if (railBottom <= railTop) continue;
+
+    const contentTop = placements
+      .filter((p) => p.node.frameIndex >= rail.startFrame && p.node.frameIndex <= rail.endFrame)
+      .reduce((min, p) => Math.min(min, p.gy), Number.POSITIVE_INFINITY);
+    let fillTop = Number.isFinite(contentTop)
+      ? Math.min(contentTop - fillPaddingTop, railTop)
+      : railTop;
+    fillTop = Math.max(fillTop, prevBottom + interSpanGap);
+    fillTop = Math.min(fillTop, railBottom);
+    const fillBottom = railBottom - interSpanGap / 2;
+    const height = Math.max(0, fillBottom - fillTop);
+    if (height <= 0) continue;
+
+    out.push({
+      railId: rail.railId || `${rail.kind}:${rail.key}:${rail.startFrame}:${rail.endFrame}`,
+      key: rail.key,
+      x: rect.x,
+      y: fillTop,
+      width: rect.width,
+      height,
+      triggerBand: findTriggerBand(rail, fillTop, height),
+      labels: [rect.label || railLabel(rail) || rail.key || "I"],
+      layerRails: [rail],
     });
     prevBottom = fillTop + height;
   }
@@ -987,23 +1233,53 @@ function renderOpenRailsBorder(out, bbox, style) {
   const rightX = x + width;
   const topY = y;
   const bottomY = y + height;
+  const segmentHeight = Math.max(0, bottomY - topY);
+  const effectiveCorner = Math.max(0, Math.min(corner, segmentHeight / 2));
+  const effectiveCap = Math.max(0, Math.min(cap, Math.max(0, width / 2)));
   const common = `fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ""}`;
 
   if (bottomY <= topY) return;
 
   // Left and right open rails with rounded corner transitions.
   const leftPath =
-    `M ${leftX + cap} ${topY} ` +
-    `Q ${leftX} ${topY} ${leftX} ${topY + corner} ` +
-    `V ${bottomY - corner} ` +
-    `Q ${leftX} ${bottomY} ${leftX + cap} ${bottomY}`;
+    `M ${leftX + effectiveCap} ${topY} ` +
+    `Q ${leftX} ${topY} ${leftX} ${topY + effectiveCorner} ` +
+    `V ${bottomY - effectiveCorner} ` +
+    `Q ${leftX} ${bottomY} ${leftX + effectiveCap} ${bottomY}`;
   const rightPath =
-    `M ${rightX - cap} ${topY} ` +
-    `Q ${rightX} ${topY} ${rightX} ${topY + corner} ` +
-    `V ${bottomY - corner} ` +
-    `Q ${rightX} ${bottomY} ${rightX - cap} ${bottomY}`;
+    `M ${rightX - effectiveCap} ${topY} ` +
+    `Q ${rightX} ${topY} ${rightX} ${topY + effectiveCorner} ` +
+    `V ${bottomY - effectiveCorner} ` +
+    `Q ${rightX} ${bottomY} ${rightX - effectiveCap} ${bottomY}`;
   out.push(`<path d="${leftPath}" ${common}/>`); 
   out.push(`<path d="${rightPath}" ${common}/>`); 
+}
+
+function persistenceLayerStyle(layerIndex) {
+  if (layerIndex <= 0) {
+    return {
+      dash: null,
+      capLength: 12,
+      cornerRadius: 10,
+    };
+  }
+  if (layerIndex === 1) {
+    return {
+      dash: "8 5",
+      capLength: 9,
+      cornerRadius: 10,
+    };
+  }
+  return {
+    dash: "1 4",
+    capLength: 9,
+    cornerRadius: 10,
+  };
+}
+
+function persistenceDashForRank(rank) {
+  const idx = Number.isFinite(rank) ? Math.max(0, Math.floor(rank)) : 0;
+  return persistenceLayerStyle(idx).dash || null;
 }
 
 // Color helpers -----------------------------------------------------
@@ -1028,8 +1304,9 @@ function interpolateTurboHex(tRaw) {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
-const TURBO_START = 0.10;
-const TURBO_END = 0.95;
+// Avoid Turbo's very dark/saturated extremes so palette two sits closer to Set3.
+const TURBO_START = 0.14;
+const TURBO_END = 0.88;
 // d3.schemeSet3 (first 10 colors) for maximally distinct small-k assignment.
 const BASE_INPUT_PALETTE = [
   "#8dd3c7",
@@ -1075,23 +1352,34 @@ function turboColorByIndex(idxOneBased) {
   return interpolateTurboHex(t);
 }
 
+function mixHexWithWhite(hex, amount = 0.2) {
+  const m = String(hex).trim().match(/^#([0-9a-fA-F]{6})$/);
+  if (!m) return hex;
+  const raw = m[1];
+  const r = Number.parseInt(raw.slice(0, 2), 16);
+  const g = Number.parseInt(raw.slice(2, 4), 16);
+  const b = Number.parseInt(raw.slice(4, 6), 16);
+  const blend = (c) => Math.round(c + (255 - c) * clamp01(amount));
+  return `#${toHex(blend(r))}${toHex(blend(g))}${toHex(blend(b))}`;
+}
+
 function buildPaletteTwo() {
-  // Build a deterministic "far-apart" order from Turbo samples.
-  const raw = Array.from({ length: 20 }, (_, i) => {
-    const t = TURBO_START + (i / 19) * (TURBO_END - TURBO_START);
+  // Use every second Turbo sample first (larger hue jumps), then fill with the rest.
+  const sampleCount = 20;
+  const raw = Array.from({ length: sampleCount }, (_, i) => {
+    const t = TURBO_START + (i / (sampleCount - 1)) * (TURBO_END - TURBO_START);
     return interpolateTurboHex(t);
   });
-  const order = [];
-  let left = 0;
-  let right = raw.length - 1;
-  // Alternate extremes so consecutive picks are perceptually farther apart.
-  while (left <= right) {
-    order.push(raw[left]);
-    if (left !== right) order.push(raw[right]);
-    left += 1;
-    right -= 1;
+  for (let i = 0; i < sampleCount; i += 1) {
+    raw[i] = mixHexWithWhite(raw[i], 0.2);
   }
-  return order;
+  const even = [];
+  const odd = [];
+  for (let i = 0; i < sampleCount; i += 1) {
+    if (i % 2 === 0) even.push(raw[i]);
+    else odd.push(raw[i]);
+  }
+  return [...even, ...odd];
 }
 
 function logStripeDebug(node, n, colors, mode) {
@@ -1112,15 +1400,8 @@ function getInputColor(inputId, k) {
   const kNum = Number.isFinite(Number(k)) && Number(k) > 0 ? Math.floor(Number(k)) : null;
 
   if (numericIndex != null) {
-    if (kNum != null && kNum <= BASE_INPUT_PALETTE.length) {
-      return BASE_INPUT_PALETTE[(numericIndex - 1) % kNum];
-    }
-    if (kNum != null && kNum > BASE_INPUT_PALETTE.length) {
-      if (numericIndex <= BASE_INPUT_PALETTE.length) {
-        return BASE_INPUT_PALETTE[numericIndex - 1];
-      }
-      return PALETTE_TWO[(numericIndex - BASE_INPUT_PALETTE.length - 1) % PALETTE_TWO.length];
-    }
+    // Always map numeric input IDs globally so explicit jump dependencies
+    // like Vu(I1, I3) preserve their true input colors.
     if (numericIndex <= BASE_INPUT_PALETTE.length) {
       return BASE_INPUT_PALETTE[numericIndex - 1];
     }
@@ -1140,6 +1421,7 @@ export async function renderSVG(layoutObj) {
   const layout = layoutObj.layout;
   const nodes = layout.nodes ?? [];
   const rails = layout.persistenceRails ?? layout.persistenceSpans ?? layout.spans ?? [];
+  assignAnnotationPersistenceGlyphTokens(nodes, rails);
 
   const mapping = await loadMapping();
   const byFrame = groupNodesByFrame(nodes);
@@ -1194,6 +1476,7 @@ export async function renderSVG(layoutObj) {
       frameRowLayouts.push({
         frameIndex: fi,
         groupId: row.groupId,
+        substoryOnly: row.nodes.every((n) => n.kind === "substory"),
         startX: Number.isFinite(rowStartX) ? rowStartX : startX,
         endX: Number.isFinite(rowEndX) ? rowEndX : startX + totalWidth,
         y,
@@ -1248,11 +1531,33 @@ export async function renderSVG(layoutObj) {
     `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg">`,
   ];
 
+  let triggerFadeIndex = 0;
   for (const bg of persistenceFills) {
     out.push(
       `<rect x="${bg.x + shiftX}" y="${bg.y}" width="${bg.width}" height="${bg.height}" rx="10" ` +
       `fill="rgba(0,0,0,0.08)" stroke="none"/>`
     );
+    if (bg.triggerBand && Number.isFinite(bg.triggerBand.y) && Number.isFinite(bg.triggerBand.height) && bg.triggerBand.height > 0) {
+      const bandY = bg.triggerBand.y;
+      const bandH = Math.min(bg.triggerBand.height, bg.height);
+      const topAligned = Math.abs(bandY - bg.y) < 0.5;
+      const rx = topAligned ? 10 : 0;
+      const fadeSeed = `${bg.railId || bg.key || "rail"}|${bandY}|${bandH}|${triggerFadeIndex}`;
+      const gradientId = `persist-trigger-fade-${Math.abs(hashString(fadeSeed))}`;
+      triggerFadeIndex += 1;
+      out.push(
+        `<defs><linearGradient id="${gradientId}" x1="0%" y1="${bandY}" x2="0%" y2="${bandY + bandH}" gradientUnits="userSpaceOnUse">` +
+        `<stop offset="0%" stop-color="#000" stop-opacity="0"/>` +
+        `<stop offset="14%" stop-color="#000" stop-opacity="0.11"/>` +
+        `<stop offset="86%" stop-color="#000" stop-opacity="0.11"/>` +
+        `<stop offset="100%" stop-color="#000" stop-opacity="0"/>` +
+        `</linearGradient></defs>`
+      );
+      out.push(
+        `<rect x="${bg.x + shiftX}" y="${bandY}" width="${bg.width}" height="${bandH}" rx="${rx}" ` +
+        `fill="url(#${gradientId})" stroke="none"/>`
+      );
+    }
   }
 
   // Place each persistence label at its own span start (instead of merged block top).
@@ -1260,8 +1565,14 @@ export async function renderSVG(layoutObj) {
     .filter((r) => r.label)
     .sort((a, b) => {
       if (a.y !== b.y) return a.y - b.y;
-      const pa = a.kind === "visualization" ? 0 : 1;
-      const pb = b.kind === "visualization" ? 0 : 1;
+      const priority = (kind) => {
+        if (kind === "visualization") return 0;
+        if (kind === "annotation") return 1;
+        if (kind === "input") return 2;
+        return 3;
+      };
+      const pa = priority(a.kind);
+      const pb = priority(b.kind);
       if (pa !== pb) return pa - pb;
       return String(a.label).localeCompare(String(b.label));
     });
@@ -1278,6 +1589,7 @@ export async function renderSVG(layoutObj) {
   }
 
   const annotationRects = persistenceRects.filter((r) => r.kind === "annotation");
+  const inputRects = persistenceRects.filter((r) => r.kind === "input");
 
   for (const bg of persistenceFills) {
     const baseBBox = {
@@ -1286,77 +1598,66 @@ export async function renderSVG(layoutObj) {
       width: bg.width,
       height: bg.height,
     };
-    // Innermost layer: solid rail only for visualization-backed persistence blocks.
-    if (bg.hasSolidLayer) {
-      renderOpenRailsBorder(out, baseBBox, {
+    const layerRails = Array.isArray(bg.layerRails) && bg.layerRails.length > 0
+      ? sortPersistenceRailsByOrder(bg.layerRails)
+      : [{ kind: "visualization", startOrder: 0 }];
+    const layerKinds = layerRails.map((layer) => layer.kind);
+    const hasVisualizationBase = layerKinds[0] === "visualization";
+    const baseTop = baseBBox.y;
+    const baseBottom = baseBBox.y + baseBBox.height;
+
+    for (let layerIndex = 0; layerIndex < layerRails.length; layerIndex += 1) {
+      const layerKind = layerRails[layerIndex]?.kind || "visualization";
+      const styleCfg = persistenceLayerStyle(layerIndex);
+      const outerOffset = layerIndex * 6;
+      // Keep all layer brackets vertically flush at start/end.
+      const outerShrinkY = layerIndex > 0 ? outerOffset : 0;
+      const renderStyle = {
         stroke: "#000",
         strokeWidth: 2,
-        dash: null,
-        capLength: 12,
-        cornerRadius: 10,
-      });
-    }
-
-    // Optional outer annotation layer: fixed outward offset from base geometry.
-    if (bg.hasAnnotationLayer) {
-      const outerOffset = bg.hasSolidLayer ? 6 : 0;
-      const outerShrinkY = bg.hasSolidLayer ? 8 : 0;
-
-      if (bg.hasSolidLayer) {
-        const baseTop = baseBBox.y;
-        const baseBottom = baseBBox.y + baseBBox.height;
-        const overlappingAnnRects = annotationRects.filter((ar) => {
-          const arTop = ar.y;
-          const arBottom = ar.y + ar.height;
-          return arBottom > baseTop && arTop < baseBottom;
-        });
-
-        if (overlappingAnnRects.length === 0) {
-          renderOpenRailsBorder(out, {
-            x: baseBBox.x - outerOffset,
-            y: baseBBox.y - outerOffset + outerShrinkY,
-            width: baseBBox.width + outerOffset * 2,
-            height: Math.max(0, baseBBox.height + outerOffset * 2 - outerShrinkY * 2),
-          }, {
-            stroke: "#000",
-            strokeWidth: 2,
-            dash: "8 5",
-            capLength: 9,
-            cornerRadius: 10,
-          });
-        } else {
-          for (const ar of overlappingAnnRects) {
-            const segTop = Math.max(baseTop, ar.y);
-            const segBottom = Math.min(baseBottom, ar.y + ar.height);
-            const segHeight = segBottom - segTop;
-            if (segHeight <= 0) continue;
-            renderOpenRailsBorder(out, {
-              x: baseBBox.x - outerOffset,
-              y: segTop - outerOffset + outerShrinkY,
-              width: baseBBox.width + outerOffset * 2,
-              height: Math.max(0, segHeight + outerOffset * 2 - outerShrinkY * 2),
-            }, {
-              stroke: "#000",
-              strokeWidth: 2,
-              dash: "8 5",
-              capLength: 9,
-              cornerRadius: 10,
-            });
-          }
-        }
-      } else {
+        dash: styleCfg.dash,
+        capLength: styleCfg.capLength,
+        cornerRadius: styleCfg.cornerRadius,
+      };
+      const renderBox = (topY, boxHeight) => {
         renderOpenRailsBorder(out, {
           x: baseBBox.x - outerOffset,
-          y: baseBBox.y - outerOffset + outerShrinkY,
+          y: topY - outerOffset + outerShrinkY,
           width: baseBBox.width + outerOffset * 2,
-          height: Math.max(0, baseBBox.height + outerOffset * 2 - outerShrinkY * 2),
-        }, {
-          stroke: "#000",
-          strokeWidth: 2,
-          dash: "8 5",
-          capLength: 9,
-          cornerRadius: 10,
-        });
+          height: Math.max(0, boxHeight + outerOffset * 2 - outerShrinkY * 2),
+        }, renderStyle);
+      };
+
+      let overlapRects = null;
+      if (layerIndex > 0) {
+        if (layerKind === "annotation") overlapRects = annotationRects;
+        else if (layerKind === "input") {
+          overlapRects = layerKinds.includes("annotation") ? annotationRects : inputRects;
+        }
+      }
+
+      if (!overlapRects || overlapRects.length === 0) {
+        renderBox(baseBBox.y, baseBBox.height);
+        continue;
+      }
+
+      const overlapping = overlapRects.filter((rect) => {
+        const rectTop = rect.y;
+        const rectBottom = rect.y + rect.height;
+        return rectBottom > baseTop && rectTop < baseBottom;
+      });
+
+      if (overlapping.length === 0) {
+        renderBox(baseBBox.y, baseBBox.height);
+        continue;
+      }
+
+      for (const rect of overlapping) {
+        const segTop = Math.max(baseTop, rect.y);
+        const segBottom = Math.min(baseBottom, rect.y + rect.height);
+        const segHeight = segBottom - segTop;
+        if (segHeight <= 0) continue;
+        renderBox(segTop, segHeight);
       }
     }
   }
@@ -1417,7 +1718,7 @@ export async function renderSVG(layoutObj) {
 
 export async function writeSVG(layoutObj, outputDir) {
   const svgContent = await renderSVG(layoutObj);
-  const fileName = `${layoutObj.articleId}.svg`;
+  const fileName = `${toSafeSvgBaseName(layoutObj.articleId)}.svg`;
   const filePath = path.join(outputDir, fileName);
   await fs.mkdir(outputDir, { recursive: true });
   await fs.writeFile(filePath, svgContent, "utf-8");

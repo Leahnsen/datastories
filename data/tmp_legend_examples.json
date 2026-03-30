@@ -1,0 +1,12 @@
+[
+  {
+    "id": "LEG_PERSISTENCE",
+    "title": "Legend Dummy Persistence",
+    "notation": "S → ⟦V₁⟧ → S → I₁, V₁u(I₁) → A → (¬V₁) → S"
+  },
+  {
+    "id": "LEG_NEW_DATA_STORY",
+    "title": "Legend Dummy New Data Story",
+    "notation": "I₁ → N(I₁)(S → Vu(I₁) → A(I₁)) → S"
+  }
+]

@@ -1,38 +1,35 @@
 [
   {
-  "id": "A00",
-  "notation": "S → I₁, Vh(I₁), Au(I₁) → S → Su(I₁) → S → Vu(I₁)"
+    "id": "A00",
+    "notation": "S → I₁, Vh(I₁), A(I₁) → S → Su(I₁) → S → Vu(I₁)"
   },
-
   {
-  "id": "A01",
-  "notation": "S → ⟦V₁⟧ → I₁ → V₁u(I₁), Au(I₁), Vcuo(I₁) → (¬V₁) → S → V → S → V → S"
+    "id": "A01",
+    "notation": "S → ⟦V₁⟧ → I₁ → V₁u(I₁), A(I₁), Vcuo(I₁) → (¬V₁) → S → V → S → V → S"
   },
   {
     "id": "A02",
-    "notation": "S → I₁ → Au(I₁) → Su(I₁) → S → V → S"
+    "notation": "S → I₁ → A(I₁) → Su(I₁) → S → V → S"
   },
   {
     "id": "A03",
-    "notation": "S → ⟦V₁⟧ → I₁ → V₁h(I₁) → I₂ → V₁u(I₂), Au(I₂), Vcuo(I₂) → (¬V₁) → S"
+    "notation": "S → ⟦V₁⟧ → I₁ → V₁h(I₁) → I₂ → V₁u(I₂), A(I₂), Vcuo(I₂) → (¬V₁) → S"
   },
   {
     "id": "A04",
     "notation": "S → ⟦V₁⟧ → I₁ → Su(I₁), V₁u(I₁) → S₁…₃→ (¬V₁) → S → V → S"
-  }
-  ,
+  },
   {
     "id": "A05",
-    "notation": "S → I₁, Au(I₁), Vcuo(I₁) → (S → V)₁…₄ → S"
+    "notation": "S → I₁, A(I₁), Vcuo(I₁) → (S → V)₁…₄ → S"
   },
   {
     "id": "A06",
-    "notation": "S → I₁ → Vcuu(I₁), Au(I₁) → S → V → S "
+    "notation": "S → I₁ → Vcuu(I₁), A(I₁) → S → V → S "
   },
   {
     "id": "A07",
     "notation": "S₁…₃ → ⟦V₁⟧ → (Iₙ → Su(Iₙ) → V₁u(I₁…ₙ))ₙ₌₁…₁₇ → (¬Vₙ)→ Su(I₁…₁₇) → Vcuu(I₁…₁₇)"
-    
   },
   {
     "id": "A08",
@@ -40,33 +37,26 @@
   },
   {
     "id": "A09",
-    "notation": "S→ (⟦Vₙ⟧ → Iₙ → (Vₙu(Iₙ), Au(Iₙ)) → (¬Vₙ) → S)ₙ₌₁…₅"
+    "notation": "S→ (⟦Vₙ⟧ → Iₙ → (Vₙu(Iₙ), A(Iₙ)) → (¬Vₙ) → S)ₙ₌₁…₅"
   },
   {
     "id": "A10",
     "notation": "S → I₁ → Su(I₁) → S → ⟦V₁h⟧(I₁) → V₁u(I₁), Su(I₁) → V₁u(I₁), Su(I₁) → S, (¬V₁h) → S → ⟦V₂h⟧(I₁) → S₁…₅ → V₂u(I₁) → S₁…₂ → Su(I₁) → S₁…₅ → (¬V₂h), S₁…₂"
   },
-
-    {
-      "id": "A11",
-      "notation": "S₁…₃ → ⟦V₁⟧ → (Iₙ → Su(Iₙ) → V₁cu(I₁…ₙ))ₙ₌₁…₁₇ → (¬Vₙ)→ (Su(I₁…₁₇) → Vcuu(I₁…₁₇))"
-    }, 
-
-   { "id": "A12",
-    "notation": "S → V → S → ⟦V₁, A₁u⟧ → (Iₙ, V₁u(I₁…ₙ), A₁u(I₁…ₙ) → S)ₙ₌₁…₁₂ → (¬V₁, ¬Au₁)"
-   },
-
-   {
+  {
+    "id": "A11",
+    "notation": "S₁…₃ → ⟦V₁⟧ → (Iₙ → Su(Iₙ) → V₁cu(I₁…ₙ))ₙ₌₁…₁₇ → (¬Vₙ)→ (Su(I₁…₁₇) → Vcuu(I₁…₁₇))"
+  },
+  {
+    "id": "A12",
+    "notation": "S → V → S → ⟦V₁, A₁u⟧ → (Iₙ, V₁u(I₁…ₙ), A₁u(I₁…ₙ) → S)ₙ₌₁…₁₂ → (¬V₁, ¬A₁)"
+  },
+  {
     "id": "A13",
-    "notation": "S → ⟦V₁⟧ → S, I₁, A(I₁) → V₁h(I₁), A(I₁), S → S → (¬V₁h(I₁)) → ⟦V₂h(I₁), A₂(I₁)⟧, S → S₁…₇ → (¬V₂h(I₁), (¬A₂(I₁))) → ⟦V₃h(I₁), A₃(I₁)⟧ → S₁…₂ → (¬V₃h(I₁), ¬A₃(I₁)) → I₂ → Nds(I₂) → S"
-   },
-
-   {
+    "notation": "S → ⟦V₁⟧ → S, I₁, A(I₁) → V₁h(I₁), A(I₁), S → S → (¬V₁h(I₁)) → ⟦V₂h(I₁), A₂(I₁)⟧, S → S₁…₇ → (¬V₂h(I₁), (¬A₂(I₁))) → ⟦V₃h(I₁), A₃(I₁)⟧ → S₁…₂ → (¬V₃h(I₁), ¬A₃(I₁)) → I₂ → N(I₂) → S"
+  },
+  {
     "id": "A14",
     "notation": "S → ⟦V₁⟧ → S → I₁, Vh(I₁), A(I₁) → (¬V₁) → ⟦V₂h(I₁), A₁(I₁)⟧ → S₁…₅ → (¬V₂h(I₁), (¬A₁(I₁))) → V → S₁…₂ → V → S "
-   }
-
-
-
-  
+  }
 ]

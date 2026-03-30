@@ -56,7 +56,7 @@ function parseSubscriptRange(raw, warnings, contextLabel = 'range') {
 function parseInputRangeRef(raw) {
   if (!raw) return null;
   const normalized = normalizeSubscriptDigits(raw).replace(/\s+/g, '');
-  const m = normalized.match(/^I(?:\()?(\d+)(?:…|\.\.\.)(\d+|n)(?:\))?$/i);
+  const m = normalized.match(/^I(?:\()?(\d+)(?:…|\.\.\.)I?(\d+|n)(?:\))?$/i);
   if (!m) return null;
   const from = Number.parseInt(m[1], 10);
   if (!Number.isFinite(from)) return null;
@@ -71,10 +71,14 @@ function parseInputListRef(raw) {
   const parts = normalized.split(',').filter(Boolean);
   if (parts.length === 0) return null;
   const refs = [];
-  for (const part of parts) {
-    const m = part.match(/^I(\d+|n)$/i);
+  for (let idx = 0; idx < parts.length; idx += 1) {
+    const part = parts[idx];
+    // Accept both I1,I2 and shorthand I1,2 (or I1,n).
+    let m = part.match(/^I(\d+|n)$/i);
+    if (!m && idx > 0) m = part.match(/^(\d+|n)$/i);
     if (!m) return null;
-    refs.push(m[1] === 'n' ? 'n' : Number.parseInt(m[1], 10));
+    const token = m[1];
+    refs.push(token === 'n' ? 'n' : Number.parseInt(token, 10));
   }
   return refs;
 }
@@ -125,7 +129,7 @@ function parseAnnotationRest(restRaw) {
     return { annIndex, variant };
   }
 
-  // Au1 / Aun
+  // Au1 / Aun (legacy token forms)
   m = rest.match(/^([A-Za-z]+)(\d+|n)$/);
   if (m) {
     const [, variant, annIndex] = m;
@@ -139,7 +143,7 @@ function parseAnnotationRest(restRaw) {
     return { annIndex, variant: null };
   }
 
-  // Au
+  // A-variant only (e.g. Au / Ad style markers in legacy data)
   m = rest.match(/^([A-Za-z]+)$/);
   if (m) {
     const [, variant] = m;
@@ -185,7 +189,7 @@ function parseElement(value, warnings) {
     visIndex = parsedVis.visIndex;
     visAction = parsedVis.visAction;
   } else if (base === 'N') {
-    // N-family glyphs (e.g. Nds) behave like visualization actions.
+    // N-family glyphs behave like visualization actions.
     visAction = headForParse;
     variant = rest || null;
   } else if (base === 'A') {
@@ -213,6 +217,17 @@ function parseElement(value, warnings) {
       const parsedList = parseInputListRef(dependencyRaw);
       if (parsedList && parsedList.length > 1) {
         inputRefs = parsedList;
+        // Treat I1,2 (two adjacent inputs) like I1...2 for downstream layout/render logic.
+        if (
+          parsedList.length === 2 &&
+          parsedList[0] !== 'n' &&
+          parsedList[1] !== 'n' &&
+          Number.isFinite(parsedList[0]) &&
+          Number.isFinite(parsedList[1]) &&
+          parsedList[1] === parsedList[0] + 1
+        ) {
+          inputRange = { from: parsedList[0], to: parsedList[1] };
+        }
         inputRef = null;
       } else {
         const hasVariableN = /[ₙn]/.test(dependencyRaw);
@@ -259,7 +274,7 @@ function isNdsElement(element) {
   if (element.type === 'NDS_SCOPE') return true;
   if (element.type !== 'N') return false;
   const raw = normalizeSubscriptDigits(element.raw || '').toLowerCase();
-  return raw === 'nds';
+  return raw === 'n' || raw === 'nds';
 }
 
 function readElementDependency(tokens, openPos) {
@@ -355,7 +370,7 @@ function parseSequence(tokens, startIndex, warnings, state) {
   let currentHasComma = false;
   let pos = startIndex;
   let persistentStartScope = false;
-  let pendingPersistentEnd = false;
+  let persistentEndScope = false;
 
   const flushStep = () => {
     if (currentElements.length) {
@@ -370,6 +385,7 @@ function parseSequence(tokens, startIndex, warnings, state) {
 
     if (token.type === 'ARROW') {
       flushStep();
+      persistentEndScope = false;
       pos += 1;
       continue;
     }
@@ -442,6 +458,7 @@ function parseSequence(tokens, startIndex, warnings, state) {
 
     if (token.type === 'RPAREN') {
       flushStep();
+      persistentEndScope = false;
       return { steps, nextPos: pos + 1 };
     }
 
@@ -458,7 +475,8 @@ function parseSequence(tokens, startIndex, warnings, state) {
     }
 
     if (token.type === 'PERSIST_NEGATE') {
-      pendingPersistentEnd = true;
+      // Keep negation active for a comma-separated close list, e.g. (¬V2, A1, I2).
+      persistentEndScope = true;
       pos += 1;
       continue;
     }
@@ -478,12 +496,40 @@ function parseSequence(tokens, startIndex, warnings, state) {
         if (persistentStartScope) {
           element.persistentStart = true;
         }
-        if (pendingPersistentEnd) {
+        if (persistentEndScope) {
           element.persistentEnd = true;
-          pendingPersistentEnd = false;
+          // End negation scope after a standalone token, but keep it alive across commas.
+          if (tokens[consumeUntil]?.type !== 'COMMA') {
+            persistentEndScope = false;
+          }
         }
 
-        // Spawned sub-story scope: Nds(Ik)( ... )
+        // Optional explicit iteration suffix for a single element:
+        // A(Iₙ)ₙ₌₁…₉, V(Iₙ)ₙ₌₁…ₖ, ...
+        if (tokens[consumeUntil]?.type === 'REPEAT') {
+          const { start, end } = tokens[consumeUntil];
+          const repeatStart = Number.isFinite(start) ? start : 1;
+          const repeatEnd = Number.isFinite(end) ? end : repeatStart;
+          if (repeatEnd < repeatStart) {
+            warnings.push(`Invalid iteration range ₙ₌${repeatStart}…${repeatEnd}`);
+          } else {
+            flushStep();
+            const blockId = ++state.iterationBlockCounter;
+            for (let iter = repeatStart; iter <= repeatEnd; iter += 1) {
+              const iterKey = `iter:${blockId}:${iter}`;
+              const cloned = substituteIterationElement(element, iter, iterKey);
+              steps.push({
+                index: 0,
+                hasComma: false,
+                elements: [cloned],
+              });
+            }
+            pos = consumeUntil + 1;
+            continue;
+          }
+        }
+
+        // Spawned sub-story scope: N(Ik)( ... )
         if (isNdsElement(element) && tokens[consumeUntil]?.type === 'LPAREN') {
           const innerStart = consumeUntil + 1;
           const inner = parseSequence(tokens, innerStart, warnings, state);

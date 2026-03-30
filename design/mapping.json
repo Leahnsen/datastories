@@ -1,8 +1,10 @@
 {
   "S": "S.svg",
   "I": "I.svg",
+  "Iu": "I-pers.svg",
   "A": "A.svg",
-  "Au": "A-pers.svg",
+  "Apd": "A-pers.svg",
+  "Aps": "A-pers-durch.svg",
   "Su": "S.svg",
   "V": "V.svg",
   "V-index": "V-index.svg",
@@ -13,7 +15,7 @@
   "Vcuo": "Vcuo.svg",
   "Vcuu": "Vcuu.svg",
   "Vcuuo": "Vcuuo.svg",
-  "Nds": "Nds.svg",
+  "N": "Nds.svg",
   
   "Vh1": "Vh.svg",
   "Vu1": "Vu.svg"

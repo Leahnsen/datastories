@@ -112,11 +112,19 @@ function normalizeKey(raw) {
 function buildPersistenceRails(nodes, warnings) {
   const rails = [];
   const open = new Map(); // key -> { startFrame, lastContentFrame, kind, inputId, dependsOnInput }
+  let railCounter = 0;
+  let startOrderCounter = 0;
   let maxFrame = 0;
 
   nodes.forEach((n) => { if (n.frameIndex > maxFrame) maxFrame = n.frameIndex; });
 
-  const sorted = [...nodes].sort((a, b) => a.frameIndex - b.frameIndex);
+  const sorted = [...nodes].sort((a, b) => {
+    if (a.frameIndex !== b.frameIndex) return a.frameIndex - b.frameIndex;
+    const ao = Number.isFinite(a.orderInStep) ? a.orderInStep : Number.MAX_SAFE_INTEGER;
+    const bo = Number.isFinite(b.orderInStep) ? b.orderInStep : Number.MAX_SAFE_INTEGER;
+    if (ao !== bo) return ao - bo;
+    return 0;
+  });
 
   function contributesRenderedContent(node) {
     // End marker token "(¬Vₙ)" is structural only and must not reserve a visual slot.
@@ -128,7 +136,10 @@ function buildPersistenceRails(nodes, warnings) {
 
   function canonicalPersistentKey(node) {
     if (node.kind === 'annotation' && node.annIndex) {
-      return `Au${node.annIndex}`;
+      return `A${node.annIndex}`;
+    }
+    if (node.kind === 'input' && node.inputId) {
+      return `I${node.inputId}`;
     }
     return node.persistentKey;
   }
@@ -140,7 +151,7 @@ function buildPersistenceRails(nodes, warnings) {
       });
     }
 
-    if (node.kind !== 'visualization' && node.kind !== 'annotation') continue;
+    if (node.kind !== 'visualization' && node.kind !== 'annotation' && node.kind !== 'input') continue;
     const key = canonicalPersistentKey(node);
     if (!key) continue;
 
@@ -155,7 +166,9 @@ function buildPersistenceRails(nodes, warnings) {
         kind: node.kind,
         inputId: node.inputId || null,
         dependsOnInput: node.dependsOnInput || false,
+        startOrder: startOrderCounter,
       });
+      startOrderCounter += 1;
     }
 
     if (node.persistentEnd) {
@@ -165,7 +178,9 @@ function buildPersistenceRails(nodes, warnings) {
         continue;
       }
       const visIndex = extractVisIndex(start.kind, key);
+      railCounter += 1;
       rails.push({
+        railId: `rail:${railCounter}`,
         key,
         kind: start.kind,
         visIndex,
@@ -173,6 +188,7 @@ function buildPersistenceRails(nodes, warnings) {
         endFrame: Math.max(start.startFrame, start.lastContentFrame ?? start.startFrame),
         inputId: start.inputId,
         dependsOnInput: start.dependsOnInput,
+        startOrder: start.startOrder,
       });
       open.delete(key);
     }
@@ -181,7 +197,9 @@ function buildPersistenceRails(nodes, warnings) {
   open.forEach((start, key) => {
     warnings.push(`Persistent start without end for key ${key}; closing at last frame ${maxFrame}`);
     const visIndex = extractVisIndex(start.kind, key);
+    railCounter += 1;
     rails.push({
+      railId: `rail:${railCounter}`,
       key,
       kind: start.kind,
       visIndex,
@@ -189,6 +207,7 @@ function buildPersistenceRails(nodes, warnings) {
       endFrame: maxFrame,
       inputId: start.inputId,
       dependsOnInput: start.dependsOnInput,
+      startOrder: start.startOrder,
     });
   });
 
@@ -201,7 +220,7 @@ function extractVisIndex(kind, key) {
     return m ? m[1] : null;
   }
   if (kind === 'annotation') {
-    const m = String(key || '').match(/^Au(\d+|n)$/i);
+    const m = String(key || '').match(/^A(\d+|n)$/i);
     return m ? m[1] : null;
   }
   return null;
@@ -251,7 +270,7 @@ function markPersistentAnnotationMembership(nodes, warnings) {
 
   for (const { node } of sorted) {
     if (node.kind !== 'annotation') continue;
-    const key = node.annIndex ? `Au${node.annIndex}` : node.persistentKey;
+    const key = node.annIndex ? `A${node.annIndex}` : node.persistentKey;
     if (!key) continue;
 
     if (node.persistentStart) {
@@ -276,6 +295,70 @@ function markPersistentAnnotationMembership(nodes, warnings) {
         open.delete(key);
       }
     }
+  }
+}
+
+function assignPersistenceStyleRank(nodes, rails) {
+  const persistenceKinds = new Set(['visualization', 'annotation', 'input']);
+  const activeRails = (rails || []).filter((rail) => persistenceKinds.has(rail.kind));
+  if (activeRails.length === 0) {
+    for (const node of nodes || []) {
+      node.persistenceStyleRank = null;
+      node.persistenceStyleRailId = null;
+    }
+    return;
+  }
+
+  const sortedRails = [...activeRails].sort((a, b) => {
+    const ao = Number.isFinite(a.startOrder) ? a.startOrder : Number.MAX_SAFE_INTEGER;
+    const bo = Number.isFinite(b.startOrder) ? b.startOrder : Number.MAX_SAFE_INTEGER;
+    if (ao !== bo) return ao - bo;
+    if (a.startFrame !== b.startFrame) return a.startFrame - b.startFrame;
+    if (a.endFrame !== b.endFrame) return a.endFrame - b.endFrame;
+    return String(a.railId || '').localeCompare(String(b.railId || ''));
+  });
+
+  function nodePersistentKey(node) {
+    if (!node) return null;
+    if (node.kind === 'visualization') return node.persistentKey;
+    if (node.kind === 'annotation') return node.annIndex ? `A${node.annIndex}` : node.persistentKey;
+    if (node.kind === 'input') return node.inputId ? `I${node.inputId}` : node.persistentKey;
+    return null;
+  }
+
+  function nodeInPersistentSpan(node) {
+    if (!node) return false;
+    if (node.kind === 'visualization') return Boolean(node.isInPersistentVisualizationSpan);
+    if (node.kind === 'annotation') return Boolean(node.isInPersistentAnnotationSpan);
+    if (node.kind === 'input') return Boolean(node.isInPersistentInputSpan);
+    return false;
+  }
+
+  for (const node of nodes || []) {
+    node.persistenceStyleRank = null;
+    node.persistenceStyleRailId = null;
+    if (!persistenceKinds.has(node.kind)) continue;
+    if (!nodeInPersistentSpan(node)) continue;
+    const key = nodePersistentKey(node);
+    if (!key) continue;
+
+    const matchingRail = sortedRails.find(
+      (rail) =>
+        rail.kind === node.kind &&
+        rail.key === key &&
+        node.frameIndex >= rail.startFrame &&
+        node.frameIndex <= rail.endFrame
+    );
+    if (!matchingRail) continue;
+
+    const activeAtFrame = sortedRails.filter(
+      (rail) => node.frameIndex >= rail.startFrame && node.frameIndex <= rail.endFrame
+    );
+    const rank = activeAtFrame.findIndex((rail) => rail.railId === matchingRail.railId);
+    if (rank < 0) continue;
+
+    node.persistenceStyleRank = rank;
+    node.persistenceStyleRailId = matchingRail.railId || null;
   }
 }
 
@@ -324,6 +407,51 @@ function markPersistentVisualizationMembership(nodes, warnings) {
   }
 }
 
+function markPersistentInputMembership(nodes, warnings) {
+  const open = new Map(); // key -> spanId
+  let spanCounter = 0;
+  const sorted = nodes
+    .map((node, idx) => ({ node, idx }))
+    .sort((a, b) => {
+      if (a.node.frameIndex !== b.node.frameIndex) return a.node.frameIndex - b.node.frameIndex;
+      return a.idx - b.idx;
+    });
+
+  for (const { node } of sorted) {
+    node.persistentInputSpanId = null;
+    node.isInPersistentInputSpan = false;
+  }
+
+  for (const { node } of sorted) {
+    if (node.kind !== 'input') continue;
+    const key = node.inputId ? `I${node.inputId}` : node.persistentKey;
+    if (!key) continue;
+
+    if (node.persistentStart) {
+      if (open.has(key)) {
+        warnings.push(`Input persistence already open for key ${key} at frame ${node.frameIndex}`);
+      } else {
+        spanCounter += 1;
+        open.set(key, `inp:${key}:${spanCounter}`);
+      }
+    }
+
+    const activeSpanId = open.get(key);
+    if (activeSpanId && !node.persistentEnd) {
+      node.persistentInputSpanId = activeSpanId;
+      node.isInPersistentInputSpan = true;
+    }
+
+    if (node.persistentEnd) {
+      if (!activeSpanId) {
+        warnings.push(`Input persistence end without start for key ${key} at frame ${node.frameIndex}`);
+      } else {
+        open.delete(key);
+      }
+    }
+  }
+}
+
 export async function buildLayout(structuredResult) {
   const warnings = [...(structuredResult.warnings || [])];
   const tokens = await loadTokens(warnings);
@@ -331,7 +459,9 @@ export async function buildLayout(structuredResult) {
   const nodes = nodesFromFrames(structuredResult, tokens);
   markPersistentAnnotationMembership(nodes, warnings);
   markPersistentVisualizationMembership(nodes, warnings);
+  markPersistentInputMembership(nodes, warnings);
   const persistenceRails = buildPersistenceRails(nodes, warnings);
+  assignPersistenceStyleRank(nodes, persistenceRails);
   const reactionWindows = buildReactionWindows(nodes);
 
   return {

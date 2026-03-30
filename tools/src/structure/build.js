@@ -11,6 +11,18 @@ const laneByType = {
 };
 
 function extractDependency(element, warnings) {
+  if (element.dependsOnAccumulatedInputs && element.inputRange) {
+    return {
+      dependsOnInput: false,
+      inputId: null,
+      inputIds: Array.isArray(element.inputRefs) && element.inputRefs.length > 1
+        ? element.inputRefs.map((ref) => String(ref))
+        : null,
+      dependsOnAccumulatedInputs: true,
+      inputRange: element.inputRange,
+    };
+  }
+
   if (Array.isArray(element.inputRefs) && element.inputRefs.length > 1) {
     return {
       dependsOnInput: false,
@@ -18,16 +30,6 @@ function extractDependency(element, warnings) {
       inputIds: element.inputRefs.map((ref) => String(ref)),
       dependsOnAccumulatedInputs: true,
       inputRange: null,
-    };
-  }
-
-  if (element.dependsOnAccumulatedInputs && element.inputRange) {
-    return {
-      dependsOnInput: false,
-      inputId: null,
-      inputIds: null,
-      dependsOnAccumulatedInputs: true,
-      inputRange: element.inputRange,
     };
   }
 
@@ -41,7 +43,7 @@ function extractDependency(element, warnings) {
     };
   }
 
-  // Detect explicit input reference inside raw, e.g., Au(I₁) or Vcuu(Iₙ)
+  // Detect explicit input reference inside raw, e.g., A(I₁) or Vcuu(Iₙ)
   const rangeMatch = element.raw.match(/\(I([₀-₉0-9]+(?:…|\.\.\.)[₀-₉ₙn0-9]+)\)/);
   if (rangeMatch) {
     const normalized = normalizeInputId(rangeMatch[1]);
@@ -96,8 +98,8 @@ function mapElementToLane(element, warnings, groupId = null, orderInStep = null)
       lane: 'visualization',
       value: {
         kind: 'substory',
-        raw: 'Nds',
-        sourceRaw: element.sourceRaw || element.raw || 'Nds',
+        raw: 'N',
+        sourceRaw: element.sourceRaw || element.raw || 'N',
         subSteps: element.subSteps || [],
         scopeInputId: element.scopeInputId || null,
         groupId,
@@ -109,7 +111,7 @@ function mapElementToLane(element, warnings, groupId = null, orderInStep = null)
         inputRange: null,
         persistentStart: false,
         persistentEnd: false,
-        persistentKey: 'Nds',
+        persistentKey: 'N',
       },
     };
   }
@@ -203,7 +205,7 @@ function mapElementToLane(element, warnings, groupId = null, orderInStep = null)
       persistentEnd: base.persistentEnd,
       persistentKey:
         (lane === 'visualization' && base.visIndex) ? `V${base.visIndex}` :
-        (lane === 'annotation' && base.annIndex) ? `Au${base.annIndex}` :
+        (lane === 'annotation' && base.annIndex) ? `A${base.annIndex}` :
         element.raw,
     },
   };

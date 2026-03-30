@@ -2,6 +2,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { toSafeSvgBaseName } from './svg.js';
 
 const DEFAULTS = {
   blockHeight: 40,
@@ -99,6 +100,52 @@ function getInputColor(inputId) {
   return PALETTE[idx];
 }
 
+function gradientStopsStepped(colors) {
+  if (!Array.isArray(colors) || colors.length === 0) return '';
+  if (colors.length === 1) {
+    return `<stop offset="0%" stop-color="${colors[0]}"></stop><stop offset="100%" stop-color="${colors[0]}"></stop>`;
+  }
+  const n = colors.length;
+  const parts = [];
+  for (let i = 0; i < n; i += 1) {
+    const start = (i / n) * 100;
+    const end = ((i + 1) / n) * 100;
+    const color = colors[i];
+    parts.push(`<stop offset="${start.toFixed(3)}%" stop-color="${color}"></stop>`);
+    parts.push(`<stop offset="${end.toFixed(3)}%" stop-color="${color}"></stop>`);
+  }
+  return parts.join('');
+}
+
+function accumulatedInputColors(node) {
+  if (!node?.dependsOnAccumulatedInputs) return [];
+  if (Array.isArray(node.inputIds) && node.inputIds.length > 1) {
+    return node.inputIds.map((id) => getInputColor(String(id)));
+  }
+  const from = Number(node?.inputRange?.from);
+  const toRaw = node?.inputRange?.to;
+  if (!Number.isFinite(from) || toRaw == null) return [];
+  if (Number.isFinite(Number(toRaw))) {
+    const to = Number(toRaw);
+    if (to < from) return [];
+    return Array.from({ length: to - from + 1 }, (_, i) => getInputColor(String(from + i)));
+  }
+  return [getInputColor(String(from)), getInputColor(String(from + 1))];
+}
+
+function applyAccumulatedGradientToGlyph(glyphInner, gradientId) {
+  // S/A base fills are exported as #737373.
+  return String(glyphInner || '').replace(/fill="#737373"/gi, `fill="url(#${gradientId})"`);
+}
+
+function applyAccumulatedGradientToVcu(glyphInner, gradientId) {
+  // Vcuu/Vcuuo accents are exported as #9ee493 (or rgb equivalent).
+  return String(glyphInner || '')
+    .replace(/fill="#9ee493"/gi, `fill="url(#${gradientId})"`)
+    .replace(/fill:\s*#9ee493/gi, `fill:url(#${gradientId})`)
+    .replace(/fill="rgb\(\s*158\s*,\s*228\s*,\s*147\s*\)"/gi, `fill="url(#${gradientId})"`);
+}
+
 function hashString(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i += 1) {
@@ -179,6 +226,11 @@ export async function renderVerticalSVG(layoutResult, options = {}) {
   // Assign colors to nodes based on inputId
   tokens.nodes.forEach((n) => {
     if (n.dependsOnInput) n.color = getInputColor(n.inputId);
+    else if (n.dependsOnAccumulatedInputs) {
+      const colors = accumulatedInputColors(n);
+      n.accumulatedColors = colors;
+      n.color = colors[0] || NEUTRAL;
+    }
     else n.color = NEUTRAL;
   });
 
@@ -201,7 +253,20 @@ export async function renderVerticalSVG(layoutResult, options = {}) {
 
     for (const node of nodes) {
       const glyphContent = await loadGlyphContent(node.variant || node.raw, mapping, warnings);
-      svg.push(renderNodeGroup(node, xPos, localY, glyphContent, tokens.glyphSize));
+      let nodeGlyph = glyphContent;
+      const accColors = Array.isArray(node.accumulatedColors) ? node.accumulatedColors : accumulatedInputColors(node);
+      if (nodeGlyph && accColors.length > 1) {
+        const gradientSeed = `${node.frameIndex}|${node.lane}|${node.raw}|${JSON.stringify(node.inputRange)}|${JSON.stringify(node.inputIds)}|${xPos}|${localY}`;
+        const gradientId = `vert-acc-grad-${Math.abs(hashString(gradientSeed))}`;
+        svg.push(`<defs><linearGradient id="${gradientId}" x1="0%" y1="0%" x2="100%" y2="0%">${gradientStopsStepped(accColors)}</linearGradient></defs>`);
+        if (node.lane === 'annotation' || node.lane === 'story') {
+          nodeGlyph = applyAccumulatedGradientToGlyph(nodeGlyph, gradientId);
+        }
+        if (node.lane === 'visualization' && /^Vcu/i.test(String(node.raw || node.variant || ''))) {
+          nodeGlyph = applyAccumulatedGradientToVcu(nodeGlyph, gradientId);
+        }
+      }
+      svg.push(renderNodeGroup(node, xPos, localY, nodeGlyph, tokens.glyphSize));
       localY += tokens.glyphSize + iconGap;
     }
   }
@@ -217,7 +282,7 @@ export async function writeVerticalSVG(layoutResult, outputDir, options = {}) {
     console.warn(warnings.join('\\n'));
   }
   await fs.mkdir(outputDir, { recursive: true });
-  const filePath = path.join(outputDir, `${layoutResult.articleId}.svg`);
+  const filePath = path.join(outputDir, `${toSafeSvgBaseName(layoutResult.articleId)}.svg`);
   await fs.writeFile(filePath, svg, 'utf-8');
 }
 
