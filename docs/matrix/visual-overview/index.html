@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Visual overview</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: #1f2937;
+      background: #ffffff;
+      line-height: 1.45;
+    }
+    .wrap {
+      padding: 20px;
+    }
+    .topbar {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.2;
+      color: #0f172a;
+    }
+    .meta {
+      margin: 0;
+      font-size: 13px;
+      color: #475569;
+    }
+    .top-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .top-links a {
+      color: #1e40af;
+      text-decoration: none;
+      border-bottom: 1px solid #93c5fd;
+      font-size: 13px;
+    }
+    .top-links a:hover { border-bottom-color: #1e40af; }
+    .gallery {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 1px 8px;
+      align-items: flex-start;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .gallery::-webkit-scrollbar {
+      display: none;
+    }
+    .gallery-scroll-top {
+      overflow-x: auto;
+      overflow-y: hidden;
+      height: 14px;
+      margin: 0 1px 6px;
+    }
+    .gallery-scroll-top .gallery-scroll-track {
+      height: 1px;
+    }
+    .gallery-scroll-top::-webkit-scrollbar {
+      height: 10px;
+    }
+    .overview-card {
+      flex: 0 0 340px;
+      border: 1px solid #dbe2ea;
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px;
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .overview-card:hover {
+      border-color: #9fb3d9;
+      box-shadow: 0 1px 6px rgba(15, 23, 42, 0.08);
+    }
+    .card-head {
+      display: grid;
+      gap: 4px;
+      min-height: 44px;
+    }
+    .card-head span {
+      font-size: 12px;
+      color: #1f2937;
+      line-height: 1.25;
+    }
+    code {
+      width: max-content;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #eef2f7;
+      color: #1f2937;
+      font-weight: 700;
+    }
+    .card-svg-wrap {
+      border: 1px solid #eef2f7;
+      border-radius: 8px;
+      overflow: visible;
+      background: #fff;
+      padding: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .card-svg-wrap img {
+      width: auto;
+      height: auto;
+      max-width: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="topbar">
+      <div>
+        <h1>Visual overview</h1>
+        <p class="meta">All visual representations sorted by article ID (65 stories).</p>
+      </div>
+      <div class="top-links">
+        <a href="../index.html">Back to matrix</a>
+        <a href="../articles/index.html">Article List</a>
+      </div>
+    </div>
+    <div class="gallery-scroll-top" id="gallery-scroll-top" aria-hidden="true">
+      <div class="gallery-scroll-track" id="gallery-scroll-track"></div>
+    </div>
+    <section class="gallery" id="gallery-cards">
+      <a class="overview-card" href="../index.html?article=B1" title="B1 - The Business School ROI Calculator 2025-26">
+        <div class="card-head">
+          <code>B1</code>
+          <span>The Business School ROI Calculator 2025-26</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/B1.svg" alt="Visual representation for B1" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=B2" title="B2 - Calculate Your Gain Under the New SALT Cap">
+        <div class="card-head">
+          <code>B2</code>
+          <span>Calculate Your Gain Under the New SALT Cap</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/B2.svg" alt="Visual representation for B2" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=F1" title="F1 - Can you run the UK economy?">
+        <div class="card-head">
+          <code>F1</code>
+          <span>Can you run the UK economy?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/F1.svg" alt="Visual representation for F1" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=F2" title="F2 - Budget 2025 calculator: how Reeves’ tax changes will affect your money">
+        <div class="card-head">
+          <code>F2</code>
+          <span>Budget 2025 calculator: how Reeves’ tax changes will affect your money</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/F2.svg" alt="Visual representation for F2" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=F3" title="F3 - The 900-page book that China watchers count on">
+        <div class="card-head">
+          <code>F3</code>
+          <span>The 900-page book that China watchers count on</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/F3.svg" alt="Visual representation for F3" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=F4" title="F4 - Can you run a Premier League football club?">
+        <div class="card-head">
+          <code>F4</code>
+          <span>Can you run a Premier League football club?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/F4.svg" alt="Visual representation for F4" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=F5" title="F5 - Draw your own chart game: How Taco were Trump’s tariffs?">
+        <div class="card-head">
+          <code>F5</code>
+          <span>Draw your own chart game: How Taco were Trump’s tariffs?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/F5.svg" alt="Visual representation for F5" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=G1" title="G1 - Chicago: Does your water service line contain lead?">
+        <div class="card-head">
+          <code>G1</code>
+          <span>Chicago: Does your water service line contain lead?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/G1.svg" alt="Visual representation for G1" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=G2" title="G2 - In Georgia, a fight over credit for its clean energy boom">
+        <div class="card-head">
+          <code>G2</code>
+          <span>In Georgia, a fight over credit for its clean energy boom</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/G2.svg" alt="Visual representation for G2" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=P1" title="P1 - nyc street view">
+        <div class="card-head">
+          <code>P1</code>
+          <span>nyc street view</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/P1.svg" alt="Visual representation for P1" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=P2" title="P2 - wine animals">
+        <div class="card-head">
+          <code>P2</code>
+          <span>wine animals</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/P2.svg" alt="Visual representation for P2" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=P3" title="P3 - How are you doing?">
+        <div class="card-head">
+          <code>P3</code>
+          <span>How are you doing?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/P3.svg" alt="Visual representation for P3" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S1" title="S1 - How inflation made your breakfast more expensive">
+        <div class="card-head">
+          <code>S1</code>
+          <span>How inflation made your breakfast more expensive</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S1.svg" alt="Visual representation for S1" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S2" title="S2 - Find out whether you are paying too much rent">
+        <div class="card-head">
+          <code>S2</code>
+          <span>Find out whether you are paying too much rent</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S2.svg" alt="Visual representation for S2" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S3" title="S3 - Was Euro 2025 a TV blockbuster?">
+        <div class="card-head">
+          <code>S3</code>
+          <span>Was Euro 2025 a TV blockbuster?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S3.svg" alt="Visual representation for S3" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S4" title="S4 - These are the costs to expect when renovating a house">
+        <div class="card-head">
+          <code>S4</code>
+          <span>These are the costs to expect when renovating a house</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S4.svg" alt="Visual representation for S4" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S5" title="S5 - Fuel prices, driving bans, tolls—how would you decide?">
+        <div class="card-head">
+          <code>S5</code>
+          <span>Fuel prices, driving bans, tolls—how would you decide?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S5.svg" alt="Visual representation for S5" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S6" title="S6 - What does a university degree cost?">
+        <div class="card-head">
+          <code>S6</code>
+          <span>What does a university degree cost?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S6.svg" alt="Visual representation for S6" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S7" title="S7 - Cubism meets street art and the Jungfrau Railway">
+        <div class="card-head">
+          <code>S7</code>
+          <span>Cubism meets street art and the Jungfrau Railway</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S7.svg" alt="Visual representation for S7" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S8" title="S8 - Allocate the 500 billion euros from the special fund">
+        <div class="card-head">
+          <code>S8</code>
+          <span>Allocate the 500 billion euros from the special fund</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S8.svg" alt="Visual representation for S8" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S9" title="S9 - How strongly your job is affected by crises">
+        <div class="card-head">
+          <code>S9</code>
+          <span>How strongly your job is affected by crises</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S9.svg" alt="Visual representation for S9" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S10" title="S10 - Where the rail service is especially unreliable">
+        <div class="card-head">
+          <code>S10</code>
+          <span>Where the rail service is especially unreliable</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S10.svg" alt="Visual representation for S10" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S11" title="S11 - How to extend your vacation in 2025">
+        <div class="card-head">
+          <code>S11</code>
+          <span>How to extend your vacation in 2025</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S11.svg" alt="Visual representation for S11" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S12" title="S12 - Pension, long-term care, health insurance—how your salary shrinks by 2045">
+        <div class="card-head">
+          <code>S12</code>
+          <span>Pension, long-term care, health insurance—how your salary shrinks by 2045</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S12.svg" alt="Visual representation for S12" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S13" title="S13 - How much return you can make with stocks (despite crashes)">
+        <div class="card-head">
+          <code>S13</code>
+          <span>How much return you can make with stocks (despite crashes)</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S13.svg" alt="Visual representation for S13" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=S14" title="S14 - This is how much your period costs over a lifetime">
+        <div class="card-head">
+          <code>S14</code>
+          <span>This is how much your period costs over a lifetime</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/S14.svg" alt="Visual representation for S14" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=T1" title="T1 - What constituency am I in? New boundary map for UK general election – and how changes may affect you">
+        <div class="card-head">
+          <code>T1</code>
+          <span>What constituency am I in? New boundary map for UK general election – and how changes may affect you</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/T1.svg" alt="Visual representation for T1" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=W1" title="W1 - How snowy could it be where you live this winter? Look up your area.">
+        <div class="card-head">
+          <code>W1</code>
+          <span>How snowy could it be where you live this winter? Look up your area.</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/W1.svg" alt="Visual representation for W1" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=W2" title="W2 - Your diet’s impact on the planet depends on where you live. Look up your city.">
+        <div class="card-head">
+          <code>W2</code>
+          <span>Your diet’s impact on the planet depends on where you live. Look up your city.</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/W2.svg" alt="Visual representation for W2" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=W3" title="W3 - Did your area just have its most humid summer? Find out here.">
+        <div class="card-head">
+          <code>W3</code>
+          <span>Did your area just have its most humid summer? Find out here.</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/W3.svg" alt="Visual representation for W3" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=W4" title="W4 - What trees are most common in your city? And are they at risk?">
+        <div class="card-head">
+          <code>W4</code>
+          <span>What trees are most common in your city? And are they at risk?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/W4.svg" alt="Visual representation for W4" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z1" title="Z1 - Where do big-city residents actually come from?">
+        <div class="card-head">
+          <code>Z1</code>
+          <span>Where do big-city residents actually come from?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z1.svg" alt="Visual representation for Z1" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z2" title="Z2 - How much would you earn if you were a civil servant?">
+        <div class="card-head">
+          <code>Z2</code>
+          <span>How much would you earn if you were a civil servant?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z2.svg" alt="Visual representation for Z2" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z3" title="Z3 - How your children could experience the climate crisis">
+        <div class="card-head">
+          <code>Z3</code>
+          <span>How your children could experience the climate crisis</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z3.svg" alt="Visual representation for Z3" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z4" title="Z4 - Are you giving your child enough pocket money?">
+        <div class="card-head">
+          <code>Z4</code>
+          <span>Are you giving your child enough pocket money?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z4.svg" alt="Visual representation for Z4" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z5" title="Z5 - Do you belong to the political center?">
+        <div class="card-head">
+          <code>Z5</code>
+          <span>Do you belong to the political center?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z5.svg" alt="Visual representation for Z5" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z6" title="Z6 - Is a heat pump worth it for your home?">
+        <div class="card-head">
+          <code>Z6</code>
+          <span>Is a heat pump worth it for your home?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z6.svg" alt="Visual representation for Z6" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z7" title="Z7 - Are you getting enough sleep?">
+        <div class="card-head">
+          <code>Z7</code>
+          <span>Are you getting enough sleep?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z7.svg" alt="Visual representation for Z7" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z8" title="Z8 - Is marriage worth it for you?">
+        <div class="card-head">
+          <code>Z8</code>
+          <span>Is marriage worth it for you?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z8.svg" alt="Visual representation for Z8" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z9" title="Z9 - How satisfied are you with your life?">
+        <div class="card-head">
+          <code>Z9</code>
+          <span>How satisfied are you with your life?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z9.svg" alt="Visual representation for Z9" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z10" title="Z10 - How far can your child go on their own?">
+        <div class="card-head">
+          <code>Z10</code>
+          <span>How far can your child go on their own?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z10.svg" alt="Visual representation for Z10" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z11" title="Z11 - How risky is your alcohol consumption?">
+        <div class="card-head">
+          <code>Z11</code>
+          <span>How risky is your alcohol consumption?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z11.svg" alt="Visual representation for Z11" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z12" title="Z12 - How well does my job fit me?">
+        <div class="card-head">
+          <code>Z12</code>
+          <span>How well does my job fit me?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z12.svg" alt="Visual representation for Z12" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z13" title="Z13 - Is an electric car worth it for you? Test it with our calculator">
+        <div class="card-head">
+          <code>Z13</code>
+          <span>Is an electric car worth it for you? Test it with our calculator</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z13.svg" alt="Visual representation for Z13" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z14" title="Z14 - How much do you earn compared with others?">
+        <div class="card-head">
+          <code>Z14</code>
+          <span>How much do you earn compared with others?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z14.svg" alt="Visual representation for Z14" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z15" title="Z15 - How much money makes you happy?">
+        <div class="card-head">
+          <code>Z15</code>
+          <span>How much money makes you happy?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z15.svg" alt="Visual representation for Z15" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z16" title="Z16 - What has the new government done well? And what not?">
+        <div class="card-head">
+          <code>Z16</code>
+          <span>What has the new government done well? And what not?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z16.svg" alt="Visual representation for Z16" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z17" title="Z17 - What the weather could look like where you live in 2100">
+        <div class="card-head">
+          <code>Z17</code>
+          <span>What the weather could look like where you live in 2100</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z17.svg" alt="Visual representation for Z17" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z18" title="Z18 - How much do I pay in—and what pension will I get out?">
+        <div class="card-head">
+          <code>Z18</code>
+          <span>How much do I pay in—and what pension will I get out?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z18.svg" alt="Visual representation for Z18" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z19" title="Z19 - Resign or not? You decide!">
+        <div class="card-head">
+          <code>Z19</code>
+          <span>Resign or not? You decide!</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z19.svg" alt="Visual representation for Z19" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z20" title="Z20 - This much money you should have saved at your age">
+        <div class="card-head">
+          <code>Z20</code>
+          <span>This much money you should have saved at your age</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z20.svg" alt="Visual representation for Z20" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z21" title="Z21 - This is how much people earn in your area">
+        <div class="card-head">
+          <code>Z21</code>
+          <span>This is how much people earn in your area</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z21.svg" alt="Visual representation for Z21" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z22" title="Z22 - How dangerous is your child&#39;s route to school?">
+        <div class="card-head">
+          <code>Z22</code>
+          <span>How dangerous is your child&#39;s route to school?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z22.svg" alt="Visual representation for Z22" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z23" title="Z23 - A home of your own? In these places it is affordable again">
+        <div class="card-head">
+          <code>Z23</code>
+          <span>A home of your own? In these places it is affordable again</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z23.svg" alt="Visual representation for Z23" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z24" title="Z24 - How well do you understand dogs?">
+        <div class="card-head">
+          <code>Z24</code>
+          <span>How well do you understand dogs?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z24.svg" alt="Visual representation for Z24" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z25" title="Z25 - Which neighborhood suits me?">
+        <div class="card-head">
+          <code>Z25</code>
+          <span>Which neighborhood suits me?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z25.svg" alt="Visual representation for Z25" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z26" title="Z26 - Are you as married as others your age?">
+        <div class="card-head">
+          <code>Z26</code>
+          <span>Are you as married as others your age?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z26.svg" alt="Visual representation for Z26" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z27" title="Z27 - Would you still pass the Abitur today?">
+        <div class="card-head">
+          <code>Z27</code>
+          <span>Would you still pass the Abitur today?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z27.svg" alt="Visual representation for Z27" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z28" title="Z28 - These are Germany&#39;s most expensive and cheapest neighborhoods">
+        <div class="card-head">
+          <code>Z28</code>
+          <span>These are Germany&#39;s most expensive and cheapest neighborhoods</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z28.svg" alt="Visual representation for Z28" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z29" title="Z29 - How much protein you really need">
+        <div class="card-head">
+          <code>Z29</code>
+          <span>How much protein you really need</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z29.svg" alt="Visual representation for Z29" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z30" title="Z30 - Should I switch health insurance?">
+        <div class="card-head">
+          <code>Z30</code>
+          <span>Should I switch health insurance?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z30.svg" alt="Visual representation for Z30" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z31" title="Z31 - How much sugar is in it?">
+        <div class="card-head">
+          <code>Z31</code>
+          <span>How much sugar is in it?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z31.svg" alt="Visual representation for Z31" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z32" title="Z32 - Can you still afford a home in your district?">
+        <div class="card-head">
+          <code>Z32</code>
+          <span>Can you still afford a home in your district?</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z32.svg" alt="Visual representation for Z32" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z33" title="Z33 - Your MSCI World portfolio crashed? How bad past crises really were">
+        <div class="card-head">
+          <code>Z33</code>
+          <span>Your MSCI World portfolio crashed? How bad past crises really were</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z33.svg" alt="Visual representation for Z33" loading="lazy">
+        </div>
+      </a>
+      <a class="overview-card" href="../index.html?article=Z34" title="Z34 - Play chancellor">
+        <div class="card-head">
+          <code>Z34</code>
+          <span>Play chancellor</span>
+        </div>
+        <div class="card-svg-wrap">
+          <img src="../../svg-vertical/Z34.svg" alt="Visual representation for Z34" loading="lazy">
+        </div>
+      </a></section>
+  </main>
+  <script>
+    (() => {
+      const top = document.getElementById("gallery-scroll-top");
+      const track = document.getElementById("gallery-scroll-track");
+      const gallery = document.getElementById("gallery-cards");
+      if (!top || !track || !gallery) return;
+
+      let syncing = false;
+
+      const syncTrackWidth = () => {
+        track.style.width = gallery.scrollWidth + "px";
+      };
+
+      const syncTopFromGallery = () => {
+        if (syncing) return;
+        syncing = true;
+        top.scrollLeft = gallery.scrollLeft;
+        syncing = false;
+      };
+
+      const syncGalleryFromTop = () => {
+        if (syncing) return;
+        syncing = true;
+        gallery.scrollLeft = top.scrollLeft;
+        syncing = false;
+      };
+
+      top.addEventListener("scroll", syncGalleryFromTop, { passive: true });
+      gallery.addEventListener("scroll", syncTopFromGallery, { passive: true });
+      window.addEventListener("resize", () => {
+        syncTrackWidth();
+        syncTopFromGallery();
+      });
+
+      if (typeof ResizeObserver !== "undefined") {
+        const ro = new ResizeObserver(() => {
+          syncTrackWidth();
+          syncTopFromGallery();
+        });
+        ro.observe(gallery);
+      }
+
+      syncTrackWidth();
+      syncTopFromGallery();
+    })();
+  </script>
+</body>
+</html>
