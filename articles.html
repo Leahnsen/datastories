@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Article List</title>
+  <link rel="stylesheet" href="./css/articles.css">
+</head>
+<body>
+  <main class="wrap">
+    <a class="back-link" href="./index.html">← Back to matrix</a>
+    <h1>Article List</h1>
+    <p id="articles-meta" class="meta">Loading articles…</p>
+    <div class="table-wrap">
+      <table aria-label="Article mapping list">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>English title</th>
+            <th>Original title</th>
+            <th>News publisher</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="articles-table-body"></tbody>
+      </table>
+    </div>
+    <div id="articles-status" class="summary" hidden></div>
+  </main>
+  <script src="./js/articles.js"></script>
+</body>
+</html>

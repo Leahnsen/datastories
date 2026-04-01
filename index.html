@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>User Input in Data Stories</title>
+  <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-row">
+      <h1>Integration of User Input in Data Stories</h1>
+      <a class="site-header-link" href="./articles.html">Article List</a>
+      <a class="site-header-link" href="./visual-overview.html">Visual overview</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="panel matrix-panel">
+      <div class="matrix-shell fig1">
+        <div id="matrix-caption" class="matrix-caption"></div>
+        <div class="axis-question-top">Narrativ integration of user input</div>
+        <div class="axis-x-top">
+          <div>Local integration</div>
+          <div>Distributed integration</div>
+        </div>
+        <div class="axis-question-y">Role of user input</div>
+        <div class="axis-y fig1-y">
+          <div>Positioning oneself within<br>existing data</div>
+          <div>Creating new<br>data</div>
+        </div>
+        <div class="matrix matrix-plain" id="matrix">
+          <div class="grid" id="grid"></div>
+          <div class="points-layer" id="points"></div>
+        </div>
+        <div id="matrix-legend-overview" class="matrix-legend is-hidden"></div>
+        <div id="matrix-legend-input" class="matrix-legend is-hidden">
+          <div class="legend-item"><span id="legend-single" class="legend-swatch"></span><span>Single Input</span></div>
+          <div class="legend-item"><span id="legend-multiple" class="legend-swatch"></span><span>Multiple Inputs</span></div>
+        </div>
+        <div id="matrix-legend-layer" class="matrix-legend is-hidden">
+          <div class="matrix-legend-prefix">Narrative depth:</div>
+          <div class="legend-item"><span id="legend-depth-1" class="legend-swatch"></span><span>Single-layer integration</span></div>
+          <div class="legend-item"><span id="legend-depth-2" class="legend-swatch"></span><span>Dual</span></div>
+          <div class="legend-item"><span id="legend-depth-3" class="legend-swatch"></span><span>Triple</span></div>
+        </div>
+        <div class="matrix-view-toggle">
+          <button id="matrix-view-overview" class="active" type="button">Overview</button>
+          <button id="matrix-view-input" type="button">Input Count</button>
+          <button id="matrix-view-depth" type="button">Narrative Depth</button>
+        </div>
+      </div>
+      <div class="filter-panel">
+        <div class="filter-head">
+          <span class="title-h3" style="margin:0;">Filter for specific narrative elements</span>
+          <span id="articles-count" class="summary"></span>
+        </div>
+        <div class="toggle-group">
+          <button id="logic-and" class="active">AND</button>
+          <button id="logic-or">OR</button>
+        </div>
+        <div id="viz-filter-grid" class="filter-grid"></div>
+        <div class="search-row">
+          <input id="title-search" type="text" placeholder="Search article title">
+          <button id="clear-viz-filters">Clear Filters</button>
+        </div>
+        <div id="viz-count-grid" class="count-grid"></div>
+      </div>
+      <div class="filter-panel">
+        <div class="filter-head">
+          <span class="title-h3" style="margin:0;">Article List</span>
+          <div class="article-list-head-meta">
+            <span id="articles-list-summary" class="summary"></span>
+            <a class="summary-link" href="./visual-overview.html">Visual overview</a>
+          </div>
+        </div>
+        <div class="list list-bottom" id="cell-list"></div>
+      </div>
+    </section>
+    <section class="panel detail center-panel">
+      <div id="detail">
+        <div class="detail-header">
+          <div class="case-label">Details of Input Data Stories</div>
+          <h2 class="detail-title">Select a data story</h2>
+          <div class="meta">Click an article in the matrix to view detailed information.</div>
+        </div>
+      </div>
+    </section>
+    <aside class="panel legend-panel">
+      <button id="legend-toggle" class="legend-toggle" aria-expanded="true" aria-label="Collapse legend" title="Collapse legend">›</button>
+      <div id="legend-content" class="legend-content">
+      <div class="legend-head">
+        <h3>Legend</h3>
+        <div class="sub">Visual Syntax of User Input in Data Stories</div>
+      </div>
+      <div class="legend-section">
+        <h4 class="legend-title">Narrative Elements</h4>
+        <div class="legend-small">Elements that are independent of user input are filled in gray.</div>
+        <ul class="legend-glyph-list">
+          <li class="legend-glyph-row"><img class="legend-glyph" src="./design/glyphs/S.svg" onerror="this.onerror=null;this.src='./design/glyphs/S.svg'" alt="Story glyph"><span>Story</span></li>
+          <li class="legend-glyph-row"><img class="legend-glyph" src="./design/glyphs/A.svg" onerror="this.onerror=null;this.src='./design/glyphs/A.svg'" alt="Annotation glyph"><span>Annotation</span></li>
+          <li class="legend-glyph-row"><img class="legend-glyph" src="./design/glyphs/V.svg" onerror="this.onerror=null;this.src='./design/glyphs/V.svg'" alt="Visualization glyph"><span>Visualization</span></li>
+          <li class="legend-glyph-row"><img class="legend-glyph" src="./design/glyphs/I.svg" onerror="this.onerror=null;this.src='./design/glyphs/I.svg'" data-legend-tone="input" data-glyph-primary="./design/glyphs/I.svg" data-glyph-fallback="./design/glyphs/I.svg" alt="Input glyph"><span>User Input</span></li>
+        </ul>
+        <div class="legend-inline-head">Visibility of user input by color</div>
+        <div class="legend-visibility-row">
+          <div class="legend-visibility-icons">
+            <img class="legend-glyph" src="./design/glyphs/I.svg" onerror="this.onerror=null;this.src='./design/glyphs/I.svg'" data-legend-tone="input" data-glyph-primary="./design/glyphs/I.svg" data-glyph-fallback="./design/glyphs/I.svg" alt="Input glyph">
+            <img class="legend-glyph" src="./design/glyphs/Vu.svg" onerror="this.onerror=null;this.src='./design/glyphs/Vu.svg'" data-legend-tone="input-visible" data-glyph-primary="./design/glyphs/Vu.svg" data-glyph-fallback="./design/glyphs/Vu.svg" alt="Update glyph">
+          </div>
+          <div class="legend-text-cell">Elements reflecting input inherit this color.</div>
+        </div>
+        <div class="legend-visibility-row accumulated-row">
+          <div class="legend-visibility-icons">
+            <img class="legend-glyph" src="./design/glyphs/I.svg" onerror="this.onerror=null;this.src='./design/glyphs/I.svg'" data-legend-tone="input" data-glyph-primary="./design/glyphs/I.svg" data-glyph-fallback="./design/glyphs/I.svg" alt="Input glyph">
+            <img class="legend-glyph" src="./design/glyphs/I.svg" onerror="this.onerror=null;this.src='./design/glyphs/I.svg'" data-legend-tone="input" data-legend-color="#bebada" data-glyph-primary="./design/glyphs/I.svg" data-glyph-fallback="./design/glyphs/I.svg" alt="Input glyph">
+            <img class="legend-glyph accumulated-vu" src="./design/glyphs/Vu.svg" onerror="this.onerror=null;this.src='./design/glyphs/Vu.svg'" data-legend-tone="input-visible-gradient" data-glyph-primary="./design/glyphs/Vu.svg" data-glyph-fallback="./design/glyphs/Vu.svg" alt="Accumulated update glyph">
+          </div>
+          <div class="legend-text-cell">Accumulated inputs are encoded as gradients.</div>
+        </div>
+        <div class="legend-inline-head">How user input gets visible in visualization</div>
+        <div class="legend-subitem"><img class="legend-glyph" src="./design/glyphs/Vh.svg" onerror="this.onerror=null;this.src='./design/glyphs/Vh.svg'" data-legend-tone="input-visible" data-glyph-primary="./design/glyphs/Vh.svg" data-glyph-fallback="./design/glyphs/Vh.svg" alt="Highlight glyph"><span>Highlight in visualization</span></div>
+        <div class="legend-subitem"><img class="legend-glyph" src="./design/glyphs/Vu.svg" onerror="this.onerror=null;this.src='./design/glyphs/Vu.svg'" data-legend-tone="input-visible" data-glyph-primary="./design/glyphs/Vu.svg" data-glyph-fallback="./design/glyphs/Vu.svg" alt="Update glyph"><span>Update in visualization</span></div>
+        <div class="legend-subitem"><img class="legend-glyph" src="./design/glyphs/Vz.svg" onerror="this.onerror=null;this.src='./design/glyphs/Vz.svg'" data-legend-tone="input-visible" data-glyph-primary="./design/glyphs/Vz.svg" data-glyph-fallback="./design/glyphs/Vz.svg" alt="Zoom glyph"><span>Zoom in visualization</span></div>
+        <div class="legend-subitem"><img class="legend-glyph" src="./design/glyphs/Vcu.svg" onerror="this.onerror=null;this.src='./design/glyphs/Vcu.svg'" data-legend-tone="input-visible" data-glyph-primary="./design/glyphs/Vcu.svg" data-glyph-fallback="./design/glyphs/Vcu.svg" alt="User itself glyph"><span>Visualization of the user themselves</span></div>
+        <div class="legend-subitem"><img class="legend-glyph" src="./design/glyphs/Vcuu.svg" onerror="this.onerror=null;this.src='./design/glyphs/Vcuu.svg'" data-legend-tone="input-visible" data-glyph-primary="./design/glyphs/Vcuu.svg" data-glyph-fallback="./design/glyphs/Vcuu.svg" alt="User vs users glyph"><span>Comparisons between the user and other participants</span></div>
+        <div class="legend-subitem"><img class="legend-glyph" src="./design/glyphs/Vcuo.svg" onerror="this.onerror=null;this.src='./design/glyphs/Vcuo.svg'" data-legend-tone="input-visible" data-glyph-primary="./design/glyphs/Vcuo.svg" data-glyph-fallback="./design/glyphs/Vcuo.svg" alt="User vs official glyph"><span>Comparisons between the user and official data</span></div>
+        <div class="legend-subitem"><img class="legend-glyph" src="./design/glyphs/Vcuuo.svg" onerror="this.onerror=null;this.src='./design/glyphs/Vcuuo.svg'" data-legend-tone="input-visible" data-glyph-primary="./design/glyphs/Vcuuo.svg" data-glyph-fallback="./design/glyphs/Vcuuo.svg" alt="User vs users vs official glyph"><span>Comparisons between the user, other participants, and official data</span></div>
+        <div class="legend-subitem"><img class="legend-glyph" src="./design/glyphs/V-index.svg" onerror="this.onerror=null;this.src='./design/glyphs/V-index.svg'" alt="Input-independent visualization glyph"><span>Input-independent visualization later referenced by user input</span></div>
+      </div>
+      <div class="legend-section">
+        <h4 class="legend-title">Narrative Flow</h4>
+        <div class="legend-inline-head">Horizontal alignment</div>
+        <div class="legend-align-row">
+          <div class="legend-icon-cell horizontal">
+            <img class="legend-glyph" src="./design/glyphs/S.svg" onerror="this.onerror=null;this.src='./design/glyphs/S.svg'" alt="S">
+            <img class="legend-glyph" src="./design/glyphs/V.svg" onerror="this.onerror=null;this.src='./design/glyphs/V.svg'" alt="V">
+          </div>
+          <div class="legend-text-cell">Elements are active at the same narrative moment.</div>
+        </div>
+        <div class="legend-inline-head">Vertical alignment</div>
+        <div class="legend-align-row">
+          <div class="legend-icon-cell vertical">
+            <img class="legend-glyph" src="./design/glyphs/S.svg" onerror="this.onerror=null;this.src='./design/glyphs/S.svg'" alt="S">
+            <img class="legend-glyph" src="./design/glyphs/V.svg" onerror="this.onerror=null;this.src='./design/glyphs/V.svg'" alt="V">
+          </div>
+          <div class="legend-text-cell">Elements appear one after another in narrative flow.</div>
+        </div>
+        <div class="legend-inline-head">Repetition</div>
+        <div class="legend-concept-row repetition-row">
+          <object class="legend-mini-svg repetition" type="image/svg+xml" data="./legend/legend-repetition.svg"></object>
+          <div class="legend-text-cell">User input independent repetitions are aggregated.</div>
+        </div>
+        <div class="legend-inline-head">Persistence</div>
+        <div class="legend-concept-row persistence-row">
+          <object class="legend-mini-svg persistence" type="image/svg+xml" data="./legend/legend-persistence.svg"></object>
+          <div class="legend-text-cell">Black bracketed segments mark persistence across multiple narrative steps; the specific persistent element is identified by a black outline.</div>
+        </div>
+        <div class="legend-inline-head">New data story</div>
+        <div class="legend-concept-row">
+          <div class="legend-icon-cell horizontal">
+            <img class="legend-glyph" src="./design/glyphs/I.svg" onerror="this.onerror=null;this.src='./design/glyphs/I.svg'" data-legend-tone="input" data-glyph-primary="./design/glyphs/I.svg" data-glyph-fallback="./design/glyphs/I.svg" alt="Input glyph">
+            <span class="legend-arrow">→</span>
+            <img class="legend-glyph" src="./design/glyphs/Nds.svg" onerror="this.onerror=null;this.src='./design/glyphs/Nds.svg'" data-legend-tone="input-visible" data-glyph-primary="./design/glyphs/Nds.svg" data-glyph-fallback="./design/glyphs/Nds.svg" alt="New data story glyph">
+          </div>
+          <div class="legend-text-cell">Input-triggered branch to a new data story.</div>
+        </div>
+      </div>
+      </div>
+    </aside>
+  </main>
+  <div class="tooltip" id="tooltip"></div>
+  <script src="./js/matrix-app.js"></script>
+</body>
+</html>

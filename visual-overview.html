@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Visual overview</title>
+  <link rel="stylesheet" href="./css/visual-overview.css">
+</head>
+<body>
+  <main class="wrap">
+    <div class="topbar">
+      <div>
+        <h1>Visual overview</h1>
+        <p id="overview-meta" class="meta">Loading visual representations…</p>
+      </div>
+      <div class="top-links">
+        <a href="./index.html">Back to matrix</a>
+        <a href="./articles.html">Article List</a>
+      </div>
+    </div>
+    <div class="gallery-scroll-top" id="gallery-scroll-top" aria-hidden="true">
+      <div class="gallery-scroll-track" id="gallery-scroll-track"></div>
+    </div>
+    <section class="gallery" id="gallery-cards" aria-live="polite"></section>
+    <div id="overview-status" class="status" hidden></div>
+  </main>
+  <script src="./js/visual-overview.js"></script>
+</body>
+</html>
